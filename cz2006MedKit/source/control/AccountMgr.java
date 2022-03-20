@@ -1,4 +1,5 @@
 package control;
+import entity.*;
 
 public class AccountMgr {
 

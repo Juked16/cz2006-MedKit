@@ -1,6 +1,6 @@
 package boundary;
 
-import entity.Post;
+import entity.*;
 
 public class ForumUI {
 

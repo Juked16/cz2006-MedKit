@@ -1,4 +1,5 @@
 package control;
+import entity.*;
 
 public class BookmarkMgr {
 
@@ -6,7 +7,7 @@ public class BookmarkMgr {
 	 * 
 	 * @param medicalfacility
 	 */
-	public boolean addBookmark(medicalFacility medicalfacility) {
+	public boolean addBookmark(MedicalFacility medicalfacility) {
 		// TODO - implement BookmarkMgr.addBookmark
 		throw new UnsupportedOperationException();
 	}
@@ -15,7 +16,7 @@ public class BookmarkMgr {
 	 * 
 	 * @param medicalfacility
 	 */
-	public boolean removeBookmark(medicalFacility medicalfacility) {
+	public boolean removeBookmark(MedicalFacility medicalfacility) {
 		// TODO - implement BookmarkMgr.removeBookmark
 		throw new UnsupportedOperationException();
 	}
