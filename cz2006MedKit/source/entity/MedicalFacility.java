@@ -1,79 +1,142 @@
 package entity;
+import java.util.ArrayList; 
+import java.util.Arrays;
+
 
 public class MedicalFacility {
 
+	/**
+	 * Variable of type of medical facility
+	 */
 	private String type;
+	
+	/**
+	 * Variable of name of medical facility
+	 */
 	private String name;
+	/**
+	 * Variable of address of medical facility
+	 */
 	private String address;
+	/**
+	 * Variable of contact number of medical facility
+	 */
 	private String contact;
-	private Rating[] ratings;
-	private Service[] services;
+	/**
+	 * Variable of ratings given by patients
+	 */
+	private ArrayList<Rating> ratings;
+	/**
+	 * Variable of services provided by the medical facility
+	 */
+	private ArrayList<Service> services;
+	
+	/**
+	 * Variable of all ratings given to the medical facility
+	 */
+	private float totalRatings;
 
 	/**
-	 * 
-	 * @param name
+	 * Constructor for medical facility
+	 * @param name Name of medical Facility
 	 */
 	public MedicalFacility(String name) {
-		// TODO - implement MedicalFacility.MedicalFacility
-		throw new UnsupportedOperationException();
+		this.name = name;
+	}
+	
+	/**
+	 * Set name of medical facility name
+	 * @param name medical facility name
+	 */
+	public void setName(String name) {
+		this.name = name;
 	}
 
+	/**
+	 * Get name of medical facility
+	 * @return medical facility name
+	 */
 	public String getName() {
 		return this.name;
 	}
 
+	/**
+	 * Get address of medical facility
+	 * @return medical facility address
+	 */
 	public String getAddress() {
 		return this.address;
 	}
 
 	/**
-	 * 
-	 * @param address
+	 * Set Address of medical facility
+	 * @param address Medical facility address
 	 */
 	public void setAddress(String address) {
 		this.address = address;
 	}
 
+	/**
+	 * Get contact number of medical facility
+	 * @return contact number
+	 */
 	public String getContact() {
 		return this.contact;
 	}
 
 	/**
-	 * 
-	 * @param contact
+	 * Set contact number of medical facility
+	 * @param contact Medical facility contact number
 	 */
 	public void setContact(String contact) {
 		this.contact = contact;
 	}
 
-	public Rating[] getRatings() {
-		return this.ratings;
+	/**
+	 * Get list of all ratings of the medical facility 
+	 * @return list of all ratings
+	 */
+	public ArrayList<Rating> getRatings() {
+		return  this.ratings;
 	}
 
 	/**
-	 * 
-	 * @param rating
+	 * Add a new rating to list of all ratings
+	 * @param rating Medical facility rating
 	 */
 	public void addRating(Rating rating) {
 		// TODO - implement MedicalFacility.addRating
+		ratings.add(rating); //add a new rating to the array list
+		totalRatings+= rating.getRating(); //add rating to the sum of all ratings
+		
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * Get average rating of all ratings of the medical facility
+	 * @return Average rating of all ratings
+	 */
 	public float getAverageRating() {
 		// TODO - implement MedicalFacility.getAverageRating
-		throw new UnsupportedOperationException();
+		int size = ratings.size(); //sum of all ratings
+		return totalRatings/size;
+		
 	}
 
-	public Service[] getServices() {
+	/**
+	 * Get list of all services provided by the medical facility
+	 * @return list of all services provided
+	 */
+	public ArrayList<Service> getServices() {
 		return this.services;
 	}
 
 	/**
-	 * 
-	 * @param services
+	 * Add services provided by the medical facility
+	 * @param services Services provided by medical facility
 	 */
-	public void setServices(Service[] services) {
-		this.services = services;
+	public void addServices(Service service) {
+		services.add(service);
 	}
 
 }
