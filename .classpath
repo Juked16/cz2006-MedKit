@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry excluding="source/" kind="src" path="cz2006MedKit"/>
+	<classpathentry kind="src" path="cz2006MedKit/source"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

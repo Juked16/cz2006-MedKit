@@ -2,6 +2,9 @@ package entity;
 
 public class Rating {
 
+	/**
+	 * Variable of User who rated a medical facility
+	 */
 	private User user;
 	private float rating;
 
