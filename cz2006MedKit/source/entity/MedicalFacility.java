@@ -2,7 +2,6 @@ package entity;
 import java.util.ArrayList; 
 import java.util.Arrays;
 
-
 public class MedicalFacility {
 
 	/**
@@ -32,9 +31,9 @@ public class MedicalFacility {
 	private ArrayList<Service> services;
 	
 	/**
-	 * Variable of all ratings given to the medical facility
+	 * Variable of list of users who book marked the medical facility
 	 */
-	private float totalRatings;
+	private ArrayList<User> notifyList;
 
 	/**
 	 * Constructor for medical facility
@@ -107,7 +106,6 @@ public class MedicalFacility {
 	public void addRating(Rating rating) {
 		// TODO - implement MedicalFacility.addRating
 		ratings.add(rating); //add a new rating to the array list
-		totalRatings+= rating.getRating(); //add rating to the sum of all ratings
 		
 		throw new UnsupportedOperationException();
 	}
@@ -119,7 +117,11 @@ public class MedicalFacility {
 	public float getAverageRating() {
 		// TODO - implement MedicalFacility.getAverageRating
 		int size = ratings.size(); //sum of all ratings
-		return totalRatings/size;
+		float sum=0;
+		for(Rating i: ratings) {
+			sum += i.getRating();
+		}
+		return sum/size;
 		
 	}
 
@@ -137,6 +139,10 @@ public class MedicalFacility {
 	 */
 	public void addServices(Service service) {
 		services.add(service);
+	}
+	
+	public ArrayList<User> getNotifyList() {
+		return this.notifyList;
 	}
 
 }
