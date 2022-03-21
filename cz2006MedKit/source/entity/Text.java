@@ -7,24 +7,49 @@ import java.sql.Timestamp;
 
 public class Text {
 
-	private User user;
+	/**
+	 * Variable of user that created text
+	 */
+    private User user;
+    /**
+	 * Variable of content of text
+	 */
 	private String content;
+    /**
+	 * Variable of time that text was created
+	 */
 	private Date timestamp;
 
-	public User getUser() {
+	/**
+	 * Get user that created text
+	 * @return user of text
+	 */
+    public User getUser() {
 		return this.user;
 	}
 
-	public String getContent() {
+	/**
+	 * Get content of text
+	 * @return content of text
+	 */
+    public String getContent() {
 		return this.content;
 	}
 
-	public String setContent() {
+	/**
+	 * Set content of text
+	 * @param content Content of text
+	 */
+    public void setContent(String content) {
 		// TODO - implement Text.setContent
-		throw new UnsupportedOperationException();
+		this.content = content;
 	}
 
-	public Date getTimestamp() {
+	/**
+	 * Get time that text was created
+	 * @return timestamp of text
+	 */
+    public Date getTimestamp() {
 		return this.timestamp;
 	}
 
