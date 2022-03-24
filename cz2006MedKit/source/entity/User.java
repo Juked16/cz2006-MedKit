@@ -44,7 +44,7 @@ public class User {
 	 * @param password
 	 */
 	public boolean verifyPassword(String password) {
-		if(password == passwordHash){
+		if(password == this.passwordHash){
 			return true;}
 		else if(password == null){
 			throw new UnsupportedOperationException();}
