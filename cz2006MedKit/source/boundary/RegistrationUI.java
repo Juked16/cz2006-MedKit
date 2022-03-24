@@ -3,12 +3,12 @@ package boundary;
 public class RegistrationUI {
 
 	public void displayErrorMessage() {
-		// TODO - implement RegistrationUI.displayErrorMessage
+		System.out.println("Error! Registration unsuccessful");
 		throw new UnsupportedOperationException();
 	}
 
 	public void displaySuccessMessage() {
-		// TODO - implement RegistrationUI.displaySuccessMessage
+		System.out.println("Registration succcessful");
 		throw new UnsupportedOperationException();
 	}
 
