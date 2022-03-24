@@ -22,7 +22,8 @@ public class User {
 	 * @param username
 	 */
 	public User(String username) {
-		// TODO - implement User.User
+		this.username = username;
+		//what about the other parameters? what about comparison?
 		throw new UnsupportedOperationException();
 	}
 
@@ -43,8 +44,12 @@ public class User {
 	 * @param password
 	 */
 	public boolean verifyPassword(String password) {
-		// TODO - implement User.verifyPassword
-		throw new UnsupportedOperationException();
+		if(password == passwordHash){
+			return true;}
+		else if(password == null){
+			throw new UnsupportedOperationException();}
+		else{
+			return false;}
 	}
 
 	/**
