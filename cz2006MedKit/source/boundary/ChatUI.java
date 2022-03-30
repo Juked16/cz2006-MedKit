@@ -2,14 +2,20 @@ package boundary;
 
 public class ChatUI {
 
+	/**
+	 * Display successful start of a conversation.
+	 */
 	public void displayConversationStarted() {
 		// TODO - implement ChatUI.displayConversationStarted
-		throw new UnsupportedOperationException();
+		System.out.println("Conversation has succesfully started.");
 	}
 
+	/**
+	 * Display error message of not finding the user account keyed in.
+	 */
 	public void displayErrorMessage() {
 		// TODO - implement ChatUI.displayErrorMessage
-		throw new UnsupportedOperationException();
+		System.out.println("Error! User account does not exist.");
 	}
 
 }
