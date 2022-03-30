@@ -3,23 +3,37 @@ package entity;
 import java.util.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.security.PublicKey;
 import java.sql.Timestamp;
+
+//***I changed Text to be a superclass of Post here***//
 
 public class Text {
 
 	/**
 	 * Variable of user that created text
 	 */
-    private User user;
+    protected User user;
     /**
 	 * Variable of content of text
 	 */
-	private String content;
+	protected String content;
     /**
 	 * Variable of time that text was created
 	 */
-	private Date timestamp;
+	protected Date timestamp;
 
+	/**
+	 * Constructor for Text
+	 * @param user User that created text
+	 * @param content Content of text
+	 */
+	public Text(User user, String content) {
+		this.user = user;
+        this.timestamp = new Date();
+        this.content = content;
+	}
+	
 	/**
 	 * Get user that created text
 	 * @return user of text

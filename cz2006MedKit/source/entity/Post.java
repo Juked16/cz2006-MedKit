@@ -5,20 +5,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.sql.Timestamp;
 
-public class Post {
+//***I changed Post to be a subclass of Text here***//
+
+public class Post extends Text {
 	
-	/**
-	 * Variable of user that posted post
-	 */
-    private User user;
-    /**
-	 * Variable of time that post was posted
-	 */
-	private Date timestamp;
-    /**
-	 * Variable of content of post
-	 */
-	private String content;
     /**
 	 * Variable of all comments of post
 	 */
@@ -31,51 +21,8 @@ public class Post {
 	 */
 	public Post(User user, String content) {
 		// TODO - implement Post.Post
-        this.user = user;
-        this.timestamp = new Date();
-        this.content = content;
+        super(user, content);
 		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * Get user that posted post
-	 * @return user of post
-	 */
-    public User getUser() {
-		return this.user;
-	}
-
-	/**
-	 * Get time that post was posted
-	 * @return timestamp of post
-	 */
-    public Date getTimestamp() {
-		return this.timestamp;
-	}
-
-	/**
-	 * Get content of post
-	 * @return content of post
-	 */
-    public String getContent() {
-		return this.content;
-	}
-
-	/**
-	 * Set content of post
-	 * @param content Content of post
-	 */
-	public void setContent(String content) {
-		this.content = content;
-	}
-
-	/**
-	 * Get list of all comments of post
-	 * @return list of all comments
-	 */
-    public ArrayList<Text> getComment() {
-		// TODO - implement Post.getComment
-        return this.comments;
 	}
 
 	/**
@@ -86,6 +33,15 @@ public class Post {
 		// TODO - implement Post.addComment
         comments.add(comment);
 		throw new UnsupportedOperationException();
+	}
+	
+	/**
+	 * Get list of all comments of post
+	 * @return list of all comments
+	 */
+    public ArrayList<Text> getComment() {
+		// TODO - implement Post.getComment
+        return this.comments;
 	}
 
 	/**
