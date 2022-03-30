@@ -22,7 +22,6 @@ public class Post extends Text {
 	public Post(User user, String content) {
 		// TODO - implement Post.Post
         super(user, content);
-		throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -32,7 +31,6 @@ public class Post extends Text {
 	public void addComment(Text comment) {
 		// TODO - implement Post.addComment
         comments.add(comment);
-		throw new UnsupportedOperationException();
 	}
 	
 	/**
@@ -56,7 +54,6 @@ public class Post extends Text {
                 break;
             }
         }
-		throw new UnsupportedOperationException();
 	}
 
 }
