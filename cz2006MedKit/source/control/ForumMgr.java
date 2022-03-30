@@ -12,7 +12,7 @@ public class ForumMgr {
 		// TODO - implement ForumMgr.addPost
 		ForumUI forumInstance = new ForumUI();
 		AccountMgr accountmgr = new AccountMgr();
-		if (accountmgr.isAccountVerified(post.getUser()) == 0) {
+		if (accountmgr.isLogin(post.getUser()) == 0) {
 			forumInstance.displayErrorMessage();
 			return false;
 		}
@@ -30,7 +30,7 @@ public class ForumMgr {
 		// TODO - implement ForumMgr.addComment
 		ForumUI forumInstance = new ForumUI();
 		AccountMgr accountmgr = new AccountMgr();
-		if (accountmgr.isAccountVerified(comment.getUser()) == 0) {
+		if (accountmgr.isLogin(comment.getUser()) == 0) {
 			forumInstance.displayErrorMessage();
 			return false;
 		}
