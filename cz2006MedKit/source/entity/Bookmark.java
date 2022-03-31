@@ -1,6 +1,6 @@
 package entity;
 
-public class Bookmark extends MedicalFacility {
+public class Bookmark  {
 
 	private MedicalFacility facility;
 	private String notes;
