@@ -1,5 +1,7 @@
 package control;
 
+import java.util.ArrayList;
+
 import boundary.ChatUI;
 import entity.*;
 
@@ -22,6 +24,7 @@ public class ChatMgr {
 	public void startPrivateMessage(User sender, User receiver, String message) {
 		// TODO - implement ChatMgr.startPrivateMessage
 		ChatUI chatInstance = new ChatUI();
+		AccountMgr accountmgr = new AccountMgr();
 		if (accountmgr.isLogin(sender)) {
 			Text chat = new Text(sender, message);
 			message.add(chat);

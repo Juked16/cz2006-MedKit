@@ -1,4 +1,6 @@
 package control;
+import java.util.ArrayList;
+
 import boundary.ForumUI;
 import entity.*;
 
@@ -8,6 +10,8 @@ public class ForumMgr {
 	 * Add post to postlist if logged in and display error message otherwise
 	 * @param post
 	 */
+	private ArrayList<Post> postList;
+	
 	public boolean addPost(Post post) {
 		// TODO - implement ForumMgr.addPost
 		ForumUI forumInstance = new ForumUI();
@@ -16,8 +20,7 @@ public class ForumMgr {
 			forumInstance.displayErrorMessage();
 			return false;
 		}
-		Postlist postlist = new Postlist();
-		postlist.addPost(post);
+		postList.add(post);
 		return true;
 	}
 
