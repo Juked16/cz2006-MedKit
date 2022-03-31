@@ -9,6 +9,8 @@ public class BookmarkMgr {
 	 */
 	public boolean addBookmark(MedicalFacility medicalfacility) {
 		// TODO - implement BookmarkMgr.addBookmark
+		Bookmark b=new BookMark(medicalfacility);
+		
 		throw new UnsupportedOperationException();
 	}
 
