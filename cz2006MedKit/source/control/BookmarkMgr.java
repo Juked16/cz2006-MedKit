@@ -13,6 +13,7 @@ public class BookmarkMgr {
 			if(medicalFacility.getName().equalsIgnoreCase(i.getName())) {
 		Bookmark b=new BookMark(medicalfacility,notes);
 		return true;}
+		}
 			else return false;
 		throw new UnsupportedOperationException();
 	}
@@ -26,7 +27,7 @@ public class BookmarkMgr {
 		for(MedicalFacility i : medicalFacilityList){
 			if(b.medicalFacility.getName().equalsIgnoreCase(i.getName())) {
 				b=NULL;
-				return true;}return false;
+				return true;}}return false;
 		throw new UnsupportedOperationException();
 	}
 
