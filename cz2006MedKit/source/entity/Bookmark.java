@@ -9,8 +9,10 @@ public class Bookmark  {
 	 * 
 	 * @param facility
 	 */
-	public Bookmark(MedicalFacility facility) {
+	public Bookmark(MedicalFacility facility, String notes) {
 		// TODO - implement Bookmark.Bookmark
+		this.facility=facility;
+		this.notes=notes;
 		throw new UnsupportedOperationException();
 	}
 
@@ -23,7 +25,7 @@ public class Bookmark  {
 	 * @param notes
 	 */
 	public void setNotes(String notes) {
-		this.notes = new String(notes);
+		this.notes = notes;
 	}
 
 	public MedicalFacility getFacility() {
