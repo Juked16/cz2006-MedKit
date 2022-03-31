@@ -10,6 +10,7 @@ public class BookmarkUI {
 	 */
 	public void displayBookmarks(Bookmark[] bookmark) {
 		// TODO - implement BookmarkUI.displayBookmarks
+		System.out.println
 		throw new UnsupportedOperationException();
 	}
 
