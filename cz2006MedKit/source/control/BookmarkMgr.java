@@ -7,10 +7,11 @@ public class BookmarkMgr {
 	 * 
 	 * @param medicalfacility
 	 */
-	public boolean addBookmark(MedicalFacility medicalfacility) {
+	public boolean addBookmark(MedicalFacility medicalfacility, String notes) {
 		// TODO - implement BookmarkMgr.addBookmark
-		Bookmark b=new BookMark(medicalfacility);
-		
+		if(medicalfacility.name
+		Bookmark b=new BookMark(medicalfacility,notes);
+		return true;
 		throw new UnsupportedOperationException();
 	}
 
