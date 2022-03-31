@@ -23,7 +23,7 @@ public class Bookmark {
 	 * @param notes
 	 */
 	public void setNotes(String notes) {
-		this.notes = notes;
+		this.notes = new String(notes);
 	}
 
 	public MedicalFacility getFacility() {
