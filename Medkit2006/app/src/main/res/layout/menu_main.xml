@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/txtAppName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="180dp"
+        android:text="MedKit"
+        android:textColor="#1F76BC"
+        android:textSize="50sp"
+        android:textStyle="bold|italic"
+        android:layout_marginBottom="20sp"/>
+
+    <Button
+        android:id="@+id/btnSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Search"
+        android:layout_below="@+id/txtAppName"
+        android:layout_centerHorizontal="true"
+        android:onClick="onClickSearch"
+        />
+
+    <Button
+        android:id="@+id/btnForum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Forum"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/btnSearch"
+        android:onClick="onClickForum"
+        />
+
+    <Button
+        android:id="@+id/btnChat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Chat"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/btnForum"
+        android:onClick="onClickChat"
+        />
+
+    <Button
+        android:id="@+id/btnBookmark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnChat"
+        android:layout_centerHorizontal="true"
+        android:text="Bookmark"
+        android:onClick="onClickBookmark"
+        />
+
+    <Button
+        android:id="@+id/btnAccount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Account"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/btnBookmark"
+        android:onClick="onClickAccount"
+        />
+
+
+</RelativeLayout>
