@@ -6,30 +6,20 @@
     android:layout_height="match_parent"
     tools:context=".SearchActivity">
 
-    <Button
-        android:id="@+id/search_nearby_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="12dp"
-        android:backgroundTint="#555454"
-        android:text="@string/near_by_search_btn"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <TextView
         android:id="@+id/search_hist_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:text="@string/search_hist_txt"
         android:textSize="32sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_nearby_btn" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteY="16dp" />
 
-    <ScrollView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_hist_scroll"
         android:layout_width="379dp"
         android:layout_height="309dp"
@@ -45,7 +35,7 @@
             android:orientation="vertical">
 
         </LinearLayout>
-    </ScrollView>
+    </androidx.recyclerview.widget.RecyclerView>
 
     <EditText
         android:id="@+id/search_src1"
@@ -57,7 +47,8 @@
         app:layout_constraintHorizontal_bias="0.132"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search_hist_scroll"
-        android:autofillHints="@string/search_hint"
+        android:autofillHints="@string/MF_name"
+        android:text="@string/search_hint"
         tools:ignore="LabelFor" />
 
     <ImageButton
