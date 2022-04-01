@@ -8,38 +8,47 @@
 
     <Button
         android:id="@+id/main_search_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_width="117dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="9dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="13dp"
+        android:onClick="sendSearchMsg"
         android:text="Search"
+        app:layout_constraintBottom_toTopOf="@+id/main_scroll"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/main_search_bar"
+        app:layout_constraintStart_toEndOf="@+id/main_search_txt"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <SearchView
+
+    <!--<SearchView
         android:id="@+id/main_search_bar"
-        android:layout_width="287dp"
-        android:layout_height="46dp"
+        android:layout_width="43dp"
+        android:layout_height="43dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />-->
 
     <ScrollView
         android:id="@+id/main_scroll"
         android:layout_width="394dp"
         android:layout_height="659dp"
         android:layout_marginBottom="8dp"
+        android:contentDescription="@string/appbar_scrolling_view_behavior"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.47"
         app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
+            android:id="@+id/main_linear_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" />
+            android:orientation="vertical"></LinearLayout>
     </ScrollView>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
