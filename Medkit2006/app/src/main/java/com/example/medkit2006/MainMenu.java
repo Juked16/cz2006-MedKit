@@ -32,7 +32,7 @@ public class MainMenu extends AppCompatActivity {
     }
 
     public void onClickSearch(View view){
-        Intent intent = new Intent(MainMenu.this, MainActivity.class);
+        Intent intent = new Intent(MainMenu.this, SearchActivity.class);
         startActivity(intent);
     }
 

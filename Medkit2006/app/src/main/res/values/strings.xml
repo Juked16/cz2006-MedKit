@@ -2,7 +2,7 @@
     <string name="app_name">Medkit2006</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="MF_name">MedicalFacilityName</string>
+    <string name="MF_name">Medical Facility Name</string>
     <string name="MF_type">Type</string>
     <string name="MF_rating">Rating</string>
     <string name="MF_address">Address</string>
@@ -16,8 +16,6 @@
     <string name="search_opt2">Distance</string>
     <string name="search_opt3">Rating</string>
     <string name="facil_detail_image_descr">Medical Facility Image</string>
-    <string name = "map_key" translatable = "false">
-        AIzaSyDbuQIEUzTgZf5it0bRTiGXnSUcnmGSwmE
-    </string>
+
 
 </resources>

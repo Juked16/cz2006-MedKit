@@ -38,13 +38,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AccountActivity" />
+        <activity android:name=".AccountActivity" android:label="Login" android:parentActivityName=".MainActivity"/>
         <activity android:name=".control.AccountMgr" />
         <activity android:name=".ForumActivity" android:label="Forum" android:parentActivityName=".MainActivity"/>
         <activity android:name=".BookmarkActivity" android:label="BookMark" android:parentActivityName=".MainActivity"/>
         <activity android:name=".ChatActivity" android:label="Chats" android:parentActivityName=".MainActivity"/>
-        <activity android:name=".LoginActivity" android:label="Login" android:parentActivityName=".MainActivity"/>
-        <activity android:name=".RegistrationActivity" />
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".RegistrationActivity" android:label="Registration" android:parentActivityName=".MainActivity"/>
         <activity android:name=".FacilDetailActivity" android:label="Facility Detail" android:parentActivityName=".MainMenu" />
         <activity android:name=".SearchActivity" android:label="Search" android:parentActivityName=".MainActivity" />
 
