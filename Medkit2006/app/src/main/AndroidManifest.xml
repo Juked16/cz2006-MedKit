@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.medkit2006">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"
+        tools:ignore="CoarseFineLocation" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <meta-data
+        android:name="com.google.android.geo.API_KEY"
+        android:value="@string+/map_key" />
 
     <application
         android:allowBackup="true"
@@ -31,11 +40,13 @@
         </activity>
         <activity android:name=".AccountActivity" />
         <activity android:name=".control.AccountMgr" />
-        <activity android:name=".ForumActivity" />
-        <activity android:name=".BookmarkActivity" />
-        <activity android:name=".ChatActivity" />
-        <activity android:name=".LoginActivity" />
+        <activity android:name=".ForumActivity" android:label="Forum" android:parentActivityName=".MainActivity"/>
+        <activity android:name=".BookmarkActivity" android:label="BookMark" android:parentActivityName=".MainActivity"/>
+        <activity android:name=".ChatActivity" android:label="Chats" android:parentActivityName=".MainActivity"/>
+        <activity android:name=".LoginActivity" android:label="Login" android:parentActivityName=".MainActivity"/>
         <activity android:name=".RegistrationActivity" />
+        <activity android:name=".FacilDetailActivity" android:label="Facility Detail" android:parentActivityName=".MainMenu" />
+        <activity android:name=".SearchActivity" android:label="Search" android:parentActivityName=".MainActivity" />
 
 
     </application>

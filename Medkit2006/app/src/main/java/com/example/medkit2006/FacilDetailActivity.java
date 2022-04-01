@@ -1,4 +1,4 @@
-package com.example.medkit;
+package com.example.medkit2006;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -27,7 +27,7 @@ public class FacilDetailActivity extends AppCompatActivity implements OnMapReady
         mapFragment.getMapAsync(this);
         // Get the Intent that started this activity and extract the string
         Intent intent = getIntent();
-        String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
+        String message = "facility name";//intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
 
         // Capture the layout's TextView and set the string as its text
         TextView textView = findViewById(R.id.medfacil_name);
