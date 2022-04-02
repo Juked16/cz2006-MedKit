@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView txtMFName,txtMFContact,txtMFType,txtMFAddress;
     private TextView test;
     private String stContact;
-    private String URL = "http://10.0.2.2/android_cz2006/mf.php";
+    private String URL = "http://159.138.106.155/mf.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         */
 
     }
+
     public void loadMF(){
         StringRequest stringRequest = new StringRequest(Request.Method.GET, URL,
                 new Response.Listener<String>() {
