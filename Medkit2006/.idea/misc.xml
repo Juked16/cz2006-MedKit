@@ -3,18 +3,21 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/julie/AndroidStudioProjects/Medkit2006/app/src/main/res/drawable-anydpi/ic_rating_stars.xml" value="0.1925" />
         <entry key="..\:/Users/julie/AndroidStudioProjects/Medkit2006/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1485" />
         <entry key="..\:/Users/julie/AndroidStudioProjects/Medkit2006/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1485" />
         <entry key="..\:/Users/julie/AndroidStudioProjects/Medkit2006/app/src/main/res/drawable/rounded_corner_view.xml" value="0.1485" />
         <entry key="..\:/Users/julie/AndroidStudioProjects/Medkit2006/app/src/main/res/layout/account.xml" value="0.23854166666666668" />
         <entry key="..\:/Users/julie/AndroidStudioProjects/Medkit2006/app/src/main/res/layout/activity_main.xml" value="0.2" />
+        <entry key="..\:/Users/julie/AndroidStudioProjects/Medkit2006/app/src/main/res/layout/activity_result_search.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/julie/AndroidStudioProjects/Medkit2006/app/src/main/res/layout/bookmark.xml" value="0.23854166666666668" />
         <entry key="..\:/Users/julie/AndroidStudioProjects/Medkit2006/app/src/main/res/layout/chat.xml" value="0.23854166666666668" />
         <entry key="..\:/Users/julie/AndroidStudioProjects/Medkit2006/app/src/main/res/layout/forum.xml" value="0.23854166666666668" />
         <entry key="..\:/Users/julie/AndroidStudioProjects/Medkit2006/app/src/main/res/layout/login.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/julie/AndroidStudioProjects/Medkit2006/app/src/main/res/layout/medical_facility_layout.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/julie/AndroidStudioProjects/Medkit2006/app/src/main/res/layout/medical_facility_layout.xml" value="0.24282982791587" />
         <entry key="..\:/Users/julie/AndroidStudioProjects/Medkit2006/app/src/main/res/layout/menu_main.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/julie/AndroidStudioProjects/Medkit2006/app/src/main/res/layout/registration.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/julie/AndroidStudioProjects/Medkit2006/app/src/main/res/layout/search.xml" value="0.2" />
         <entry key="..\:/Users/julie/AndroidStudioProjects/Medkit2006/app/src/main/res/layout/success.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/julie/AndroidStudioProjects/Medkit2006/app/src/main/res/xml/network_security_config.xml" value="0.1" />
         <entry key="..\:/Users/julie/AndroidStudioProjects/Medkit2006/app/src/main/res/xml/test.xml" value="0.25416666666666665" />

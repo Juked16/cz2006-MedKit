@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
         */
 
     }
-
     public void loadMF(){
         StringRequest stringRequest = new StringRequest(Request.Method.GET, URL,
                 new Response.Listener<String>() {
@@ -112,8 +111,8 @@ public class MainActivity extends AppCompatActivity {
             StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-                    test.setText(response.toString());
-
+                    txtMFAddress.setText(response.toString());
+                    txtMFName.setText("success");
                     try {
                         JSONArray mfList = new JSONArray(response);
                         JSONObject mfDetail = mfList.getJSONObject(0);
@@ -132,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     Toast.makeText(MainActivity.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
-                    test.setText("failed");
+                    txtMFName.setText("failed");
                 }
             }){
                 @Nullable
@@ -149,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
         else{
-            test.setText("failedd");
+            txtMFName.setText("failedd");
             Toast.makeText(this, "string cannot be empty",Toast.LENGTH_SHORT).show();
         }
         Toast.makeText(this, "end of class",Toast.LENGTH_SHORT).show();

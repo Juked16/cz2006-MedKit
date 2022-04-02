@@ -7,15 +7,15 @@ import android.view.View;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class LoginActivity extends AppCompatActivity {
+public class SearchActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login);
+        setContentView(R.layout.search);
     }
 
-    public void toRegister(View view){
-        Intent intent = new Intent(LoginActivity.this, RegistrationActivity.class);
+    public void toSearchResult(View view){
+        Intent intent = new Intent(SearchActivity.this, SearchResultActivity.class);
         startActivity(intent);
     }
 }

@@ -8,6 +8,7 @@
     <string name="MF_address">Address</string>
     <string name="MF_contact">Contact</string>
     <string name="MF_services">Service</string>
+    <string name="search_result_list">Search Result List</string>
 
 
 </resources>

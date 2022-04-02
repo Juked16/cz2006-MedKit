@@ -35,6 +35,12 @@ public class MedicalFacility {
 	private ArrayList<User> notifyList;
 
 	/**
+	 * Empty Constructor for medical facility
+	 * 	 */
+	public MedicalFacility() {
+	}
+
+	/**
 	 * Constructor for medical facility
 	 * @param name Name of medical Facility
 	 */

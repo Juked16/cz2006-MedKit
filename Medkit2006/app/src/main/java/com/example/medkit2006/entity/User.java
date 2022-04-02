@@ -1,9 +1,6 @@
 package com.example.medkit2006.entity;
 
-import java.util.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.sql.Timestamp;
+import java.util.Date;
 
 public class User {
 

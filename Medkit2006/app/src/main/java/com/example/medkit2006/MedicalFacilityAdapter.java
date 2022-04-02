@@ -20,19 +20,18 @@ import java.util.List;
  */
 
 public class MedicalFacilityAdapter extends RecyclerView.Adapter<MedicalFacilityAdapter.MFViewHolder>{
-    private Context mContext;
-    private List<MedicalFacility> medicalFacilityList;
+    LayoutInflater inflater;
+    List<MedicalFacility> medicalFacilityList;
 
-    public MedicalFacilityAdapter(Context mContext, List<MedicalFacility> medicalFacilityList) {
-        this.mContext = mContext;
+    public MedicalFacilityAdapter(Context context, List<MedicalFacility> medicalFacilityList) {
+        this.inflater = LayoutInflater.from(context);
         this.medicalFacilityList = medicalFacilityList;
     }
 
 
     @Override
     public MFViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(mContext);
-        View view = inflater.inflate(R.layout.medical_facility_layout,null);
+        View view = inflater.inflate(R.layout.medical_facility_layout,parent, false);
         return new MFViewHolder(view);
     }
 
@@ -41,9 +40,9 @@ public class MedicalFacilityAdapter extends RecyclerView.Adapter<MedicalFacility
         MedicalFacility medicalFacility = medicalFacilityList.get(position);
         holder.txtMFName.setText(medicalFacility.getName());
         holder.txtMFType.setText(medicalFacility.getType());
-        holder.txtMFAddress.setText(medicalFacility.getAddress());
+        //holder.txtMFAddress.setText(medicalFacility.getAddress());
         holder.txtMFContact.setText(medicalFacility.getContact());
-        holder.txtMFRating.setText(String.valueOf(medicalFacility.getAverageRating()));
+        //holder.txtMFRating.setText(String.valueOf(medicalFacility.getAverageRating()));
     }
 
     @Override
@@ -56,10 +55,10 @@ public class MedicalFacilityAdapter extends RecyclerView.Adapter<MedicalFacility
 
         public MFViewHolder(View itemView){
             super(itemView);
-            txtMFName = itemView.findViewById(R.id.txtMedicalFacilityName);
-            txtMFType = itemView.findViewById(R.id.txtMedicalFacilityType);
-            txtMFAddress = itemView.findViewById(R.id.txtMedicalFacilityAddress);
-            txtMFContact = itemView.findViewById(R.id.txtMedicalFacilityContact);
+            txtMFName = itemView.findViewById(R.id.cardViewMFName);
+            txtMFType = itemView.findViewById(R.id.cardViewMFType);
+            //txtMFAddress = itemView.findViewById(R.id.cardview);
+            txtMFContact = itemView.findViewById(R.id.cardViewMFContact);
         }
     }
 

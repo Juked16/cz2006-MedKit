@@ -52,7 +52,9 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="93dp"
-        android:text="Register" />
+        android:text="Register"
+        android:onClick="toRegister"
+        />
 
 
 </RelativeLayout>

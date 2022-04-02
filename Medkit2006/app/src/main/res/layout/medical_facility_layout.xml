@@ -1,108 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewMF"
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></androidx.recyclerview.widget.RecyclerView>
-
-
-    <TextView
-        android:id="@+id/txtMedicalFacilityName"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="60dp"
-        android:text="@string/MF_name"
-        android:textColor="#25232B"
-        android:textSize="40sp"
-        android:textStyle="bold"
-        android:padding="10sp"
-        />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        app:cardBackgroundColor="#9DEFDC"
+        app:cardCornerRadius="10dp"
+        >
 
-    <TextView
-        android:id="@+id/txtMedicalFacilityType"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txtMedicalFacilityName"
-        android:layout_toStartOf="@+id/mfRatingLabel"
-        android:background="@drawable/rounded_corner_view"
-        android:padding="5sp"
-        android:text="@string/MF_type"
-        android:textColor="#263238"
-        android:textSize="30sp" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/mfRatingLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txtMedicalFacilityName"
-        android:layout_centerHorizontal="true"
-        android:labelFor="@id/txtMedicalFacilityRating"
-        android:text="Rating: "
-        android:textSize="30sp"
-        android:textColor="#263238"
-        android:layout_marginLeft="15dp"
-        android:background="@drawable/rounded_corner_view"
-        android:padding="5sp"
-        />
+            <TextView
+                android:id="@+id/cardViewMFName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:padding="3sp"
+                android:text="@string/MF_name"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/txtMedicalFacilityRating"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txtMedicalFacilityName"
-        android:layout_centerHorizontal="true"
-        android:layout_toRightOf="@id/mfRatingLabel"
-        android:text="@string/MF_rating"
-        android:textSize="30sp"
-        android:textColor="#263238"
-        android:layout_marginLeft="5dp"
-        android:background="@drawable/rounded_corner_view"
-        android:padding="5sp"
-        />
+            <ImageView
+                android:id="@+id/cardViewStars"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cardViewMFName"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="0dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="10dp"
+                android:layout_toRightOf="@id/cardViewRating"
+                android:src="@drawable/ic_rating_stars" />
 
-    <TextView
-        android:id="@+id/txtMedicalFacilityAddress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txtMedicalFacilityName"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="71dp"
-        android:padding="30sp"
-        android:text="@string/MF_address"
-        android:textColor="#263238"
-        android:textSize="30sp"
-        android:layout_marginLeft="10sp"
-        android:background="@drawable/rounded_corner_view"/>
+            <TextView
+                android:id="@+id/cardViewRating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cardViewMFName"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                android:layout_toEndOf="@id/cardViewMFContact"
+                android:padding="5sp"
+                android:text="@string/MF_rating"
+                android:textColor="#263238"
+                android:textSize="15sp"
+                />
 
-    <TextView
-        android:id="@+id/txtMedicalFacilityContact"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txtMedicalFacilityAddress"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"
-        android:padding="20sp"
-        android:text="@string/MF_contact"
-        android:textColor="#263238"
-        android:background="@drawable/rounded_corner_view"
-        android:textSize="30sp" />
+            <ImageView
+                android:id="@+id/cardViewCall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cardViewMFName"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="9dp"
+                android:layout_marginBottom="10dp"
+                android:layout_toEndOf="@id/cardViewMFType"
+                android:src="@drawable/ic_call"
 
-    <TextView
-        android:id="@+id/txtMedicalFacilityServices"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txtMedicalFacilityContact"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="26dp"
-        android:background="@drawable/rounded_corner_view"
-        android:padding="20sp"
-        android:text="@string/MF_services"
-        android:textColor="#263238"
-        android:textSize="30sp" />
+                />
 
+            <TextView
+                android:id="@+id/cardViewMFContact"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cardViewMFName"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                android:layout_toEndOf="@id/cardViewCall"
+                android:padding="5sp"
+                android:text="@string/MF_contact"
+                android:textColor="#263238"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/cardViewMFType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cardViewMFName"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="5dp"
+                android:padding="5sp"
+                android:text="@string/MF_type"
+                android:textColor="#263238"
+                android:textSize="15sp"
+                android:background="@drawable/rounded_corner_view"
+                />
+
+        </RelativeLayout>
+
+
+    </androidx.cardview.widget.CardView>
 
 </RelativeLayout>
