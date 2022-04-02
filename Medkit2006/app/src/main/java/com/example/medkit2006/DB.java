@@ -19,49 +19,25 @@ import java.util.function.Consumer;
 
 public class DB {
 
-    static Connection conn;
-    String lastMsg = "";
+    /*
+    CREATE TABLE medical_facilities(name VARCHAR(45) PRIMARY KEY,type VARCHAR(45),address VARCHAR(100), contact VARCHAR(45));
+    INSERT INTO medical_facilities VALUES ("Alexandra Hospital","hospital","378 ALEXANDRA ROAD ALEXANDRA HOSPITAL Singapore 159964","64722000")
+    */
+
+    Connection conn;
+    String lastMsg;
 
     public DB() {
         connect();
     }
 
     public void connect(){
-        conn = new Connection("94.74.80.1", "test", "Blue!$!$!$", 3306, "db_medical_facilities", new IConnectionInterface() {
-            @Override
-            public void actionCompleted() {
-                lastMsg = "OK";
-            }
-
-            @Override
-            public void handleInvalidSQLPacketException(InvalidSQLPacketException ex) {
-                lastMsg = ex.getMessage();
-            }
-
-            @Override
-            public void handleMySQLException(MySQLException ex) {
-                lastMsg = ex.getMessage();
-            }
-
-            @Override
-            public void handleIOException(IOException ex) {
-                lastMsg = ex.getMessage();
-            }
-
-            @Override
-            public void handleMySQLConnException(MySQLConnException ex) {
-                lastMsg = ex.getMessage();
-            }
-
-            @Override
-            public void handleException(Exception exception) {
-                lastMsg = exception.getMessage();
-            }
-        });
+        lastMsg = "connecting";
+        conn = new Connection("94.74.80.1", "test", "Blue!$!$!$", 3306, "db_medical_facilities", new DefaultResultInterface());
     }
 
     public void execute(@NotNull String statement, Runnable whenDone){
-        conn.createStatement().execute(statement, new IConnectionInterface() {
+        conn.createStatement().execute(statement, new DefaultResultInterface() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void actionCompleted() {
@@ -72,36 +48,11 @@ public class DB {
                     lastMsg = e.getMessage();
                 }
             }
-
-            @Override
-            public void handleInvalidSQLPacketException(InvalidSQLPacketException ex) {
-                lastMsg = ex.getMessage();
-            }
-
-            @Override
-            public void handleMySQLException(MySQLException ex) {
-                lastMsg = ex.getMessage();
-            }
-
-            @Override
-            public void handleIOException(IOException ex) {
-                lastMsg = ex.getMessage();
-            }
-
-            @Override
-            public void handleMySQLConnException(MySQLConnException ex) {
-                lastMsg = ex.getMessage();
-            }
-
-            @Override
-            public void handleException(Exception exception) {
-                lastMsg = exception.getMessage();
-            }
         });
     }
 
     public void executeQuery(@NotNull String query, Consumer<ResultSet> whenDone) {
-        conn.createStatement().executeQuery(query, new IResultInterface() {
+        conn.createStatement().executeQuery(query, new DefaultResultInterface() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void executionComplete(ResultSet resultSet) {
@@ -112,31 +63,42 @@ public class DB {
                     lastMsg = e.getMessage();
                 }
             }
-
-            @Override
-            public void handleInvalidSQLPacketException(InvalidSQLPacketException ex) {
-                lastMsg = ex.getMessage();
-            }
-
-            @Override
-            public void handleMySQLException(MySQLException ex) {
-                lastMsg = ex.getMessage();
-            }
-
-            @Override
-            public void handleIOException(IOException ex) {
-                lastMsg = ex.getMessage();
-            }
-
-            @Override
-            public void handleMySQLConnException(MySQLConnException ex) {
-                lastMsg = ex.getMessage();
-            }
-
-            @Override
-            public void handleException(Exception ex) {
-                lastMsg = ex.getMessage();
-            }
         });
+    }
+
+    class DefaultResultInterface implements IConnectionInterface,IResultInterface{
+        public void actionCompleted() {
+            lastMsg = "Connect OK";
+        }
+
+        @Override
+        public void executionComplete(ResultSet resultSet) {
+            lastMsg = "Result OK";
+        }
+
+        @Override
+        public void handleInvalidSQLPacketException(InvalidSQLPacketException ex) {
+            lastMsg = ex.getMessage();
+        }
+
+        @Override
+        public void handleMySQLException(MySQLException ex) {
+            lastMsg = ex.getMessage();
+        }
+
+        @Override
+        public void handleIOException(IOException ex) {
+            lastMsg = ex.getMessage();
+        }
+
+        @Override
+        public void handleMySQLConnException(MySQLConnException ex) {
+            lastMsg = ex.getMessage();
+        }
+
+        @Override
+        public void handleException(Exception exception) {
+            lastMsg = exception.getMessage();
+        }
     }
 }
