@@ -5,7 +5,8 @@
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:onClick="goBack"
-    tools:context=".FacilDetailActivity">
+    tools:context=".FacilDetailActivity"
+    android:name="com.testing.svma.FacilDetailActivity">
 
     <ScrollView
         android:layout_width="395dp"
@@ -23,14 +24,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
-            <ImageButton
-                android:id="@+id/imageButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="goBack"
-                app:srcCompat="?attr/actionModeCloseDrawable" />
 
             <HorizontalScrollView
                 android:id="@+id/horizontalScrollView"

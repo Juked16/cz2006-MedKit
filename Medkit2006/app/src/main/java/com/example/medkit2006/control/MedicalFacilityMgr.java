@@ -1,5 +1,6 @@
 package com.example.medkit2006.control;
 
+import com.example.medkit2006.SearchActivity;
 import com.example.medkit2006.boundary.SearchUI;
 import com.example.medkit2006.entity.MedicalFacility;
 import com.example.medkit2006.entity.User;
@@ -13,14 +14,23 @@ public class MedicalFacilityMgr {
 	 * Variable of list of all medical facility in database
 	 */
 	private MedicalFacility[] medicalFacilityList;
-	
-	
-	/**
+	/** TODO: a function to return 30 facility for display
+	 * @return certain number of medical facilities, the certain number is defined in SearchActivity.NUMBER_OF_DISPLAY
+	 */
+	public MedicalFacility[] getFacilityList()
+	{
+		//return SearchActivity.NUMBER_OF_DISPLAY;
+		return null;
+	}
+
+	/** TODO: modifie the function to return the list in a certain order
 	 * Get list of Medical facilities matching the input and filter (if any)
 	 * @param input Query of matching medical facilities
-	 * @param filter List of filters
+	 * @param filter List of filters - changed to single filter -- filters are realized by dropdown list, and can only be selected once
+	 * @param Mode Denote the pattern of return result: 0/Alphabet, 1/Distance, 2/Rating, -1/Arbitrary
+	 * @return null if no available result
 	 */
-	public MedicalFacility[] getFacilityList(String input, String[] filter) {
+	public MedicalFacility[] getFacilityList(String input, String filter, int Mode) {
 		// TODO - implement MedicalFacilityMgr.getFacilityList
 		Pattern p = Pattern.compile(input, Pattern.CASE_INSENSITIVE);
 		for(MedicalFacility i : medicalFacilityList) {
