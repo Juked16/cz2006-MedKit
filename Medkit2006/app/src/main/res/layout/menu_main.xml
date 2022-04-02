@@ -70,11 +70,10 @@
         android:layout_width="309dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/btnBookmark"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="-451dp"
         android:ems="10"
         android:inputType="textMultiLine"
-        android:text="select * from medicalfacilities" />
+        android:text="select * from medical_facilities" />
 
     <Button
         android:id="@+id/btnDBTest"

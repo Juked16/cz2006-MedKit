@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -71,8 +72,8 @@ public class MainMenu extends AppCompatActivity {
             btn.setText(db.lastMsg);
             return;
         }
-        String query = ((EditText) findViewById(R.id.textDBQuery)).getText().toString();
-        if (query.toUpperCase().startsWith("SELECT"))
+        String query = ((EditText) findViewById(R.id.textDBQuery)).getText().toString().trim();
+        if (query.contains("SELECT") || query.contains("select"))
             db.executeQuery(query, resultSet -> {
                 try {
                     StringBuilder text = new StringBuilder();
@@ -91,6 +92,7 @@ public class MainMenu extends AppCompatActivity {
                     btn.setText(text);
                 } catch (SQLColumnNotFoundException e) {
                     btn.setText(e.getMessage());
+                    Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
         else

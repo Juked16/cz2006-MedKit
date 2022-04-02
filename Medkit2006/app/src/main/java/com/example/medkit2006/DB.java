@@ -20,8 +20,56 @@ import java.util.function.Consumer;
 public class DB {
 
     /*
-    CREATE TABLE medical_facilities(name VARCHAR(45) PRIMARY KEY,type VARCHAR(45),address VARCHAR(100), contact VARCHAR(45));
-    INSERT INTO medical_facilities VALUES ("Alexandra Hospital","hospital","378 ALEXANDRA ROAD ALEXANDRA HOSPITAL Singapore 159964","64722000")
+    CREATE TABLE account (
+        username VARCHAR(45) PRIMARY KEY,
+        email VARCHAR(45) NOT NULL UNIQUE,
+        passwordHash BINARY(32) NOT NULL,
+        verified BIT NOT NULL,
+        firstName VARCHAR(45),
+        lastName VARCHAR(45),
+        gender VARCHAR(10),
+        bloodType VARCHAR(3),
+        dateOfBirth DATE
+    );
+    CREATE TABLE bookmark (
+        username VARCHAR(45) NOT NULL,
+        medical_facility VARCHAR(45) NOT NULL,
+        notes VARCHAR(100)
+    );
+    CREATE TABLE text (
+        id INT NOT NULL AUTO_INCREMENT KEY,
+        username VARCHAR(45) NOT NULL,
+        content VARCHAR(1000) NOT NULL,
+        timestamp DATETIME NOT NULL
+    );
+    CREATE TABLE post(
+        username VARCHAR(45) NOT NULL,
+        content VARCHAR(1000) NOT NULL,
+        timestamp DATETIME NOT NULL,
+        comments VARCHAR(1000) NOT NULL -- #TODO: comma separated list of text ids?
+    );
+    CREATE TABLE medical_facilities(
+        name VARCHAR(45) PRIMARY KEY,
+        type VARCHAR(45) NOT NULL,
+        address VARCHAR(100) NOT NULL,
+        contact VARCHAR(45) NOT NULL
+    );
+    CREATE TABLE rating(
+        username VARCHAR(45) NOT NULL,
+        medical_facility VARCHAR(45) NOT NULL,
+        rating INT NOT NULL
+    );
+    CREATE TABLE service(
+        type VARCHAR(45) NOT NULL,
+        price DOUBLE NOT NULL,
+        description VARCHAR(1000) NOT NULL,
+    );
+    CREATE TABLE chat(
+        users VARCHAR(1000) NOT NULL, -- #TODO: comma separated list of usernames?
+        messages VARCHAR(1000) NOT NULL -- #TODO: comma separated list of text ids?
+    )
+
+    INSERT INTO medical_facilities VALUES ("Alexandra Hospital","hospital","378 ALEXANDRA ROAD ALEXANDRA HOSPITAL Singapore 159964","64722000");
     */
 
     Connection conn;
@@ -33,7 +81,7 @@ public class DB {
 
     public void connect(){
         lastMsg = "connecting";
-        conn = new Connection("94.74.80.1", "test", "Blue!$!$!$", 3306, "db_medical_facilities", new DefaultResultInterface());
+        conn = new Connection("94.74.80.1", "test", "Blue!$!$!$", 3306, "medkit", new DefaultResultInterface());
     }
 
     public void execute(@NotNull String statement, Runnable whenDone){
