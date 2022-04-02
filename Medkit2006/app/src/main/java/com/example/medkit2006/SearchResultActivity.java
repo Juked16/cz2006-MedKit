@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,11 +29,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SearchResultActivity extends AppCompatActivity {
+public class SearchResultActivity extends AppCompatActivity{
     RecyclerView recyclerView;
     MedicalFacilityAdapter adapter;
     ArrayList<MedicalFacility> medicalFacilityList;
 
+    private CardView cardView;
     private TextView txtMFName,txtMFContact,txtMFType,txtMFAddress;
     private TextView test;
     private String stContact;
@@ -46,7 +48,6 @@ public class SearchResultActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.mfListRecyclerV);
         medicalFacilityList = new ArrayList<>();
         extractMedicalFacility();
-
 
     }
 
@@ -96,11 +97,11 @@ public class SearchResultActivity extends AppCompatActivity {
         };
 
         requestQueue.add(jsonArrayRequest);
-
     }
 
     public void toMFDetails(View view){
-        Intent intent = new Intent(SearchResultActivity.this, MainActivity.class);
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
     }
+
 }

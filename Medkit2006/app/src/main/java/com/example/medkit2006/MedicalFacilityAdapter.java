@@ -1,12 +1,15 @@
 package com.example.medkit2006;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medkit2006.entity.MedicalFacility;
@@ -43,6 +46,17 @@ public class MedicalFacilityAdapter extends RecyclerView.Adapter<MedicalFacility
         //holder.txtMFAddress.setText(medicalFacility.getAddress());
         holder.txtMFContact.setText(medicalFacility.getContact());
         //holder.txtMFRating.setText(String.valueOf(medicalFacility.getAverageRating()));
+        CardView cv = (CardView) holder.itemView.findViewById(R.id.cardView);
+        cv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(inflater.getContext(),
+                        "click success bind", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(view.getContext(), MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                view.getContext().startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -50,7 +64,7 @@ public class MedicalFacilityAdapter extends RecyclerView.Adapter<MedicalFacility
         return medicalFacilityList.size();
     }
 
-    class MFViewHolder extends RecyclerView.ViewHolder{
+    public class MFViewHolder extends RecyclerView.ViewHolder{
         TextView txtMFName,txtMFContact,txtMFType,txtMFAddress,txtMFRating;
 
         public MFViewHolder(View itemView){
@@ -59,6 +73,7 @@ public class MedicalFacilityAdapter extends RecyclerView.Adapter<MedicalFacility
             txtMFType = itemView.findViewById(R.id.cardViewMFType);
             //txtMFAddress = itemView.findViewById(R.id.cardview);
             txtMFContact = itemView.findViewById(R.id.cardViewMFContact);
+
         }
     }
 
