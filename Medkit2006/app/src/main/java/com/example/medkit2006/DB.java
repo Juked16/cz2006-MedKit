@@ -24,49 +24,56 @@ public class DB {
         username VARCHAR(45) PRIMARY KEY,
         email VARCHAR(45) NOT NULL UNIQUE,
         passwordHash BINARY(32) NOT NULL,
-        verified BIT NOT NULL,
+        verified BIT DEFAULT 0,
         firstName VARCHAR(45),
         lastName VARCHAR(45),
-        gender VARCHAR(10),
-        bloodType VARCHAR(3),
+        gender ENUM("M","F","O"),
+        bloodType ENUM("A+","A-","B+","B-","AB+","AB-","O+","O-"),
         dateOfBirth DATE
+    );
+    CREATE TABLE medical_facilities(
+        name VARCHAR(45) PRIMARY KEY,
+        type VARCHAR(45) NOT NULL, -- #TODO: ENUM?
+        address VARCHAR(100) NOT NULL,
+        contact VARCHAR(45) NOT NULL
     );
     CREATE TABLE bookmark (
         username VARCHAR(45) NOT NULL,
         medical_facility VARCHAR(45) NOT NULL,
-        notes VARCHAR(100)
+        notes VARCHAR(100) DEFAULT "",
+        FOREIGN KEY (username) REFERENCES account(username),
+        FOREIGN KEY (medical_facility) REFERENCES medical_facilities(name),
+        CONSTRAINT user_mf PRIMARY KEY (username,medical_facility)
     );
     CREATE TABLE text (
-        id INT NOT NULL AUTO_INCREMENT KEY,
-        username VARCHAR(45) NOT NULL,
-        content VARCHAR(1000) NOT NULL,
-        timestamp DATETIME NOT NULL
-    );
-    CREATE TABLE post(
+        id INT AUTO_INCREMENT PRIMARY KEY,
         username VARCHAR(45) NOT NULL,
         content VARCHAR(1000) NOT NULL,
         timestamp DATETIME NOT NULL,
-        comments VARCHAR(1000) NOT NULL -- #TODO: comma separated list of text ids?
-    );
-    CREATE TABLE medical_facilities(
-        name VARCHAR(45) PRIMARY KEY,
-        type VARCHAR(45) NOT NULL,
-        address VARCHAR(100) NOT NULL,
-        contact VARCHAR(45) NOT NULL
+        postId INT CHECK (chatId = NULL),
+        chatId INT CHECK (postId = NULL),
+        FOREIGN KEY (username) REFERENCES account(username)
     );
     CREATE TABLE rating(
         username VARCHAR(45) NOT NULL,
         medical_facility VARCHAR(45) NOT NULL,
-        rating INT NOT NULL
+        rating INT NOT NULL CHECK(rating >= 1 AND rating <= 5),
+        FOREIGN KEY (username) REFERENCES account(username),
+        FOREIGN KEY (medical_facility) REFERENCES medical_facilities(name),
+        CONSTRAINT user_mf PRIMARY KEY (username,medical_facility)
     );
     CREATE TABLE service(
-        type VARCHAR(45) NOT NULL,
-        price DOUBLE NOT NULL,
+        medical_facility VARCHAR(45) NOT NULL,
+        type VARCHAR(45) NOT NULL, -- #TODO: ENUM?
+        price DOUBLE NOT NULL CHECK (price > 0),
         description VARCHAR(1000) NOT NULL,
+        FOREIGN KEY (medical_facility) REFERENCES medical_facilities(name)
     );
     CREATE TABLE chat(
-        users VARCHAR(1000) NOT NULL, -- #TODO: comma separated list of usernames?
-        messages VARCHAR(1000) NOT NULL -- #TODO: comma separated list of text ids?
+        id INT NOT NULL,
+        username VARCHAR(45) NOT NULL,
+        FOREIGN KEY (username) REFERENCES account(username),
+        CONSTRAINT id_username PRIMARY KEY (id,username)
     )
 
     INSERT INTO medical_facilities VALUES ("Alexandra Hospital","hospital","378 ALEXANDRA ROAD ALEXANDRA HOSPITAL Singapore 159964","64722000");
@@ -74,13 +81,15 @@ public class DB {
 
     Connection conn;
     String lastMsg;
+    static DB instance = null;
 
     public DB() {
         connect();
+        instance = this;
     }
 
     public void connect(){
-        lastMsg = "connecting";
+        lastMsg = "connecting (click again if stuck)";
         conn = new Connection("94.74.80.1", "test", "Blue!$!$!$", 3306, "medkit", new DefaultResultInterface());
     }
 

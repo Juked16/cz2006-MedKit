@@ -64,5 +64,24 @@
         android:onClick="onClickAccount"
         />
 
+    <EditText
+        android:id="@+id/textDBQuery"
+        android:layout_width="309dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnBookmark"
+        android:layout_marginTop="-450dp"
+        android:ems="10"
+        android:inputType="textMultiLine"
+        android:layout_centerHorizontal="true"
+        android:text="select * from medical_facilities" />
+
+    <Button
+        android:id="@+id/btnDBTest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textDBQuery"
+        android:layout_centerHorizontal="true"
+        android:onClick="onClickDB"
+        android:text="DB Test" />
 
 </RelativeLayout>
