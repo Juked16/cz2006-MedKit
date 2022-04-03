@@ -13,8 +13,20 @@
         android:text="Registration"
         />
 
+
     <EditText
-        android:id="@+id/editTextTextEmailAddress"
+        android:id="@+id/regUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="170dp"
+        android:ems="10"
+        android:hint="Username"
+        android:textStyle="italic" />
+
+    <EditText
+        android:id="@+id/regEmailAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -37,7 +49,7 @@
         android:inputType="textPassword" />
 
     <EditText
-        android:id="@+id/cfmPassword"
+        android:id="@+id/regConfirmPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -55,6 +67,15 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="170dp"
         android:text="Register" />
+
+    <TextView
+        android:id="@+id/regError"
+        android:layout_width="307dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/btnRegister"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="-40dp" />
 
 
 </RelativeLayout>

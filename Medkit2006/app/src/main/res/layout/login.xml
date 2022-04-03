@@ -14,20 +14,19 @@
         />
 
     <EditText
-        android:id="@+id/etLoginEmailAddress"
+        android:id="@+id/loginUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="245dp"
         android:ems="10"
-        android:inputType="textEmailAddress"
-        android:hint="Email"
+        android:hint="Username"
         android:textStyle="italic"
         />
 
     <EditText
-        android:id="@+id/etLoginPw"
+        android:id="@+id/loginPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -55,6 +54,14 @@
         android:text="Register"
         android:onClick="toRegister"
         />
+
+    <TextView
+        android:id="@+id/loginStatus"
+        android:layout_width="291dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etLoginPw"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="35dp" />
 
 
 </RelativeLayout>

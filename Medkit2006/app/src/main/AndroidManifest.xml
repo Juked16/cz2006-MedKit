@@ -47,7 +47,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".AccountActivity" android:label="Login" android:parentActivityName=".MainActivity"/>
-        <activity android:name=".control.AccountMgr" />
         <activity android:name=".ForumActivity" android:label="Forum" android:parentActivityName=".MainActivity"/>
         <activity android:name=".BookmarkActivity" android:label="BookMark" android:parentActivityName=".MainActivity"/>
         <activity android:name=".ChatActivity" android:label="Chats" android:parentActivityName=".MainActivity"/>

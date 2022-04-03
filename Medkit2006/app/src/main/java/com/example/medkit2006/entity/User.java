@@ -4,9 +4,8 @@ import java.util.Date;
 
 public class User {
 
-	private String username;
+	private final String username;
 	private String email;
-	private String passwordHash;
 	private boolean verified;
 	private String firstName;
 	private String lastName;
@@ -21,7 +20,10 @@ public class User {
 	public User(String username) {
 		this.username = username;
 		//what about the other parameters? what about comparison?
-		throw new UnsupportedOperationException();
+	}
+
+	public String getUsername() {
+		return username;
 	}
 
 	public String getEmail() {
@@ -34,27 +36,6 @@ public class User {
 	 */
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	/**
-	 * 
-	 * @param password
-	 */
-	public boolean verifyPassword(String password) {
-		if(password == this.passwordHash){
-			return true;}
-		else if(password == null){
-			throw new UnsupportedOperationException();}
-		else{
-			return false;}
-	}
-
-	/**
-	 * 
-	 * @param passwordHash
-	 */
-	public void setPasswordHash(String passwordHash) {
-		this.passwordHash = passwordHash;
 	}
 
 	public boolean getVerified() {

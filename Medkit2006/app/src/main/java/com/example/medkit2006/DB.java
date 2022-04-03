@@ -79,9 +79,9 @@ public class DB {
     INSERT INTO medical_facilities VALUES ("Alexandra Hospital","hospital","378 ALEXANDRA ROAD ALEXANDRA HOSPITAL Singapore 159964","64722000");
     */
 
-    Connection conn;
-    String lastMsg;
-    static DB instance = null;
+    public Connection conn;
+    public String lastMsg;
+    public static DB instance = null;
 
     public DB() {
         connect();
@@ -108,14 +108,13 @@ public class DB {
         });
     }
 
-    public void executeQuery(@NotNull String query, Consumer<ResultSet> whenDone) {
+    public void executeQuery(@NotNull String query, @NotNull Consumer<ResultSet> whenDone) {
         conn.createStatement().executeQuery(query, new DefaultResultInterface() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void executionComplete(ResultSet resultSet) {
                 try {
-                    if (whenDone != null)
-                        whenDone.accept(resultSet);
+                    whenDone.accept(resultSet);
                 }catch (Exception e){
                     lastMsg = e.getMessage();
                 }
