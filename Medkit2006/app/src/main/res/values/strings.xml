@@ -2,13 +2,21 @@
     <string name="app_name">Medkit2006</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="MF_name">MedicalFacilityName</string>
+    <string name="MF_name">Medical Facility Name</string>
+    <string name="MF_image">Medical Facility Image</string>
     <string name="MF_type">Type</string>
     <string name="MF_rating">Rating</string>
     <string name="MF_address">Address</string>
     <string name="MF_contact">Contact</string>
     <string name="MF_services">Service</string>
-    <string name="search_result_list">Search Result List</string>
+    <string name="near_by_search_btn">Search Nearby</string>
+    <string name="search_hist_txt">Search History</string>
+    <string name="search_hint">Enter search here</string>
+    <string name="search_ord_hint">Sort by </string>
+    <string name="search_opt1">Alphabet</string>
+    <string name="search_opt2">Distance</string>
+    <string name="search_opt3">Rating</string>
+    <string name="no_result_warning">Search NO result!</string>
 
 
 </resources>
