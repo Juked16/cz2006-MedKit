@@ -23,6 +23,7 @@
         android:layout_marginTop="170dp"
         android:ems="10"
         android:hint="Username"
+        android:minHeight="48dp"
         android:textStyle="italic" />
 
     <EditText
@@ -35,6 +36,7 @@
         android:ems="10"
         android:hint="Email"
         android:inputType="textEmailAddress"
+        android:minHeight="48dp"
         android:textStyle="italic" />
 
     <EditText
@@ -46,7 +48,8 @@
         android:layout_marginTop="286dp"
         android:ems="10"
         android:hint="Password"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        android:minHeight="48dp" />
 
     <EditText
         android:id="@+id/regConfirmPassword"
@@ -57,7 +60,9 @@
         android:layout_marginBottom="292dp"
         android:ems="10"
         android:hint="ConfirmPassword"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        android:minHeight="48dp"
+        android:textColorHint="#757575" />
 
     <Button
         android:id="@+id/btnRegister"

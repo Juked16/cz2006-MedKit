@@ -1,10 +1,18 @@
 package com.example.medkit2006.control;
 
+import android.util.Log;
+import android.widget.Toast;
+
+import com.BoardiesITSolutions.AndroidMySQLConnector.ColumnDefinition;
+import com.BoardiesITSolutions.AndroidMySQLConnector.Exceptions.SQLColumnNotFoundException;
+import com.BoardiesITSolutions.AndroidMySQLConnector.MySQLRow;
+import com.example.medkit2006.DB;
 import com.example.medkit2006.SearchActivity;
 import com.example.medkit2006.boundary.SearchUI;
 import com.example.medkit2006.entity.MedicalFacility;
 import com.example.medkit2006.entity.User;
 
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,11 +25,6 @@ public class MedicalFacilityMgr {
 	/** TODO: a function to return 30 facility for display
 	 * @return certain number of medical facilities, the certain number is defined in SearchActivity.NUMBER_OF_DISPLAY
 	 */
-	public MedicalFacility[] getFacilityList()
-	{
-		//return SearchActivity.NUMBER_OF_DISPLAY;
-		return null;
-	}
 
 	/** TODO: modifie the function to return the list in a certain order
 	 * Get list of Medical facilities matching the input and filter (if any)

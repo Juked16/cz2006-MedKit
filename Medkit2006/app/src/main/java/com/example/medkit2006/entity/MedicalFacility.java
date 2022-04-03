@@ -28,7 +28,7 @@ public class MedicalFacility {
 	 * Variable of services provided by the medical facility
 	 */
 	private ArrayList<Service> services;
-	
+
 	/**
 	 * Variable of list of users who book marked the medical facility
 	 */
@@ -140,7 +140,7 @@ public class MedicalFacility {
 
 	/**
 	 * Add services provided by the medical facility
-	 * @param services Services provided by medical facility
+	 * @param service Services provided by medical facility
 	 */
 	public void addServices(Service service) {
 		services.add(service);

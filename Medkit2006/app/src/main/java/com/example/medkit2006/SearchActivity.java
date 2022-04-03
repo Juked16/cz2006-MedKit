@@ -15,8 +15,14 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.BoardiesITSolutions.AndroidMySQLConnector.ColumnDefinition;
+import com.BoardiesITSolutions.AndroidMySQLConnector.Exceptions.SQLColumnNotFoundException;
+import com.BoardiesITSolutions.AndroidMySQLConnector.MySQLRow;
 import com.example.medkit2006.control.MedicalFacilityMgr;
 import com.example.medkit2006.entity.MedicalFacility;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SearchActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
     public static final String EXTRA_MESSAGE = "@string/MF_name";
@@ -46,10 +52,26 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
         LinearLayout ll = findViewById(R.id.search_result_ll);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         //Use Button to display medical facilities, on click to go to facility detail page
-        mf_mgr.getFacilityList();
-        for(int i = 0; i < NUMBER_OF_DISPLAY; i++) {
+        String query = "select name from medical_facilities".trim();
+        List<String> names = new ArrayList<>();
+        DB.instance.executeQuery(query, resultSet -> {
+            try {
+                MySQLRow row;
+                while ((row = resultSet.getNextRow()) != null) {
+                    String tmp_name = row.getString("name");
+                    Log.d("DBSearchName", tmp_name);
+                    boolean add = names.add(tmp_name);
+                }
+            } catch (SQLColumnNotFoundException e) {
+                Toast.makeText(getApplicationContext(), "@string/search_ord_hint", Toast.LENGTH_LONG).show();
+            }
+        });
+        //problem: button added before execution done
+        Log.d("DBSearchName", "size of names stored "+Integer.toString(names.size()));
+        for(int i = 0;  i < names.size(); i++) {
             display_btns[i] = new Button(this);
-            display_btns[i].setText("@string/MF_name");
+            display_btns[i].setText(names.get(i));
+            Log.d("ButtonCreation",Integer.toString(i));
             ll.addView(display_btns[i], lp);
             //using lambda to initialize onclick operations
             display_btns[i].setOnClickListener(v -> {
