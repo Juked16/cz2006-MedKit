@@ -64,10 +64,11 @@ public class MainMenu extends AppCompatActivity {
 
     public void onClickDB(View view) {
         Button btn = ((Button) view);
+        DB.instance.conn.returnCallbackToMainThread(true,this);
         try {
             btn.setText(DB.instance.conn.getServerVersion());
         } catch (Exception e) {
-            btn.setText(e.getMessage());
+            btn.setText(DB.instance.lastMsg);
             return;
         }
         String query = ((EditText) findViewById(R.id.textDBQuery)).getText().toString().trim();

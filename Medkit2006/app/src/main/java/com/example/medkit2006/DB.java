@@ -89,7 +89,7 @@ public class DB {
     }
 
     public void connect(){
-        lastMsg = "connecting (click again if stuck)";
+        lastMsg = "connecting";
         conn = new Connection("94.74.80.1", "test", "Blue!$!$!$", 3306, "medkit", new DefaultResultInterface());
     }
 
