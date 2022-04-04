@@ -51,7 +51,8 @@ public class RegistrationActivity extends AppCompatActivity {
                                         mgr.createAccount(username.getText().toString(), email.getText().toString(), pwdField.getText().toString(), () -> {
                                             mgr.getUserDetails(username.getText().toString(), user -> {
                                                 mgr.setLoggedInUser(user);
-                                                Intent intent = new Intent(this, LoginActivity.class);
+                                                finish();
+                                                Intent intent = new Intent(this, AccountActivity.class);
                                                 startActivity(intent);
                                             }, e -> error.setText(e.getMessage()));
                                         }, e -> error.setText(e.getMessage()));

@@ -29,8 +29,12 @@ public class LoginActivity extends AppCompatActivity {
                 AccountMgr mgr = MainActivity.accountMgr;
                 mgr.validateAccount(usernameField.getText().toString(), pwdField.getText().toString(), success -> {
                     if (success) {
-                        Intent intent = new Intent(this, AccountActivity.class);
-                        startActivity(intent);
+                        mgr.getUserDetails(usernameField.getText().toString(),user -> {
+                            mgr.setLoggedInUser(user);
+                            finish();
+                            Intent intent = new Intent(this, AccountActivity.class);
+                            startActivity(intent);
+                        },e -> status.setText(e.getMessage()));
                     } else
                         status.setText("Invalid username or password");
                 }, e -> status.setText(e.getMessage()));
@@ -39,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void toRegister(View view) {
+        finish();
         Intent intent = new Intent(LoginActivity.this, RegistrationActivity.class);
         startActivity(intent);
     }

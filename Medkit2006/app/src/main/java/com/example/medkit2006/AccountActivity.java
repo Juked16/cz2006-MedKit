@@ -16,18 +16,29 @@ public class AccountActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.account);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         User loggedIn = MainActivity.accountMgr.getLoggedInUser();
-        if(loggedIn != null){//TODO: WHY NOT UPDATING??
+        if (loggedIn != null) {
             ((TextView) findViewById(R.id.accName)).setText(loggedIn.getUsername());
             ((TextView) findViewById(R.id.accEmail)).setText(loggedIn.getEmail());
-            ((TextView) findViewById(R.id.accSettings)).setText("?");
-            ((Button)findViewById(R.id.btnAccLogin)).setText("Logout");
+            findViewById(R.id.btnAccSettings).setVisibility(View.VISIBLE);
+            findViewById(R.id.btnAccSettings).setOnClickListener(btn -> {
+                Intent intent = new Intent(AccountActivity.this, AccountSettingsActivity.class);
+                startActivity(intent);
+            });
+            ((Button) findViewById(R.id.btnAccLogin)).setText("Logout");
         }
     }
 
-    public void toLogin(View view){
-        if(((Button)view).getText().toString().equals("Logout"))
+    public void toLogin(View view) {
+        if (((Button) view).getText().toString().equals("Logout")) {
             MainActivity.accountMgr.setLoggedInUser(null);
+        }
+        finish();
         Intent intent = new Intent(AccountActivity.this, LoginActivity.class);
         startActivity(intent);
     }

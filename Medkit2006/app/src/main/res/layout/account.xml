@@ -20,7 +20,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="250dp"
-        android:text="Username" />
+        android:text="" />
 
     <TextView
         android:id="@+id/accEmail"
@@ -29,7 +29,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="303dp"
-        android:text="Email" />
+        android:text="" />
 
     <Button
         android:id="@+id/btnAccLogin"
@@ -42,13 +42,14 @@
         android:onClick="toLogin"
         />
 
-    <TextView
-        android:id="@+id/accSettings"
+    <Button
+        android:id="@+id/btnAccSettings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="299dp"
+        android:layout_marginBottom="280dp"
+        android:visibility="invisible"
         android:text="Settings" />
 
 
