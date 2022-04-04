@@ -55,6 +55,7 @@
         <activity android:name=".FacilDetailActivity" android:label="Facility Detail" android:parentActivityName=".SearchActivity" />
         <activity android:name=".SearchActivity" android:label="Search" android:parentActivityName=".MainActivity" />
         <activity android:name=".AccountSettingsActivity" android:label="AccountSettings" android:parentActivityName=".AccountActivity" />
+        <activity android:name=".SearchResultActivity" />
 
 
     </application>

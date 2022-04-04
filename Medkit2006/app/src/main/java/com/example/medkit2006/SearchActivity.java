@@ -1,7 +1,5 @@
 package com.example.medkit2006;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,14 +13,12 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.BoardiesITSolutions.AndroidMySQLConnector.ColumnDefinition;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.BoardiesITSolutions.AndroidMySQLConnector.Exceptions.SQLColumnNotFoundException;
 import com.BoardiesITSolutions.AndroidMySQLConnector.MySQLRow;
 import com.example.medkit2006.control.MedicalFacilityMgr;
 import com.example.medkit2006.entity.MedicalFacility;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class SearchActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
     public static final String EXTRA_MESSAGE = "@string/MF_name";
@@ -118,4 +114,9 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
     public void onNothingSelected(AdapterView<?> adapterView) {
         // Auto-generated method stub
     }
+    public void toSearchResult(View view){
+        Intent intent = new Intent(SearchActivity.this, SearchResultActivity.class);
+        startActivity(intent);
+    }
+
 }
