@@ -1,9 +1,6 @@
 package com.example.medkit2006.control;
 
-import android.os.Build;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 
 import com.BoardiesITSolutions.AndroidMySQLConnector.Exceptions.SQLColumnNotFoundException;
 import com.BoardiesITSolutions.AndroidMySQLConnector.MySQLRow;
@@ -22,7 +19,7 @@ import java.util.function.Consumer;
 
 public class AccountMgr {
 
-    private String verficationCode;
+    private String verificationCode;
     private final HashMap<String, User> users = new HashMap<>();
     private User loggedInUser;
 
@@ -34,20 +31,40 @@ public class AccountMgr {
         return email.matches("^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$");
     }
 
-    public void emailExist(@NotNull String email, Consumer<Boolean> callback) {
-        DB.instance.executeQuery("select email from account where email = \"" + email + "\"", resultSet -> callback.accept(resultSet.getNextRow() != null));
+    /**
+     *
+     * @param email Email
+     * @param callback Called when no error
+     * @param error Called when error
+     */
+    public void emailExist(@NotNull String email, Consumer<Boolean> callback, Consumer<Exception> error) {
+        DB.instance.executeQuery("select email from account where email = \"" + email + "\"", resultSet -> callback.accept(resultSet.getNextRow() != null), error);
     }
 
-    public void usernameExist(@NotNull String username, Consumer<Boolean> callback){
-        DB.instance.executeQuery("select username from account where username = \""+username+"\"",resultSet -> callback.accept(resultSet.getNextRow() != null));
+    /**
+     *
+     * @param username Username
+     * @param callback Called when no error
+     * @param error Called when error
+     */
+    public void usernameExist(@NotNull String username, Consumer<Boolean> callback, Consumer<Exception> error) {
+        DB.instance.executeQuery("select username from account where username = \"" + username + "\"", resultSet -> callback.accept(resultSet.getNextRow() != null), error);
     }
 
-    public void createAccount(@NotNull String username, String email, @NotNull String password, @NotNull Runnable callback){
-        DB.instance.execute("insert into account (username,email,passwordHash) values (\""+username+"\",\""+email+"\",\""+hash(password)+"\")", callback);
+    /**
+     *
+     * @param username Username
+     * @param email Email
+     * @param password Password (Not hashed)
+     * @param callback Called when no error
+     * @param error Called when error
+     */
+    public void createAccount(@NotNull String username, String email, @NotNull String password, @NotNull Runnable callback, Consumer<Exception> error) {
+        DB.instance.execute("insert into account (username,email,passwordHash) values (\"" + username + "\",\"" + email + "\",\"" + hash(password) + "\")", callback, error);
     }
 
-    public void sendVerificationCode(@NotNull String email,@NotNull String verificationCode) {
-        this.verficationCode = verificationCode;
+    public void sendVerificationCode(@NotNull String email, @NotNull String verificationCode) {
+        this.verificationCode = verificationCode;
         // TODO - implement email sending
     }
 
@@ -60,20 +77,33 @@ public class AccountMgr {
     }
 
     public boolean validateVerificationCode(@NotNull String verificationCode) {
-        return verificationCode.equals(this.verficationCode);
+        return verificationCode.equals(this.verificationCode);
     }
 
     public boolean isAccountVerified(@NonNull User user) {//TODO: remove?
         return user.getVerified();
     }
 
-    public void validateAccount(@NotNull String username, @NotNull String password, Consumer<Boolean> callback) {
-        DB.instance.executeQuery("select username from account where username = \"" + username + "\" and passwordHash = cast('" + hash(password) + "' as BINARY(32))", resultSet -> callback.accept(resultSet.getNextRow() != null));
+    /**
+     *
+     * @param username Username
+     * @param password Password (Not hashed)
+     * @param callback Called when no error
+     * @param error Called when error
+     */
+    public void validateAccount(@NotNull String username, @NotNull String password, Consumer<Boolean> callback, Consumer<Exception> error) {
+        DB.instance.executeQuery("select username from account where username = \"" + username + "\" and passwordHash = cast('" + hash(password) + "' as BINARY(32))", resultSet -> callback.accept(resultSet.getNextRow() != null), error);
     }
 
-    public void getUserDetails(@NotNull String username, @NotNull Consumer<User> callback) {
+    /**
+     *
+     * @param username Username
+     * @param callback Called when no error
+     * @param error Called when error
+     */
+    public void getUserDetails(@NotNull String username, @NotNull Consumer<User> callback, Consumer<Exception> error) {
         User tmp = users.get(username);
-        if(tmp != null){
+        if (tmp != null) {
             callback.accept(tmp);
             return;
         }
@@ -95,11 +125,16 @@ public class AccountMgr {
             } catch (SQLColumnNotFoundException ignored) {
 
             }
-            users.put(username,user);
+            users.put(username, user);
             callback.accept(user);
-        });
+        }, error);
     }
 
+    /**
+     *
+     * @param s String to hash
+     * @return SHA-256 hash
+     */
     public String hash(@NotNull String s) {
         MessageDigest digest;
         try {

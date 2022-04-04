@@ -19,11 +19,10 @@ public class LoginActivity extends AppCompatActivity {
         EditText usernameField = findViewById(R.id.loginUsername);
         EditText pwdField = findViewById(R.id.loginPassword);
         TextView status = findViewById(R.id.loginStatus);
-        status.setText(DB.instance.lastMsg);//TODO: remove
         findViewById(R.id.btnLogin).setOnClickListener(button -> {
-            if(usernameField.getText().length() == 0)
+            if (usernameField.getText().length() == 0)
                 status.setText("Please input username");
-            else if(pwdField.getText().length() == 0)
+            else if (pwdField.getText().length() == 0)
                 status.setText("Please input password");
             else {
                 status.setText("Logging in...");
@@ -32,9 +31,9 @@ public class LoginActivity extends AppCompatActivity {
                     if (success) {
                         Intent intent = new Intent(this, AccountActivity.class);
                         startActivity(intent);
-                    }else
+                    } else
                         status.setText("Invalid username or password");
-                });
+                }, e -> status.setText(e.getMessage()));
             }
         });
     }
