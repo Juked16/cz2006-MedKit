@@ -24,7 +24,7 @@ public class MainMenu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu_main);
 
-        button = (Button)findViewById(R.id.btnSearch);
+        button = (Button) findViewById(R.id.btnSearch);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -40,37 +40,40 @@ public class MainMenu extends AppCompatActivity {
         //finish();
     }
 
-    public void onClickSearch(View view){
+    public void onClickSearch(View view) {
         Intent intent = new Intent(MainMenu.this, SearchActivity.class);
         startActivity(intent);
     }
 
-    public void onClickForum(View view){
+    public void onClickForum(View view) {
         Intent intent = new Intent(MainMenu.this, ForumActivity.class);
         startActivity(intent);
     }
-    public void onClickChat(View view){
+
+    public void onClickChat(View view) {
         Intent intent = new Intent(MainMenu.this, ChatActivity.class);
         startActivity(intent);
     }
-    public void onClickBookmark(View view){
+
+    public void onClickBookmark(View view) {
         Intent intent = new Intent(MainMenu.this, BookmarkActivity.class);
         startActivity(intent);
     }
-    public void onClickAccount(View view){
+
+    public void onClickAccount(View view) {
         Intent intent = new Intent(MainMenu.this, AccountActivity.class);
         startActivity(intent);
     }
 
     public void onClickDB(View view) {
         Button btn = ((Button) view);
-        DB.instance.conn.returnCallbackToMainThread(true,this);
         try {
-            btn.setText(DB.instance.conn.getServerVersion());
+            DB.instance.conn.returnCallbackToMainThread(true, this);
         } catch (Exception e) {
             btn.setText(DB.instance.lastMsg);
             return;
         }
+        btn.setText("Executing");
         String query = ((EditText) findViewById(R.id.textDBQuery)).getText().toString().trim();
         if (query.contains("SELECT") || query.contains("select"))
             DB.instance.executeQuery(query, resultSet -> {
@@ -93,9 +96,8 @@ public class MainMenu extends AppCompatActivity {
                     btn.setText(e.getMessage());
                     Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
-            });
+            }, e -> btn.setText(e.getMessage()));
         else
             DB.instance.execute(query, () -> btn.setText("OK"));
-        btn.setText(DB.instance.lastMsg);
     }
 }

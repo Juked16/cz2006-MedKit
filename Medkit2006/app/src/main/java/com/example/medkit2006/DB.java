@@ -1,6 +1,7 @@
 package com.example.medkit2006;
 
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
@@ -88,43 +89,84 @@ public class DB {
         instance = this;
     }
 
-    public void connect(){
+    public void connect() {
+        Log.i("DB", "Connecting");
         lastMsg = "connecting";
-        conn = new Connection("94.74.80.1", "test", "Blue!$!$!$", 3306, "medkit", new DefaultResultInterface());
+        conn = new Connection("94.74.80.1", "test", "Blue!$!$!$", 3306, "medkit", new DefaultResultInterface(e -> lastMsg = e.getMessage()));
     }
 
-    public void execute(@NotNull String statement, Runnable whenDone){
-        conn.createStatement().execute(statement, new DefaultResultInterface() {
+    /**
+     *
+     * @param statement Sql statement without result
+     * @param whenDone Called when done without error
+     */
+    public void execute(@NotNull String statement, Runnable whenDone) {
+        execute(statement, whenDone, null);
+    }
+
+    /**
+     *
+     * @param statement Sql statement without result
+     * @param whenDone Called when done without error
+     * @param onError Called when error
+     */
+    public void execute(@NotNull String statement, Runnable whenDone, Consumer<Exception> onError) {
+        conn.createStatement().execute(statement, new DefaultResultInterface(onError) {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void actionCompleted() {
                 try {
                     if (whenDone != null)
                         whenDone.run();
-                }catch (Exception e){
+                } catch (Exception e) {
                     lastMsg = e.getMessage();
+                    Log.wtf("DB", e);
                 }
             }
         });
     }
 
+    /**
+     *
+     * @param query Select statement
+     * @param whenDone Called when done without error
+     */
     public void executeQuery(@NotNull String query, @NotNull Consumer<ResultSet> whenDone) {
-        conn.createStatement().executeQuery(query, new DefaultResultInterface() {
+        executeQuery(query, whenDone, null);
+    }
+
+    /**
+     *
+     * @param query Select statement
+     * @param whenDone Called when done with no error
+     * @param onError Called when error
+     */
+    public void executeQuery(@NotNull String query, @NotNull Consumer<ResultSet> whenDone, Consumer<Exception> onError) {
+        conn.createStatement().executeQuery(query, new DefaultResultInterface(onError) {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void executionComplete(ResultSet resultSet) {
                 try {
                     whenDone.accept(resultSet);
-                }catch (Exception e){
+                } catch (Exception e) {
                     lastMsg = e.getMessage();
+                    Log.wtf("DB", e);
                 }
             }
         });
     }
 
-    class DefaultResultInterface implements IConnectionInterface,IResultInterface{
+    class DefaultResultInterface implements IConnectionInterface, IResultInterface {
+
+        private final Consumer<Exception> onError;
+
+        public DefaultResultInterface(Consumer<Exception> onError) {
+            this.onError = onError;
+        }
+
         public void actionCompleted() {
             lastMsg = "Connect OK";
+            Log.i("DB", "Connect OK");
         }
 
         @Override
@@ -135,26 +177,41 @@ public class DB {
         @Override
         public void handleInvalidSQLPacketException(InvalidSQLPacketException ex) {
             lastMsg = ex.getMessage();
+            if (onError != null)
+                onError.accept(ex);
+            Log.wtf("DB", ex);
         }
 
         @Override
         public void handleMySQLException(MySQLException ex) {
             lastMsg = ex.getMessage();
+            if (onError != null)
+                onError.accept(ex);
+            Log.wtf("DB", ex);
         }
 
         @Override
         public void handleIOException(IOException ex) {
             lastMsg = ex.getMessage();
+            if (onError != null)
+                onError.accept(ex);
+            Log.wtf("DB", ex);
         }
 
         @Override
         public void handleMySQLConnException(MySQLConnException ex) {
             lastMsg = ex.getMessage();
+            if (onError != null)
+                onError.accept(ex);
+            Log.wtf("DB", ex);
         }
 
         @Override
         public void handleException(Exception exception) {
             lastMsg = exception.getMessage();
+            if (onError != null)
+                onError.accept(exception);
+            Log.wtf("DB", exception);
         }
     }
 }

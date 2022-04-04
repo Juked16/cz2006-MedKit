@@ -25,7 +25,6 @@ public class RegistrationActivity extends AppCompatActivity {
         EditText pwdField = findViewById(R.id.regPassword);
         EditText cPwdField = findViewById(R.id.regConfirmPassword);
         TextView error = findViewById(R.id.regError);
-        error.setText(DB.instance.lastMsg); //TODO: remove
         findViewById(R.id.btnRegister).setOnClickListener(view -> {
             AccountMgr mgr = MainActivity.accountMgr;
             if (username.length() >= 3) {
@@ -54,11 +53,11 @@ public class RegistrationActivity extends AppCompatActivity {
                                                 mgr.setLoggedInUser(user);
                                                 Intent intent = new Intent(this, LoginActivity.class);
                                                 startActivity(intent);
-                                            });
-                                        });
+                                            }, e -> error.setText(e.getMessage()));
+                                        }, e -> error.setText(e.getMessage()));
                                     }
-                                });
-                        });
+                                }, e -> error.setText(e.getMessage()));
+                        }, e -> error.setText(e.getMessage()));
                 } else {
                     error.setText("Invalid email");
                     email.requestFocus();
