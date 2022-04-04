@@ -25,7 +25,7 @@ public class DB {
         username VARCHAR(45) PRIMARY KEY,
         email VARCHAR(45) NOT NULL UNIQUE,
         passwordHash BINARY(32) NOT NULL,
-        verified BIT DEFAULT 0,
+        verified INT DEFAULT 0, -- #should be BIT but lib can't get BIT datatype
         firstName VARCHAR(45),
         lastName VARCHAR(45),
         gender ENUM("M","F","O"),
@@ -36,8 +36,14 @@ public class DB {
         name VARCHAR(45) PRIMARY KEY,
         type VARCHAR(45) NOT NULL, -- #TODO: ENUM?
         address VARCHAR(100) NOT NULL,
-        contact VARCHAR(45) NOT NULL
+        contact VARCHAR(45) NOT NULL,
+        description VARCHAR(1000) DEFAULT ""
     );
+    CREATE TABLE mf_photo(
+        medical_facility VARCHAR(45) NOT NULL,
+        image VARBINARY(8000) NOT NULL,
+        FOREIGN KEY (medical_facility) REFERENCES medical_facilities(name)
+    )
     CREATE TABLE bookmark (
         username VARCHAR(45) NOT NULL,
         medical_facility VARCHAR(45) NOT NULL,
@@ -75,7 +81,7 @@ public class DB {
         username VARCHAR(45) NOT NULL,
         FOREIGN KEY (username) REFERENCES account(username),
         CONSTRAINT id_username PRIMARY KEY (id,username)
-    )
+    );
 
     INSERT INTO medical_facilities VALUES ("Alexandra Hospital","hospital","378 ALEXANDRA ROAD ALEXANDRA HOSPITAL Singapore 159964","64722000");
     */
