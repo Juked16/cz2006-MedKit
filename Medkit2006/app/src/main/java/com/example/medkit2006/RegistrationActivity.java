@@ -1,17 +1,14 @@
 package com.example.medkit2006;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.medkit2006.boundary.VerificationUI;
 import com.example.medkit2006.control.AccountMgr;
 
 public class RegistrationActivity extends AppCompatActivity {
@@ -19,6 +16,12 @@ public class RegistrationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(MainActivity.accountMgr.isLoggedIn()){
+            finish();
+            Intent intent = new Intent(this, AccountActivity.class);
+            startActivity(intent);
+            return;
+        }
         setContentView(R.layout.registration);
         EditText username = findViewById(R.id.regUsername);
         EditText email = findViewById(R.id.regEmailAddress);
@@ -52,7 +55,7 @@ public class RegistrationActivity extends AppCompatActivity {
                                             mgr.getUserDetails(username.getText().toString(), user -> {
                                                 mgr.setLoggedInUser(user);
                                                 finish();
-                                                Intent intent = new Intent(this, AccountActivity.class);
+                                                Intent intent = new Intent(this, VerificationUI.class);
                                                 startActivity(intent);
                                             }, e -> error.setText(e.getMessage()));
                                         }, e -> error.setText(e.getMessage()));

@@ -56,6 +56,7 @@
         <activity android:name=".SearchActivity" android:label="Search" android:parentActivityName=".MainActivity" />
         <activity android:name=".AccountSettingsActivity" android:label="AccountSettings" android:parentActivityName=".AccountActivity" />
         <activity android:name=".SearchResultActivity" android:label="Facility Detail" android:parentActivityName=".SearchActivity"/>
+        <activity android:name=".boundary.VerificationUI" android:label="Verification" android:parentActivityName=".AccountActivity"/>
 
 
     </application>

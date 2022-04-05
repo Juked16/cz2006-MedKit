@@ -51,12 +51,12 @@ public class MainMenu extends AppCompatActivity {
     }
 
     public void onClickChat(View view) {
-        Intent intent = new Intent(MainMenu.this, ChatActivity.class);
+        Intent intent = new Intent(MainMenu.this, MainActivity.accountMgr.isLoggedIn() ? ChatActivity.class : LoginActivity.class);
         startActivity(intent);
     }
 
     public void onClickBookmark(View view) {
-        Intent intent = new Intent(MainMenu.this, BookmarkActivity.class);
+        Intent intent = new Intent(MainMenu.this, MainActivity.accountMgr.isLoggedIn() ? BookmarkActivity.class : LoginActivity.class);
         startActivity(intent);
     }
 

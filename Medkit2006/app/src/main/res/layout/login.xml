@@ -4,14 +4,13 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/loginLabel"
+        android:id="@+id/loginHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="87dp"
-        android:textSize="50sp"
         android:text="Login"
-        />
+        android:textSize="50sp" />
 
     <EditText
         android:id="@+id/loginUsername"
@@ -36,7 +35,7 @@
         />
 
     <Button
-        android:id="@+id/btnLogin"
+        android:id="@+id/loginLoginBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -45,21 +44,20 @@
         android:text="Login" />
 
     <Button
-        android:id="@+id/btnToRegister"
+        android:id="@+id/loginToRegisterBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="93dp"
-        android:text="Register"
         android:onClick="toRegister"
-        />
+        android:text="Register" />
 
     <TextView
         android:id="@+id/loginStatus"
         android:layout_width="291dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/etLoginPw"
+        android:layout_below="@+id/loginPassword"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="35dp" />
 

@@ -23,14 +23,14 @@ public class AccountActivity extends AppCompatActivity {
         super.onResume();
         User loggedIn = MainActivity.accountMgr.getLoggedInUser();
         if (loggedIn != null) {
-            ((TextView) findViewById(R.id.accName)).setText(loggedIn.getUsername());
-            ((TextView) findViewById(R.id.accEmail)).setText(loggedIn.getEmail());
-            findViewById(R.id.btnAccSettings).setVisibility(View.VISIBLE);
-            findViewById(R.id.btnAccSettings).setOnClickListener(btn -> {
+            ((TextView) findViewById(R.id.accountName)).setText(loggedIn.getUsername());
+            ((TextView) findViewById(R.id.accountEmail)).setText(loggedIn.getEmail());
+            findViewById(R.id.AccountToSettingsBtn).setVisibility(View.VISIBLE);
+            findViewById(R.id.AccountToSettingsBtn).setOnClickListener(btn -> {
                 Intent intent = new Intent(AccountActivity.this, AccountSettingsActivity.class);
                 startActivity(intent);
             });
-            ((Button) findViewById(R.id.btnAccLogin)).setText("Logout");
+            ((Button) findViewById(R.id.accountLoginBtn)).setText("Logout");
         }
     }
 

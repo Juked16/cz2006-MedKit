@@ -66,6 +66,10 @@ public class AccountMgr {
         // TODO - implement email sending
     }
 
+    public boolean isLoggedIn(){
+        return loggedInUser != null;
+    }
+
     public User getLoggedInUser() {
         return loggedInUser;
     }
@@ -137,7 +141,7 @@ public class AccountMgr {
                 "lastName = \"" + loggedInUser.getLastName() + "\"," +
                 "gender = \"" + loggedInUser.getGender() + "\"," +
                 "bloodType = \"" + loggedInUser.getBloodType() + "\"," +
-                "dateOfBirth = \"" + (dob != null ? new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(dob) : null) + "\"" +
+                "dateOfBirth = " + (dob != null ? "\""+new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(dob)+"\"" : "null") + " " +
                 "where username = \"" + loggedInUser.getUsername() + "\"", callback, error
         );
     }

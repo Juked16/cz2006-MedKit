@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/txtAccountLabel"
+        android:id="@+id/accountHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -14,7 +14,7 @@
         android:text="Account" />
 
     <TextView
-        android:id="@+id/accName"
+        android:id="@+id/accountName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -23,7 +23,7 @@
         android:text="" />
 
     <TextView
-        android:id="@+id/accEmail"
+        android:id="@+id/accountEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -32,7 +32,7 @@
         android:text="" />
 
     <Button
-        android:id="@+id/btnAccLogin"
+        android:id="@+id/accountLoginBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -43,7 +43,7 @@
         />
 
     <Button
-        android:id="@+id/btnAccSettings"
+        android:id="@+id/AccountToSettingsBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

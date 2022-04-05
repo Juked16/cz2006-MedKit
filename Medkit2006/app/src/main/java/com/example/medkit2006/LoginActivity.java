@@ -15,11 +15,20 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(MainActivity.accountMgr.isLoggedIn()){
+            finish();
+            Intent intent = new Intent(this, AccountActivity.class);
+            startActivity(intent);
+            return;
+        }
         setContentView(R.layout.login);
         EditText usernameField = findViewById(R.id.loginUsername);
         EditText pwdField = findViewById(R.id.loginPassword);
         TextView status = findViewById(R.id.loginStatus);
-        findViewById(R.id.btnLogin).setOnClickListener(button -> {
+        //TODO: remove before submitting
+        usernameField.setText("test");
+        pwdField.setText("testtest");
+        findViewById(R.id.loginLoginBtn).setOnClickListener(button -> {
             if (usernameField.getText().length() == 0)
                 status.setText("Please input username");
             else if (pwdField.getText().length() == 0)
