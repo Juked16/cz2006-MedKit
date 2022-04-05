@@ -1,4 +1,4 @@
-package com.example.medkit2006;
+package com.example.medkit2006.boundary;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
@@ -14,6 +14,9 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.medkit2006.DB;
+import com.example.medkit2006.MainActivity;
+import com.example.medkit2006.R;
 import com.example.medkit2006.boundary.VerificationUI;
 import com.example.medkit2006.entity.User;
 
@@ -25,7 +28,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-public class AccountSettingsActivity extends AppCompatActivity {
+public class AccountSettingsUI extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

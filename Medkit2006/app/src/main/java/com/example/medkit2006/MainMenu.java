@@ -13,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.BoardiesITSolutions.AndroidMySQLConnector.ColumnDefinition;
 import com.BoardiesITSolutions.AndroidMySQLConnector.Exceptions.SQLColumnNotFoundException;
 import com.BoardiesITSolutions.AndroidMySQLConnector.MySQLRow;
+import com.example.medkit2006.boundary.AccountUI;
+import com.example.medkit2006.boundary.LoginUI;
 
 import java.util.ArrayList;
 
@@ -51,17 +53,17 @@ public class MainMenu extends AppCompatActivity {
     }
 
     public void onClickChat(View view) {
-        Intent intent = new Intent(MainMenu.this, MainActivity.accountMgr.isLoggedIn() ? ChatActivity.class : LoginActivity.class);
+        Intent intent = new Intent(MainMenu.this, MainActivity.accountMgr.isLoggedIn() ? ChatActivity.class : LoginUI.class);
         startActivity(intent);
     }
 
     public void onClickBookmark(View view) {
-        Intent intent = new Intent(MainMenu.this, MainActivity.accountMgr.isLoggedIn() ? BookmarkActivity.class : LoginActivity.class);
+        Intent intent = new Intent(MainMenu.this, MainActivity.accountMgr.isLoggedIn() ? BookmarkActivity.class : LoginUI.class);
         startActivity(intent);
     }
 
     public void onClickAccount(View view) {
-        Intent intent = new Intent(MainMenu.this, AccountActivity.class);
+        Intent intent = new Intent(MainMenu.this, AccountUI.class);
         startActivity(intent);
     }
 

@@ -1,4 +1,4 @@
-package com.example.medkit2006;
+package com.example.medkit2006.boundary;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,9 +9,11 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.medkit2006.MainActivity;
+import com.example.medkit2006.R;
 import com.example.medkit2006.entity.User;
 
-public class AccountActivity extends AppCompatActivity {
+public class AccountUI extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,7 +29,7 @@ public class AccountActivity extends AppCompatActivity {
             ((TextView) findViewById(R.id.accountEmail)).setText(loggedIn.getEmail());
             findViewById(R.id.AccountToSettingsBtn).setVisibility(View.VISIBLE);
             findViewById(R.id.AccountToSettingsBtn).setOnClickListener(btn -> {
-                Intent intent = new Intent(AccountActivity.this, AccountSettingsActivity.class);
+                Intent intent = new Intent(AccountUI.this, AccountSettingsUI.class);
                 startActivity(intent);
             });
             ((Button) findViewById(R.id.accountLoginBtn)).setText("Logout");
@@ -39,7 +41,7 @@ public class AccountActivity extends AppCompatActivity {
             MainActivity.accountMgr.setLoggedInUser(null);
         }
         finish();
-        Intent intent = new Intent(AccountActivity.this, LoginActivity.class);
+        Intent intent = new Intent(AccountUI.this, LoginUI.class);
         startActivity(intent);
     }
 }

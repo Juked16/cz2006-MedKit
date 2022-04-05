@@ -9,8 +9,6 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.medkit2006.AccountActivity;
-import com.example.medkit2006.LoginActivity;
 import com.example.medkit2006.MainActivity;
 import com.example.medkit2006.R;
 import com.example.medkit2006.entity.User;
@@ -26,7 +24,7 @@ public class VerificationUI extends AppCompatActivity {
         User user = MainActivity.accountMgr.getLoggedInUser();
         if (user == null) {
             finish();
-            startActivity(new Intent(this, LoginActivity.class));
+            startActivity(new Intent(this, LoginUI.class));
             return;
         }
         EditText code = findViewById(R.id.verificationCode);
@@ -52,7 +50,7 @@ public class VerificationUI extends AppCompatActivity {
             if (MainActivity.accountMgr.validateVerificationCode(code.getText().toString())) {
                 user.setVerified(true);
                 finish();
-                startActivity(new Intent(this, AccountActivity.class));
+                startActivity(new Intent(this, AccountUI.class));
             } else
                 status.setText("Invalid verification code");
         });
