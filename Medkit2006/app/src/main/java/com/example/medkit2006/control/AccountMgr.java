@@ -103,7 +103,7 @@ public class AccountMgr {
             MySQLRow row = resultSet.getNextRow();
             try {
                 user.setEmail(row.getString("email"));
-                Log.e("User",""+row.getInt("verified"));
+                user.setVerified(row.getInt("verified") != 0);
                 //below all nullable
                 user.setFirstName(row.getString("firstName"));
                 user.setLastName(row.getString("lastName"));

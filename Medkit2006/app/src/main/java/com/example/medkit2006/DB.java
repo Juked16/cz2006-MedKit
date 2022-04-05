@@ -37,13 +37,15 @@ public class DB {
         type VARCHAR(45) NOT NULL, -- #TODO: ENUM?
         address VARCHAR(100) NOT NULL,
         contact VARCHAR(45) NOT NULL,
+        latitude DECIMAL(11,7) NOT NULL,
+        longitude DECIMAL(12,7) NOT NULL,
         description VARCHAR(1000) DEFAULT ""
     );
     CREATE TABLE mf_photo(
         medical_facility VARCHAR(45) NOT NULL,
         image VARBINARY(8000) NOT NULL,
         FOREIGN KEY (medical_facility) REFERENCES medical_facilities(name)
-    )
+    );
     CREATE TABLE bookmark (
         username VARCHAR(45) NOT NULL,
         medical_facility VARCHAR(45) NOT NULL,
@@ -83,7 +85,7 @@ public class DB {
         CONSTRAINT id_username PRIMARY KEY (id,username)
     );
 
-    INSERT INTO medical_facilities VALUES ("Alexandra Hospital","hospital","378 ALEXANDRA ROAD ALEXANDRA HOSPITAL Singapore 159964","64722000");
+    INSERT INTO medical_facilities VALUES ("Alexandra Hospital","hospital","378 ALEXANDRA ROAD ALEXANDRA HOSPITAL Singapore 159964","64722000",1.2865882,103.7990862,"");
     */
 
     public Connection conn;
