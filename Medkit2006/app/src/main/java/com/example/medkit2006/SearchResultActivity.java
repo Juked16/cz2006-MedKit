@@ -100,7 +100,8 @@ public class SearchResultActivity extends AppCompatActivity{
     }
 
     public void toMFDetails(View view){
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        Intent intent = new Intent(getApplicationContext(), MedicalFacility.class);
+        intent.putExtra("MF_name", "Raffles");
         startActivity(intent);
     }
 

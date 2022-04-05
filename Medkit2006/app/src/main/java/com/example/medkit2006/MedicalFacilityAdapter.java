@@ -52,7 +52,7 @@ public class MedicalFacilityAdapter extends RecyclerView.Adapter<MedicalFacility
             public void onClick(View view) {
                 Toast.makeText(inflater.getContext(),
                         "click success bind", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(view.getContext(), MainActivity.class);
+                Intent intent = new Intent(view.getContext(), FacilDetailActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 view.getContext().startActivity(intent);
             }

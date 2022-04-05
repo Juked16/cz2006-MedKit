@@ -2,30 +2,50 @@ package com.example.medkit2006;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.BoardiesITSolutions.AndroidMySQLConnector.Exceptions.SQLColumnNotFoundException;
-import com.BoardiesITSolutions.AndroidMySQLConnector.MySQLRow;
-import com.example.medkit2006.control.MedicalFacilityMgr;
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.medkit2006.entity.MedicalFacility;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SearchActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
     public static final String EXTRA_MESSAGE = "@string/MF_name";
-    public static final int NUMBER_OF_DISPLAY = 30;
+
+    RecyclerView recyclerView;
     String[] filters = {"Rating>3.5", "Distance<10km"};
-    private MedicalFacilityMgr mf_mgr = new MedicalFacilityMgr();
-    private Button[] display_btns = new Button[30];
+    MedicalFacilityAdapter adapter;
+    ArrayList<MedicalFacility> medicalFacilityList;
+
+    private String stContact;
+    private final String URL = "http://159.138.106.155/mf.php";
+
+    //private CardView[] display_cards = new CardView[30];
+    //private Button[] display_btns = new Button[30];
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,43 +64,59 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
         // Set the ArrayAdapter (ad) data on the Spinner which binds data to spinner
         spin.setAdapter(ad);
 
-        //3. Settings of RecyclerView
-        LinearLayout ll = findViewById(R.id.search_result_ll);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        //4. Using Button to display medical facilities, on click to go to facility detail page
-        for(int i = 0;  i < NUMBER_OF_DISPLAY; i++) {
-            display_btns[i] = new Button(this);
-            display_btns[i].setText("Raffles");
-            Log.d("ButtonCreation",Integer.toString(i));
-            ll.addView(display_btns[i], lp);
-            //using lambda to initialize onclick operations
-            display_btns[i].setOnClickListener(v -> {
-                Button btn = (Button) v;
-                Log.d("success:", "button has just been found");
-                Intent intent = new Intent(btn.getContext(), FacilDetailActivity.class);
-                String message = btn.getText().toString();
-                intent.putExtra(EXTRA_MESSAGE, message);
-                startActivity(intent);
-            });
-        }
-
-
-        String query = "select name from medical_facilities".trim();
-        DB.instance.executeQuery(query, resultSet -> {
-            try {
-                MySQLRow row;
-                int i = 0;
-                while ((row = resultSet.getNextRow()) != null && i < NUMBER_OF_DISPLAY) {
-                    String tmp_name = row.getString("name");
-                    Log.d("DBSearchName", tmp_name);
-                    display_btns[i].setText(tmp_name);
-                    i++;
-                }
-            } catch (SQLColumnNotFoundException e) {
-                Toast.makeText(getApplicationContext(), "@string/search_ord_hint", Toast.LENGTH_LONG).show();
-            }
-        });
+        //3. Settings of LayOut
+        recyclerView = findViewById(R.id.search_result_rv);
+        medicalFacilityList = new ArrayList<>();
+        extractMedicalFacility();
     }
+
+    public void extractMedicalFacility(){
+        //instantiate request queue
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, URL,null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+
+                for(int i =0; i <response.length(); i++){
+                    try {
+                        JSONObject mfDetail = response.getJSONObject(i);
+
+                        MedicalFacility medicalFacility = new MedicalFacility();
+                        medicalFacility.setName(mfDetail.getString("name").toString());
+                        medicalFacility.setContact(mfDetail.getString("contact"));
+                        medicalFacility.setType(mfDetail.getString("type"));
+                        medicalFacility.setAddress(mfDetail.getString("address"));
+                        medicalFacilityList.add(medicalFacility);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                adapter = new MedicalFacilityAdapter(getApplicationContext(),medicalFacilityList);
+                recyclerView.setAdapter(adapter);
+
+                Toast.makeText(SearchActivity.this,"success", Toast.LENGTH_SHORT).show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(SearchActivity.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> data=new HashMap<>();
+                data.put("contact",stContact);
+                return data;
+            }
+        };
+        requestQueue.add(jsonArrayRequest);
+    }
+
     public void searchHandler(View v) {
         //Get user input text
         EditText edx = findViewById(R.id.search_src1);
@@ -92,17 +128,7 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
         //Get user selection of order by
         RadioGroup rgr = findViewById(R.id.sort_radioGroup);
         int mode = rgr.getCheckedRadioButtonId();
-
-        MedicalFacility[] results = mf_mgr.getFacilityList(user_str, filters[position], mode);
-        if(results == null){//generate warning use toaster
-            Toast.makeText(getApplicationContext(), "@string/no_result_warning", Toast.LENGTH_LONG).show();
-        }
-        else{//change result list display
-            for(int i = 0; i < 30; i++) {
-                display_btns[i] = new Button(this);
-                display_btns[i].setText("@string/MF_name");
-            }
-        }
+        //TODO: get the search result and pass to search result page? or pass the search parameters?
     }
 
     @Override
@@ -118,5 +144,4 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
         Intent intent = new Intent(SearchActivity.this, SearchResultActivity.class);
         startActivity(intent);
     }
-
 }

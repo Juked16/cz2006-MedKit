@@ -52,10 +52,10 @@
         <activity android:name=".ChatActivity" android:label="Chats" android:parentActivityName=".MainActivity"/>
         <activity android:name=".LoginActivity" android:label="Login" android:parentActivityName=".MainMenu"/>
         <activity android:name=".RegistrationActivity" android:label="Registration" android:parentActivityName=".LoginActivity"/>
-        <activity android:name=".FacilDetailActivity" android:label="Facility Detail" android:parentActivityName=".SearchActivity" />
+        <activity android:name=".FacilDetailActivity" android:label="Facility Detail" />
         <activity android:name=".SearchActivity" android:label="Search" android:parentActivityName=".MainActivity" />
         <activity android:name=".AccountSettingsActivity" android:label="AccountSettings" android:parentActivityName=".AccountActivity" />
-        <activity android:name=".SearchResultActivity" />
+        <activity android:name=".SearchResultActivity" android:label="Facility Detail" android:parentActivityName=".SearchActivity"/>
 
 
     </application>
