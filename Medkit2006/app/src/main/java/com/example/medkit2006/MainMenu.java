@@ -77,7 +77,7 @@ public class MainMenu extends AppCompatActivity {
         }
         btn.setText("Executing");
         String query = ((EditText) findViewById(R.id.textDBQuery)).getText().toString().trim();
-        if (query.contains("SELECT") || query.contains("select"))
+        if (query.toUpperCase().contains("SELECT"))
             DB.instance.executeQuery(query, resultSet -> {
                 try {
                     StringBuilder text = new StringBuilder();

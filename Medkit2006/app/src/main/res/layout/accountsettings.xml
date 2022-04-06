@@ -106,18 +106,17 @@
         android:id="@+id/accountSettingsStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_above="@+id/accountSettingsSaveBtn"
-        android:ems="10"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"
-        />
+        android:ems="10" />
 
     <Button
         android:id="@+id/accountSettingsSaveBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"
         android:text="Save"
         android:textAllCaps="false" />
@@ -152,5 +151,16 @@
         android:visibility="invisible"
         android:layout_toEndOf="@+id/accountSettingsEmail"
         android:text="Verify" />
+
+    <Button
+        android:id="@+id/accountSettingsChangePwBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/accountSettingsStatus"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="120dp"
+        android:text="Change Password"
+        android:textAllCaps="false" />
 
 </RelativeLayout>

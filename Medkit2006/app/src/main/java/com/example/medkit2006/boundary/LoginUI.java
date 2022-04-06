@@ -17,19 +17,24 @@ public class LoginUI extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(MainActivity.accountMgr.isLoggedIn()){
+        setContentView(R.layout.login);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (MainActivity.accountMgr.isLoggedIn()) {
             finish();
-            Intent intent = new Intent(this, AccountUI.class);
-            startActivity(intent);
+            startActivity(new Intent(this, AccountUI.class));
             return;
         }
-        setContentView(R.layout.login);
         EditText usernameField = findViewById(R.id.loginUsername);
         EditText pwdField = findViewById(R.id.loginPassword);
         TextView status = findViewById(R.id.loginStatus);
         //TODO: remove before submitting
         usernameField.setText("test");
         pwdField.setText("testtest");
+        findViewById(R.id.loginForgotPwBtn).setOnClickListener(btn -> startActivity(new Intent(this, ForgetPwUI.class)));
         findViewById(R.id.loginLoginBtn).setOnClickListener(button -> {
             if (usernameField.getText().length() == 0)
                 status.setText("Please input username");
@@ -40,12 +45,12 @@ public class LoginUI extends AppCompatActivity {
                 AccountMgr mgr = MainActivity.accountMgr;
                 mgr.validateAccount(usernameField.getText().toString(), pwdField.getText().toString(), success -> {
                     if (success) {
-                        mgr.getUserDetails(usernameField.getText().toString(),user -> {
+                        mgr.getUserDetails(usernameField.getText().toString(), user -> {
                             mgr.setLoggedInUser(user);
                             finish();
                             Intent intent = new Intent(this, AccountUI.class);
                             startActivity(intent);
-                        },e -> status.setText(e.getMessage()));
+                        }, e -> status.setText(e.getMessage()));
                     } else
                         status.setText("Invalid username or password");
                 }, e -> status.setText(e.getMessage()));

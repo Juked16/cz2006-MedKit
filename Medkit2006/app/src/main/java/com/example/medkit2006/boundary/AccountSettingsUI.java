@@ -17,7 +17,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.medkit2006.DB;
 import com.example.medkit2006.MainActivity;
 import com.example.medkit2006.R;
-import com.example.medkit2006.boundary.VerificationUI;
 import com.example.medkit2006.entity.User;
 
 import java.text.ParseException;
@@ -114,8 +113,13 @@ public class AccountSettingsUI extends AppCompatActivity {
                 });
                 dialog.show();
             });
-            DB.instance.conn.returnCallbackToMainThread(true,this);
-            findViewById(R.id.accountSettingsSaveBtn).setOnClickListener(btn -> {
+            findViewById(R.id.accountSettingsChangePwBtn).setOnClickListener(btn -> {
+                Intent intent = new Intent(this, ForgetPwUI.class);
+                intent.putExtra("ChangePassword", true);
+                startActivity(intent);
+            });
+            Button save = findViewById(R.id.accountSettingsSaveBtn);
+            save.setOnClickListener(btn -> {
                 TextView status = findViewById(R.id.accountSettingsStatus);
                 String emailText = email.getText().toString();
                 if (!emailText.equals(user.getEmail())) {
@@ -129,7 +133,7 @@ public class AccountSettingsUI extends AppCompatActivity {
                                 verified.setChecked(false);
                                 afterEmailCheck();
                             } else
-                                status.setText("Email already in-use");
+                                status.setText("Please use another email");
                         }, e -> status.setText(e.getMessage()));
                     } else
                         status.setText("Invalid email");

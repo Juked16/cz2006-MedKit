@@ -2,6 +2,8 @@ package com.example.medkit2006.boundary;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -17,10 +19,18 @@ import java.security.SecureRandom;
 
 public class VerificationUI extends AppCompatActivity {
 
+    private int resendTime;
+    private final Handler handler = new Handler(Looper.getMainLooper());
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.verification);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         User user = MainActivity.accountMgr.getLoggedInUser();
         if (user == null) {
             finish();
@@ -32,12 +42,10 @@ public class VerificationUI extends AppCompatActivity {
         Button verify = findViewById(R.id.verificationVerifyButton);
         TextView status = findViewById(R.id.verificationStatus);
         send.setOnClickListener(btn -> {
-            //TODO: cooldown
             code.setEnabled(true);
             verify.setEnabled(true);
             SecureRandom random = new SecureRandom();
-            String upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            char[] chars = (upper + "0123456789").toCharArray();
+            char[] chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
             char[] codeBuf = new char[5];
             for (int idx = 0; idx < codeBuf.length; ++idx)
                 codeBuf[idx] = chars[random.nextInt(chars.length)];
@@ -45,6 +53,9 @@ public class VerificationUI extends AppCompatActivity {
             code.setText(codeStr); //TODO: remove after implement sending
             MainActivity.accountMgr.sendVerificationCode(user.getEmail(), codeStr);
             status.setText("Verification code sent to " + user.getEmail());
+            send.setEnabled(false);
+            resendTime = 11;
+            scheduleTimer(send);
         });
         verify.setOnClickListener(btn -> {
             if (MainActivity.accountMgr.validateVerificationCode(code.getText().toString())) {
@@ -54,5 +65,18 @@ public class VerificationUI extends AppCompatActivity {
             } else
                 status.setText("Invalid verification code");
         });
+    }
+
+    private void scheduleTimer(Button send){
+        Runnable timer = () -> {
+            if (--resendTime <= 0) {
+                send.setText("Resend");
+                send.setEnabled(true);
+            }else {
+                send.setText("Resend in " + resendTime + "s");
+                scheduleTimer(send);
+            }
+        };
+        handler.postDelayed(timer,1000);
     }
 }

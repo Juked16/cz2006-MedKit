@@ -1,7 +1,5 @@
 package com.example.medkit2006.control;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import com.BoardiesITSolutions.AndroidMySQLConnector.MySQLRow;
@@ -15,7 +13,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.function.Consumer;
 
@@ -29,7 +26,7 @@ public class AccountMgr {
     }
 
     public boolean validEmail(@NonNull String email) {
-        return email.matches("^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$");
+        return email.matches("^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$");
     }
 
     /**
@@ -66,7 +63,7 @@ public class AccountMgr {
         // TODO - implement email sending
     }
 
-    public boolean isLoggedIn(){
+    public boolean isLoggedIn() {
         return loggedInUser != null;
     }
 
@@ -141,9 +138,19 @@ public class AccountMgr {
                 "lastName = \"" + loggedInUser.getLastName() + "\"," +
                 "gender = \"" + loggedInUser.getGender() + "\"," +
                 "bloodType = \"" + loggedInUser.getBloodType() + "\"," +
-                "dateOfBirth = " + (dob != null ? "\""+new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(dob)+"\"" : "null") + " " +
+                "dateOfBirth = " + (dob != null ? "\"" + new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(dob) + "\"" : "null") + " " +
                 "where username = \"" + loggedInUser.getUsername() + "\"", callback, error
         );
+    }
+
+    /**
+     * @param email    Email
+     * @param password Password (Not hashed)
+     * @param callback Called when no error
+     * @param error    Called when error
+     */
+    public void updatePassword(@NotNull String email, @NotNull String password, Runnable callback, Consumer<Exception> error) {
+        DB.instance.execute("update account set passwordHash = \"" + hash(password) + "\" where email = \"" + email + "\"", callback, error);
     }
 
     /**

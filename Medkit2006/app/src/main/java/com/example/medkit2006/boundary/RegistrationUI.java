@@ -43,12 +43,12 @@ public class RegistrationUI extends AppCompatActivity {
                     } else
                         mgr.usernameExist(username.getText().toString(), userExist -> {
                             if (userExist) {
-                                error.setText("Username already in-use");
+                                error.setText("Please use another username");
                                 username.requestFocus();
                             } else
                                 mgr.emailExist(email.getText().toString(), emailExist -> {
                                     if (emailExist) {
-                                        error.setText("Email already in-use");
+                                        error.setText("Please use another email");
                                         email.requestFocus();
                                     } else {
                                         error.setText("Registering...");
@@ -56,8 +56,7 @@ public class RegistrationUI extends AppCompatActivity {
                                             mgr.getUserDetails(username.getText().toString(), user -> {
                                                 mgr.setLoggedInUser(user);
                                                 finish();
-                                                Intent intent = new Intent(this, VerificationUI.class);
-                                                startActivity(intent);
+                                                startActivity(new Intent(this, VerificationUI.class));
                                             }, e -> error.setText(e.getMessage()));
                                         }, e -> error.setText(e.getMessage()));
                                     }

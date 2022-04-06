@@ -21,35 +21,44 @@
         android:layout_marginTop="245dp"
         android:ems="10"
         android:hint="Username"
-        android:textStyle="italic"
-        />
+        android:textStyle="italic" />
 
     <EditText
         android:id="@+id/loginPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_below="@+id/loginUsername"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
         android:ems="10"
-        android:inputType="textPassword"
         android:hint="Password"
-        />
+        android:inputType="textPassword" />
+
+    <Button
+        android:id="@+id/loginForgotPwBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/loginStatus"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="Forgot Password" />
 
     <Button
         android:id="@+id/loginLoginBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/loginForgotPwBtn"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="183dp"
+        android:layout_marginTop="20dp"
         android:text="Login" />
 
     <Button
         android:id="@+id/loginToRegisterBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/loginLoginBtn"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="93dp"
+        android:layout_marginTop="20dp"
         android:onClick="toRegister"
         android:text="Register" />
 
@@ -59,7 +68,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/loginPassword"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="35dp" />
+        android:layout_marginTop="20dp" />
 
 
 </RelativeLayout>

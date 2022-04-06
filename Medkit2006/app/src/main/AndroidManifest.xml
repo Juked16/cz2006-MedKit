@@ -54,9 +54,10 @@
         <activity android:name=".boundary.RegistrationUI" android:label="Registration" android:parentActivityName=".boundary.LoginUI"/>
         <activity android:name=".FacilDetailActivity" android:label="Facility Detail" />
         <activity android:name=".SearchActivity" android:label="Search" android:parentActivityName=".MainActivity" />
-        <activity android:name=".boundary.AccountSettingsUI" android:label="AccountSettings" android:parentActivityName=".boundary.AccountUI" />
+        <activity android:name=".boundary.AccountSettingsUI" android:label="Account Settings" android:parentActivityName=".boundary.AccountUI" />
         <activity android:name=".SearchResultActivity" android:label="Facility Detail" android:parentActivityName=".SearchActivity"/>
         <activity android:name=".boundary.VerificationUI" android:label="Verification" android:parentActivityName=".boundary.AccountUI"/>
+        <activity android:name=".boundary.ForgetPwUI" android:label="Forget Password" android:parentActivityName=".boundary.LoginUI"/>
 
 
     </application>
