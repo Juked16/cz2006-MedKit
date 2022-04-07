@@ -11,7 +11,7 @@ public class BookmarkUI extends SearchUI {
 		// TODO - implement BookmarkUI.displayBookmarks
 		for(Bookmark b : bookmark){
 				SearchUI searchInstance = new SearchUI();
-				searchInstance.displayFacilityDetail(b.getFacility());
+				//searchInstance.displayFacilityDetail(b.getFacility());
 			        System.out.println(b.getNotes());
 		throw new UnsupportedOperationException();
 		}

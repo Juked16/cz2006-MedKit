@@ -1,4 +1,4 @@
-package com.example.medkit2006;
+package com.example.medkit2006.boundary;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.medkit2006.MainActivity;
+import com.example.medkit2006.R;
+import com.example.medkit2006.boundary.SearchUI;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -14,7 +17,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class FacilDetailActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class FacilDetailUI extends AppCompatActivity implements OnMapReadyCallback {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +29,7 @@ public class FacilDetailActivity extends AppCompatActivity implements OnMapReady
         mapFragment.getMapAsync(this);
         // Get the Intent that started this activity and extract the string
         Intent intent = getIntent();
-        String message = intent.getStringExtra(SearchActivity.EXTRA_MESSAGE);
+        String message = intent.getStringExtra(SearchUI.EXTRA_MESSAGE);
 
         // Capture the layout's TextView and set the string as its text
         TextView textView = findViewById(R.id.medfacil_name);

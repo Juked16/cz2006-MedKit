@@ -8,7 +8,10 @@ import java.sql.Timestamp;
 //***I changed Post to be a subclass of Text here***//
 
 public class Post extends Text {
-	
+	/**
+	 * Variable of topic of post
+	 */
+	private String question;
     /**
 	 * Variable of all comments of post
 	 */

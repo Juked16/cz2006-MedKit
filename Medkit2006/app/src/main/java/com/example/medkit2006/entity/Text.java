@@ -41,6 +41,7 @@ public class Text {
     public User getUser() {
 		return this.user;
 	}
+	public String getUsername(){return this.user.getUsername();}
 
 	/**
 	 * Get content of text
@@ -66,5 +67,5 @@ public class Text {
     public Date getTimestamp() {
 		return this.timestamp;
 	}
-
+	public String getDate(){return this.timestamp.toString();}
 }

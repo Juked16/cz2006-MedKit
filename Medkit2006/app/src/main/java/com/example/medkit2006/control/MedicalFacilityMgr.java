@@ -1,18 +1,8 @@
 package com.example.medkit2006.control;
 
-import android.util.Log;
-import android.widget.Toast;
-
-import com.BoardiesITSolutions.AndroidMySQLConnector.ColumnDefinition;
-import com.BoardiesITSolutions.AndroidMySQLConnector.Exceptions.SQLColumnNotFoundException;
-import com.BoardiesITSolutions.AndroidMySQLConnector.MySQLRow;
-import com.example.medkit2006.DB;
-import com.example.medkit2006.SearchActivity;
-import com.example.medkit2006.boundary.SearchUI;
 import com.example.medkit2006.entity.MedicalFacility;
 import com.example.medkit2006.entity.User;
 
-import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,8 +30,8 @@ public class MedicalFacilityMgr {
 			String name = i.getName();
 			Matcher m = p.matcher(name);
 			if(m.find()) {
-				SearchUI searchInstance = new SearchUI();
-				searchInstance.displayFacilityDetail(i);
+	//			SearchUI searchInstance = new SearchUI();
+	//			searchInstance.displayFacilityDetail(i);
 			}
 		}
 		throw new UnsupportedOperationException();
@@ -55,8 +45,8 @@ public class MedicalFacilityMgr {
 		// TODO - implement MedicalFacilityMgr.getFacilityDetails
 		for(MedicalFacility i : medicalFacilityList){
 			if(medicalFacility.equalsIgnoreCase(i.getName())) {
-				SearchUI searchInstance = new SearchUI();
-				searchInstance.displayFacilityDetail(i);
+				//SearchUI searchInstance = new SearchUI();
+				//searchInstance.displayFacilityDetail(i);
 				break;
 			}
 		}

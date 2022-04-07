@@ -1,17 +1,14 @@
-package com.example.medkit2006;
+package com.example.medkit2006.boundary;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.RadioGroup;
-import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,6 +19,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.medkit2006.MedicalFacilityAdapter;
+import com.example.medkit2006.R;
 import com.example.medkit2006.entity.MedicalFacility;
 
 import org.json.JSONArray;
@@ -32,42 +31,26 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SearchActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
-    public static final String EXTRA_MESSAGE = "@string/MF_name";
-
+public class SearchResultUI extends AppCompatActivity{
     RecyclerView recyclerView;
-    String[] filters = {"Rating>3.5", "Distance<10km"};
     MedicalFacilityAdapter adapter;
     ArrayList<MedicalFacility> medicalFacilityList;
 
+    private CardView cardView;
+    private TextView txtMFName,txtMFContact,txtMFType,txtMFAddress;
+    private TextView test;
     private String stContact;
-    private final String URL = "http://159.138.106.155/mf.php";
-
-    //private CardView[] display_cards = new CardView[30];
-    //private Button[] display_btns = new Button[30];
-
+    private String URL = "http://159.138.106.155/mf.php";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        //1. Basic Settings
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
+        setContentView(R.layout.activity_result_search);
 
-        //2. Settings of Spinner
-        // Take the instance of Spinner and apply OnItemSelectedListener on it which tells which item of spinner is clicked
-        Spinner spin = findViewById(R.id.filter_spinner);
-        spin.setOnItemSelectedListener(this);
-        // Create the instance of ArrayAdapter having the list of filters
-        ArrayAdapter ad = new ArrayAdapter(this, android.R.layout.simple_spinner_item, filters);
-        // set simple layout resource file for each item of spinner
-        ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Set the ArrayAdapter (ad) data on the Spinner which binds data to spinner
-        spin.setAdapter(ad);
-
-        //3. Settings of LayOut
-        recyclerView = findViewById(R.id.search_result_rv);
+        recyclerView = findViewById(R.id.mfListRecyclerV);
         medicalFacilityList = new ArrayList<>();
         extractMedicalFacility();
+
     }
 
     public void extractMedicalFacility(){
@@ -98,12 +81,12 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
                 adapter = new MedicalFacilityAdapter(getApplicationContext(),medicalFacilityList);
                 recyclerView.setAdapter(adapter);
 
-                Toast.makeText(SearchActivity.this,"success", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SearchResultUI.this,"success", Toast.LENGTH_SHORT).show();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(SearchActivity.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(SearchResultUI.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
             }
         }){
             @Nullable
@@ -114,34 +97,14 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
                 return data;
             }
         };
+
         requestQueue.add(jsonArrayRequest);
     }
 
-    public void searchHandler(View v) {
-        //Get user input text
-        EditText edx = findViewById(R.id.search_src1);
-        String user_str = edx.getText().toString();
-        //Get filters
-        Spinner spn = findViewById(R.id.filter_spinner);
-        int position = spn.getSelectedItemPosition();
-
-        //Get user selection of order by
-        RadioGroup rgr = findViewById(R.id.sort_radioGroup);
-        int mode = rgr.getCheckedRadioButtonId();
-        //TODO: get the search result and pass to search result page? or pass the search parameters?
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {
-        Toast.makeText(getApplicationContext(), "@string/search_ord_hint"+filters[position], Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-        // Auto-generated method stub
-    }
-    public void toSearchResult(View view){
-        Intent intent = new Intent(SearchActivity.this, SearchResultActivity.class);
+    public void toMFDetails(View view){
+        Intent intent = new Intent(getApplicationContext(), MedicalFacility.class);
+        intent.putExtra("MF_name", "Raffles");
         startActivity(intent);
     }
+
 }

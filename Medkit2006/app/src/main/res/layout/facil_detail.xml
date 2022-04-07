@@ -5,7 +5,7 @@
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:onClick="goBack"
-    tools:context=".FacilDetailActivity"
+    tools:context=".boundary.FacilDetailUI"
     android:name="com.testing.svma.FacilDetailActivity">
 
     <ScrollView
