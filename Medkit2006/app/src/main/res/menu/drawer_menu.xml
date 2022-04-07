@@ -9,8 +9,4 @@
         android:id="@+id/myPost"
         android:title="My Posts"/>
 
-    <item
-        android:id="@+id/myPass"
-        android:title="Change Password"/>
-
 </menu>

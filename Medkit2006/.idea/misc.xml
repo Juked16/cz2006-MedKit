@@ -43,13 +43,20 @@
         <entry key="..\:/Users/julie/Documents/GitHub/cz2006-MedKit/Medkit2006/app/src/main/res/layout/registration.xml" value="0.25416666666666665" />
         <entry key="app/src/main/res/layout/activity_drafts.xml" value="0.24329071044921877" />
         <entry key="app/src/main/res/layout/activity_feed.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_forum.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_my_post.xml" value="0.12273550724637682" />
         <entry key="app/src/main/res/layout/activity_post_detail.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_search.xml" value="0.1" />
         <entry key="app/src/main/res/layout/feed_tile.xml" value="0.12273550724637682" />
+        <entry key="app/src/main/res/layout/login.xml" value="0.1" />
         <entry key="app/src/main/res/layout/nav_header.xml" value="0.1" />
         <entry key="app/src/main/res/layout/registration.xml" value="0.1" />
         <entry key="app/src/main/res/layout/search.xml" value="0.1" />
+        <entry key="app/src/main/res/menu/activity_profile_drawer.xml" value="0.1" />
+        <entry key="app/src/main/res/menu/draft_post_editor.xml" value="0.1" />
+        <entry key="app/src/main/res/menu/drawer_menu.xml" value="0.1" />
+        <entry key="app/src/main/res/menu/feed_action.xml" value="0.1" />
+        <entry key="app/src/main/res/menu/post_editor.xml" value="0.1" />
         <entry key="app/src/main/res/menu/profile.xml" value="0.15462962962962962" />
       </map>
     </option>
