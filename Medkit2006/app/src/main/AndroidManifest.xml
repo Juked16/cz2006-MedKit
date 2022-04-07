@@ -2,43 +2,44 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.medkit2006">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"
-        tools:ignore="CoarseFineLocation" />
     <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
-
+        android:name="android.permission.ACCESS_FINE_LOCATION"
+        tools:ignore="CoarseFineLocation" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        tools:replace="android:theme"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Medkit2006"
-        android:networkSecurityConfig="@xml/network_security_config">
+        tools:replace="android:theme">
+        <activity
+            android:name=".boundary.ChatUsersUI"
+            android:exported="false" />
+        <activity
+            android:name=".MessageActivity"
+            android:exported="false" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/map_key" />
-
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
         <activity
             android:name=".MainActivity"
-            android:exported="true">
-
-        </activity>
-        <activity android:name=".Success">
-
-        </activity>
-        <activity android:name=".boundary.MainMenuUI"
+            android:exported="true" />
+        <activity android:name=".Success" />
+        <activity
+            android:name=".boundary.MainMenuUI"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -46,26 +47,73 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".boundary.AccountUI" android:label="Account" android:parentActivityName=".boundary.MainMenuUI"/>
-        <activity android:name=".BookmarkActivity" android:label="BookMark" android:parentActivityName=".MainActivity"/>
-        <activity android:name=".ChatActivity" android:label="Chats" android:parentActivityName=".MainActivity"/>
-        <activity android:name=".boundary.LoginUI" android:label="Login" android:parentActivityName=".boundary.MainMenuUI"/>
-        <activity android:name=".boundary.RegistrationUI" android:label="Registration" android:parentActivityName=".boundary.LoginUI"/>
-        <activity android:name=".boundary.FacilDetailUI" android:label="Facility Detail" />
-        <activity android:name=".boundary.SearchUI" android:label="Search" android:parentActivityName=".MainActivity" />
-        <activity android:name=".boundary.AccountSettingsUI" android:label="Account Settings" android:parentActivityName=".boundary.AccountUI" />
-        <activity android:name=".boundary.SearchResultUI" android:label="Facility Detail" android:parentActivityName=".boundary.SearchUI"/>
-        <activity android:name=".boundary.VerificationUI" android:label="Verification" android:parentActivityName=".boundary.AccountUI"/>
-        <activity android:name=".boundary.ForgetPwUI" android:label="Forget Password" android:parentActivityName=".boundary.LoginUI"/>
-
-        <activity android:name=".boundary.ForumUI" android:label="Forget Password" android:parentActivityName=".boundary.MainMenuUI"/>
-        <activity android:name=".boundary.PostDetailUI" android:label="Forget Password" android:parentActivityName=".boundary.ForumUI"/>
-        <activity android:name=".boundary.MyPostUI" android:label="Forget Password" android:parentActivityName=".boundary.ForumUI"/>
-        <activity android:name=".boundary.PostDraftUI" android:label="Forget Password" android:parentActivityName=".boundary.ForumUI"/>
-        <activity android:name=".boundary.PostEditorUI" android:label="Forget Password" android:parentActivityName=".boundary.ForumUI"/>
-        <activity android:name=".boundary.PostToDraftUI" android:label="Forget Password" android:parentActivityName=".boundary.ForumUI"/>
-
-
+        <activity
+            android:name=".boundary.AccountUI"
+            android:label="Account"
+            android:parentActivityName=".boundary.MainMenuUI" />
+        <activity
+            android:name=".BookmarkActivity"
+            android:label="BookMark"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".boundary.ChatUI"
+            android:label="Chats"
+            android:parentActivityName=".boundary.MainMenuUI" />
+        <activity
+            android:name=".boundary.LoginUI"
+            android:label="Login"
+            android:parentActivityName=".boundary.MainMenuUI" />
+        <activity
+            android:name=".boundary.RegistrationUI"
+            android:label="Registration"
+            android:parentActivityName=".boundary.LoginUI" />
+        <activity
+            android:name=".boundary.FacilDetailUI"
+            android:label="Facility Detail" />
+        <activity
+            android:name=".boundary.SearchUI"
+            android:label="Search"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".boundary.AccountSettingsUI"
+            android:label="Account Settings"
+            android:parentActivityName=".boundary.AccountUI" />
+        <activity
+            android:name=".boundary.SearchResultUI"
+            android:label="Facility Detail"
+            android:parentActivityName=".boundary.SearchUI" />
+        <activity
+            android:name=".boundary.VerificationUI"
+            android:label="Verification"
+            android:parentActivityName=".boundary.AccountUI" />
+        <activity
+            android:name=".boundary.ForgetPwUI"
+            android:label="Forget Password"
+            android:parentActivityName=".boundary.LoginUI" />
+        <activity
+            android:name=".boundary.ForumUI"
+            android:label="Forget Password"
+            android:parentActivityName=".boundary.MainMenuUI" />
+        <activity
+            android:name=".boundary.PostDetailUI"
+            android:label="Forget Password"
+            android:parentActivityName=".boundary.ForumUI" />
+        <activity
+            android:name=".boundary.MyPostUI"
+            android:label="Forget Password"
+            android:parentActivityName=".boundary.ForumUI" />
+        <activity
+            android:name=".boundary.PostDraftUI"
+            android:label="Forget Password"
+            android:parentActivityName=".boundary.ForumUI" />
+        <activity
+            android:name=".boundary.PostEditorUI"
+            android:label="Forget Password"
+            android:parentActivityName=".boundary.ForumUI" />
+        <activity
+            android:name=".boundary.PostToDraftUI"
+            android:label="Forget Password"
+            android:parentActivityName=".boundary.ForumUI" />
     </application>
 
 </manifest>

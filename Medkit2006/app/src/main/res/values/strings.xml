@@ -20,6 +20,8 @@
     <string name="open">Open</string>
     <string name="close">Close</string>
     <string name="action_settings">Setting</string>
+    <string name="type_a_message_here">Type a message here</string>
+    <string name="username">Username</string>
     <string-array name="gender_array">
         <item />
         <item>M</item>
