@@ -2,6 +2,7 @@ package com.example.medkit2006.control;
 
 import androidx.annotation.NonNull;
 
+import com.BoardiesITSolutions.AndroidMySQLConnector.Exceptions.SQLColumnNotFoundException;
 import com.BoardiesITSolutions.AndroidMySQLConnector.MySQLRow;
 import com.example.medkit2006.DB;
 import com.example.medkit2006.entity.User;
@@ -11,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -55,7 +57,8 @@ public class AccountMgr {
      * @param error    Called when error
      */
     public void createAccount(@NotNull String username, String email, @NotNull String password, @NotNull Runnable callback, Consumer<Exception> error) {
-        DB.instance.execute("insert into account (username,email,passwordHash) values (\"" + username + "\",\"" + email + "\",\"" + hash(password) + "\")", callback, error);
+        byte[] salt = salt();
+        DB.instance.execute("insert into account (username,email,passwordHash,passwordSalt) values (\"" + username + "\",\"" + email + "\",\"" + hash(password, salt) + "\",\"" + bytesToHex(salt) + "\")", callback, error);
     }
 
     public void sendVerificationCode(@NotNull String email, @NotNull String verificationCode) {
@@ -90,7 +93,20 @@ public class AccountMgr {
      * @param error    Called when error
      */
     public void validateAccount(@NotNull String username, @NotNull String password, Consumer<Boolean> callback, Consumer<Exception> error) {
-        DB.instance.executeQuery("select username from account where username = \"" + username + "\" and passwordHash = cast('" + hash(password) + "' as BINARY(32))", resultSet -> callback.accept(resultSet.getNextRow() != null), error);
+        DB.instance.executeQuery("select passwordSalt from account where username = \"" + username + "\"", saltResult -> {
+            MySQLRow row = saltResult.getNextRow();
+            if (row != null) {
+                byte[] salt;
+                try {
+                    salt = hexStringToByteArray(row.getString("passwordSalt"));
+                } catch (SQLColumnNotFoundException e) {
+                    callback.accept(false);
+                    return;
+                }
+                DB.instance.executeQuery("select username from account where username = \"" + username + "\" and passwordHash = cast('" + hash(password, salt) + "' as BINARY(32))",
+                        resultSet -> callback.accept(resultSet.getNextRow() != null), error);
+            }
+        }, error);
     }
 
     /**
@@ -150,22 +166,45 @@ public class AccountMgr {
      * @param error    Called when error
      */
     public void updatePassword(@NotNull String email, @NotNull String password, Runnable callback, Consumer<Exception> error) {
-        DB.instance.execute("update account set passwordHash = \"" + hash(password) + "\" where email = \"" + email + "\"", callback, error);
+        byte[] salt = salt();
+        DB.instance.execute("update account set passwordHash = \"" + hash(password, salt) + "\", passwordSalt = \"" + bytesToHex(salt) + "\" where email = \"" + email + "\"", callback, error);
     }
 
     /**
      * @param s String to hash
-     * @return SHA-256 hash
+     * @param salt Salt
+     * @return SHA-256 salted hash
      */
-    public String hash(@NotNull String s) {
+    @NonNull
+    private String hash(@NotNull String s, @NotNull byte[] salt) {
         MessageDigest digest;
         try {
             digest = MessageDigest.getInstance("SHA-256");
+            digest.update(salt);
             return bytesToHex(digest.digest(s.getBytes(StandardCharsets.UTF_8)));
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
         return "Should never happen";
+    }
+
+    @NonNull
+    private byte[] salt() {
+        SecureRandom random = new SecureRandom();
+        byte[] salt = new byte[16];
+        random.nextBytes(salt);
+        return salt;
+    }
+
+    @NonNull
+    private byte[] hexStringToByteArray(@NotNull String s) {
+        int len = s.length();
+        byte[] data = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+                    + Character.digit(s.charAt(i+1), 16));
+        }
+        return data;
     }
 
     @NonNull

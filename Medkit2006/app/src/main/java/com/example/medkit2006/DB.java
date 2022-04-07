@@ -25,6 +25,7 @@ public class DB {
         username VARCHAR(45) PRIMARY KEY,
         email VARCHAR(45) NOT NULL UNIQUE,
         passwordHash BINARY(32) NOT NULL,
+        passwordSalt BINARY(32) NOT NULL,
         verified INT DEFAULT 0, -- #should be BIT but lib can't get BIT datatype
         firstName VARCHAR(45),
         lastName VARCHAR(45),
