@@ -51,6 +51,7 @@ public class VerificationUI extends AppCompatActivity {
         verify.setOnClickListener(btn -> {
             if (MainActivity.accountMgr.validateVerificationCode(code.getText().toString())) {
                 user.setVerified(true);
+                MainActivity.accountMgr.saveLoggedInUserDetails(null, null);
                 finish();
                 startActivity(new Intent(this, AccountUI.class));
             } else
@@ -58,16 +59,16 @@ public class VerificationUI extends AppCompatActivity {
         });
     }
 
-    private void scheduleTimer(Button send){
+    private void scheduleTimer(Button send) {
         Runnable timer = () -> {
             if (--resendTime <= 0) {
                 send.setText("Resend");
                 send.setEnabled(true);
-            }else {
+            } else {
                 send.setText("Resend in " + resendTime + "s");
                 scheduleTimer(send);
             }
         };
-        handler.postDelayed(timer,1000);
+        handler.postDelayed(timer, 1000);
     }
 }

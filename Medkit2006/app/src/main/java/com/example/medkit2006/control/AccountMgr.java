@@ -157,7 +157,8 @@ public class AccountMgr {
                 }
                 DB.instance.executeQuery("select username from account where username = \"" + username + "\" and passwordHash = cast('" + hash(password, salt) + "' as BINARY(32))",
                         resultSet -> callback.accept(resultSet.getNextRow() != null), error);
-            }
+            } else
+                callback.accept(false);
         }, error);
     }
 
