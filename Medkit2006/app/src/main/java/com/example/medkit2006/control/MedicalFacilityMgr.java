@@ -1,5 +1,7 @@
 package com.example.medkit2006.control;
 
+import android.util.Log;
+
 import com.BoardiesITSolutions.AndroidMySQLConnector.MySQLRow;
 import com.example.medkit2006.DB;
 import com.example.medkit2006.entity.MedicalFacility;
@@ -51,7 +53,27 @@ public class MedicalFacilityMgr {
 	}
 
 	public void getFacilityDetails(String facility_name, Consumer<MedicalFacility> callback, Consumer<Exception> error) {
-
+		String query = ("select * from medical_facilities where name = '"+facility_name+"'").toUpperCase();
+		Log.d("Issued query", query);
+		DB.instance.executeQuery(query, resultSet -> {
+			MedicalFacility tmp_facil = new MedicalFacility();
+			ArrayList<MedicalFacility> facility_list = new ArrayList<MedicalFacility>();
+			MySQLRow row = resultSet.getNextRow();
+			try {
+				tmp_facil.setName(row.getString("name"));    //name is nullable
+				tmp_facil.setType(row.getString("type"));
+				tmp_facil.setAddress(row.getString("address"));
+				tmp_facil.setContact(row.getString("contact"));
+				tmp_facil.setLongitude(row.getFloat("longitude"));
+				tmp_facil.setLatitude(row.getFloat("latitude"));
+				tmp_facil.setDescription(row.getString("description"));
+				facility_list.add(tmp_facil);
+			} catch (Exception e) {
+				error.accept(e);
+				return;
+			}
+			callback.accept(tmp_facil);
+		}, error);
 	}
 
 	/**

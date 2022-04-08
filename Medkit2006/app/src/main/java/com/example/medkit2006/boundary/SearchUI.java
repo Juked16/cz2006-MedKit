@@ -1,5 +1,7 @@
 package com.example.medkit2006.boundary;
 
+import static com.example.medkit2006.MainActivity.facilityMgr;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -44,7 +46,6 @@ public class SearchUI extends AppCompatActivity implements AdapterView.OnItemSel
     RecyclerView recyclerView;
     MedicalFacilityAdapter adapter;
     private final String[] filters = {"Rating>3.5", "Distance<10km"};
-    public final MedicalFacilityMgr facil_mgr = new MedicalFacilityMgr();
     private ArrayList<MedicalFacility> medicalFacilityList;
 
     @Override
@@ -60,7 +61,7 @@ public class SearchUI extends AppCompatActivity implements AdapterView.OnItemSel
         medicalFacilityList= new ArrayList<MedicalFacility>();
         recyclerView = findViewById(R.id.search_result_rv);
 
-        facil_mgr.getAllFacilityList(medicalFacilityList -> {
+        facilityMgr.getAllFacilityList(medicalFacilityList -> {
             Log.d("Received Medical Facility List", String.valueOf(medicalFacilityList.size()));
             runOnUiThread(new Runnable() {
                 @Override
@@ -100,7 +101,7 @@ public class SearchUI extends AppCompatActivity implements AdapterView.OnItemSel
         //Get user selection of order by
         RadioGroup rgr = findViewById(R.id.sort_radioGroup);
         int mode = rgr.getCheckedRadioButtonId();
-        //TODO: get the search result and pass to search result page? or pass the search parameters?
+        //Gather all info and formulate a query.
     }
 
     @Override

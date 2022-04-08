@@ -1,33 +1,38 @@
 package com.example.medkit2006.boundary;
 
+import static com.example.medkit2006.MainActivity.facilityMgr;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.medkit2006.MainActivity;
 import com.example.medkit2006.R;
 import com.example.medkit2006.boundary.SearchUI;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class FacilDetailUI extends AppCompatActivity implements OnMapReadyCallback {
-
+    private GoogleMap map;
+    SupportMapFragment mapFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.facil_detail);
         //Instantiation of map object, get a handle to the fragment and register the callback.
-
         try{
-            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+            mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
         }catch(Exception e){
@@ -36,22 +41,32 @@ public class FacilDetailUI extends AppCompatActivity implements OnMapReadyCallba
         // Get the Intent that started this activity and extract the string
         Intent intent = getIntent();
         String message = intent.getStringExtra(SearchUI.EXTRA_MESSAGE);
-
+        Log.d("Received MF Name", message);
+        facilityMgr.getFacilityDetails(message, facility -> {
+                    TextView textView = findViewById(R.id.medfacil_name);
+                    textView.setText(facility.getName());
+                    textView = findViewById(R.id.medfacil_descr);
+                    textView.setText(facility.getDescription());
+                    LatLng pos = new LatLng(facility.getLatitude(), facility.getLongitude());
+                    map.addMarker(new MarkerOptions()
+                            .position(pos)
+                            .title(facility.getName()));
+                    map.moveCamera(CameraUpdateFactory.newLatLng(pos));
+                },
+                e -> { Log.d("Received Medical Facility List Unsuccessful", e.toString().trim()); });
         // Capture the layout's TextView and set the string as its text
-        TextView textView = findViewById(R.id.medfacil_name);
-        textView.setText(message);
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        // Set the map coordinates to Kyoto Japan.
-        LatLng sing = new LatLng(1.3340416323795148, 103.84970722221946);
+        this.map = googleMap;
+        /*LatLng sing = new LatLng(1.3340416323795148, 103.84970722221946);
         googleMap.addMarker(new MarkerOptions()
                 .position(sing)
-                .title("Raffles"));
+                .title("Raffles"));*/
         // Move the camera to the map coordinates and zoom in closer.
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sing));
-        googleMap.moveCamera(CameraUpdateFactory.zoomTo(15));
+        //googleMap.moveCamera(CameraUpdateFactory.newLatLng(sing));
+        googleMap.moveCamera(CameraUpdateFactory.zoomTo(17));
         // Display traffic
         googleMap.setTrafficEnabled(true);
     }

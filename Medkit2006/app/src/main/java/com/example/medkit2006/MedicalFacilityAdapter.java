@@ -56,7 +56,7 @@ public class MedicalFacilityAdapter extends RecyclerView.Adapter<MedicalFacility
                 Toast.makeText(inflater.getContext(),
                         "click success bind", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(view.getContext(), FacilDetailUI.class);
-                intent.putExtra(SearchUI.EXTRA_MESSAGE, medicalFacility.getName());
+                intent.putExtra(SearchUI.EXTRA_MESSAGE, holder.txtMFName.getText());
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 view.getContext().startActivity(intent);
             }
