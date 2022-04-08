@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -42,25 +43,36 @@ import java.util.Map;
 
 public class SearchUI extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
     public static final String EXTRA_MESSAGE = "@string/MF_name";
+    public static final String QUERY = "@string/MF_search";
 
     RecyclerView recyclerView;
     MedicalFacilityAdapter adapter;
-    private final String[] filters = {"Rating>3.5", "Distance<10km"};
-    private ArrayList<MedicalFacility> medicalFacilityList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //1. Basic Settings
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        Spinner spin = findViewById(R.id.filter_spinner);
-        spin.setOnItemSelectedListener(this);
-        ArrayAdapter ad = new ArrayAdapter(this, android.R.layout.simple_spinner_item, filters);
-        ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spin.setAdapter(ad);
-        medicalFacilityList= new ArrayList<MedicalFacility>();
-        recyclerView = findViewById(R.id.search_result_rv);
 
+        //Setting spinners
+        Spinner type_spin = findViewById(R.id.type_filter_spinner);
+        Spinner rating_spin = findViewById(R.id.rating_filter_spinner);
+
+        type_spin.setOnItemSelectedListener(this);
+        rating_spin.setOnItemSelectedListener(this);
+
+        ArrayAdapter type_ad = new ArrayAdapter(this, android.R.layout.simple_spinner_item, facilityMgr.filters_type);
+        type_ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        type_spin.setAdapter(type_ad);
+        ArrayAdapter rating_ad = new ArrayAdapter(this, android.R.layout.simple_spinner_item, facilityMgr.filters_rating);
+        rating_ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        rating_spin.setAdapter(rating_ad);
+
+        ArrayList<MedicalFacility> medicalFacilityList = new ArrayList<MedicalFacility>();
+        recyclerView = findViewById(R.id.search_result_rv);
+        displayAllFacility();
+    }
+
+    public void displayAllFacility(){
         facilityMgr.getAllFacilityList(medicalFacilityList -> {
             Log.d("Received Medical Facility List", String.valueOf(medicalFacilityList.size()));
             runOnUiThread(new Runnable() {
@@ -71,42 +83,20 @@ public class SearchUI extends AppCompatActivity implements AdapterView.OnItemSel
                     recyclerView.setAdapter(adapter);
                 }
             });
-            try{
-                Toast.makeText(SearchUI.this, "success", Toast.LENGTH_SHORT).show();
-            } catch(Exception e){
-                Looper.prepare();
-                Toast.makeText(SearchUI.this, "Toast", Toast.LENGTH_SHORT).show();
-                Looper.loop();
-            }
         }, e -> {
             Log.d("Received Medical Facility List Unsuccessful", e.toString().trim());
-            try {
-                Toast.makeText(SearchUI.this, e.toString().trim(), Toast.LENGTH_SHORT).show();
-            } catch(Exception e2){
-                Looper.prepare();
-                Toast.makeText(SearchUI.this, "Toast", Toast.LENGTH_SHORT).show();
-                Looper.loop();
-            }
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {// Stuff that updates the UI
+                    Toast.makeText(getApplicationContext(), e.toString().trim(), Toast.LENGTH_SHORT).show();
+                }
+            });
         });
-    }
-
-    public void searchHandler(View v) {
-        //Get user input text
-        EditText edx = findViewById(R.id.search_src1);
-        String user_str = edx.getText().toString();
-        //Get filters
-        Spinner spn = findViewById(R.id.filter_spinner);
-        int position = spn.getSelectedItemPosition();
-
-        //Get user selection of order by
-        RadioGroup rgr = findViewById(R.id.sort_radioGroup);
-        int mode = rgr.getCheckedRadioButtonId();
-        //Gather all info and formulate a query.
     }
 
     @Override
     public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {
-        Toast.makeText(getApplicationContext(), "@string/search_ord_hint"+filters[position], Toast.LENGTH_LONG).show();
+        // Auto-generated method stub
     }
 
     @Override
@@ -114,7 +104,45 @@ public class SearchUI extends AppCompatActivity implements AdapterView.OnItemSel
         // Auto-generated method stub
     }
     public void toSearchResult(View view){
-        Intent intent = new Intent(SearchUI.this, SearchResultUI.class);
-        startActivity(intent);
+        //Get user input text
+        EditText edx = findViewById(R.id.search_src1);
+        String name = edx.getText().toString();
+        //Get filters
+        int filter_pos[] = new int[2];
+        Spinner spn = findViewById(R.id.type_filter_spinner);
+        filter_pos[0] = spn.getSelectedItemPosition();
+        spn = findViewById(R.id.rating_filter_spinner);
+        filter_pos[1] = spn.getSelectedItemPosition();
+        //Get user selection of order by
+        RadioGroup rgr = findViewById(R.id.sort_radioGroup);
+        String order ;
+        try {
+            RadioButton rbtn = findViewById(rgr.getCheckedRadioButtonId());
+            order = rbtn.getText().toString();
+        }catch (Exception e){
+            order = "";
+        }
+        facilityMgr.getFacilityList(name, filter_pos, order, medicalFacilityList -> {
+            Log.d("Received Medical Facility List", String.valueOf(medicalFacilityList.size()));
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {// Stuff that updates the UI
+                    recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                    adapter = new MedicalFacilityAdapter(getApplicationContext(), medicalFacilityList);
+                    recyclerView.setAdapter(adapter);
+                }
+            });
+        }, e -> {
+            Log.d("Received Medical Facility List Unsuccessful", e.toString().trim());
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {// Stuff that updates the UI
+                    Toast.makeText(getApplicationContext(), e.toString().trim(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
+        //Gather all info and formulate a query.
+        //Intent intent = new Intent(SearchUI.this, SearchResultUI.class);
+        //startActivity(intent);
     }
 }

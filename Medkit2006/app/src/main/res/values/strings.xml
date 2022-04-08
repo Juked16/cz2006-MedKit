@@ -14,7 +14,7 @@
     <string name="search_hint">Enter search here</string>
     <string name="search_ord_hint">Sort by </string>
     <string name="search_opt1">Alphabet</string>
-    <string name="search_opt2">Distance</string>
+    <string name="search_opt2">Type</string>
     <string name="search_opt3">Rating</string>
     <string name="no_result_warning">Search NO result!</string>
     <string name="open">Open</string>
