@@ -46,7 +46,8 @@ public class ForgetPwUI extends AppCompatActivity {
                         mgr.emailExist(email, emailExist -> {
                             if (emailExist)
                                 mgr.sendVerificationCode(email);
-                            //else send "email does not exist in our records"?
+                            else
+                                status.setText("Email does not exist in our records");
                         }, e -> status.setText(e.getMessage()));
                         status.setText("Verification code sent to " + email);
                         stage++;
