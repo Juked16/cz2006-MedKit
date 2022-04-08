@@ -50,7 +50,6 @@ public class SearchResultUI extends AppCompatActivity{
         recyclerView = findViewById(R.id.mfListRecyclerV);
         medicalFacilityList = new ArrayList<>();
         extractMedicalFacility();
-
     }
 
     public void extractMedicalFacility(){
@@ -103,7 +102,7 @@ public class SearchResultUI extends AppCompatActivity{
 
     public void toMFDetails(View view){
         Intent intent = new Intent(getApplicationContext(), MedicalFacility.class);
-        intent.putExtra("MF_name", "Raffles");
+        intent.putExtra(SearchUI.EXTRA_MESSAGE, "Raffles");
         startActivity(intent);
     }
 

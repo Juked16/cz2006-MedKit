@@ -1,8 +1,16 @@
 package com.example.medkit2006.control;
 
+import com.BoardiesITSolutions.AndroidMySQLConnector.MySQLRow;
+import com.example.medkit2006.DB;
 import com.example.medkit2006.entity.MedicalFacility;
 import com.example.medkit2006.entity.User;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Locale;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -11,46 +19,39 @@ public class MedicalFacilityMgr {
 	/**
 	 * Variable of list of all medical facility in database
 	 */
-	private MedicalFacility[] medicalFacilityList;
-	/** TODO: a function to return 30 facility for display
-	 * @return certain number of medical facilities, the certain number is defined in SearchActivity.NUMBER_OF_DISPLAY
-	 */
 
-	/** TODO: modifie the function to return the list in a certain order
-	 * Get list of Medical facilities matching the input and filter (if any)
-	 * @param input Query of matching medical facilities
-	 * @param filter List of filters - changed to single filter -- filters are realized by dropdown list, and can only be selected once
-	 * @param Mode Denote the pattern of return result: 0/Alphabet, 1/Distance, 2/Rating, -1/Arbitrary
-	 * @return null if no available result
-	 */
-	public MedicalFacility[] getFacilityList(String input, String filter, int Mode) {
-		// TODO - implement MedicalFacilityMgr.getFacilityList
-		Pattern p = Pattern.compile(input, Pattern.CASE_INSENSITIVE);
-		for(MedicalFacility i : medicalFacilityList) {
-			String name = i.getName();
-			Matcher m = p.matcher(name);
-			if(m.find()) {
-	//			SearchUI searchInstance = new SearchUI();
-	//			searchInstance.displayFacilityDetail(i);
+	public void getAllFacilityList(@NotNull Consumer<ArrayList<MedicalFacility>> callback, Consumer<Exception> error){
+		String query = "select * from medical_facilities".toUpperCase();
+		DB.instance.executeQuery(query, resultSet -> {
+			MedicalFacility tmp_facil = new MedicalFacility();
+			ArrayList<MedicalFacility> facility_list = new ArrayList<MedicalFacility>();
+			MySQLRow row;
+			while((row = resultSet.getNextRow())!=null) {
+				try {
+					tmp_facil.setName(row.getString("name"));    //name is nullable
+					tmp_facil.setType(row.getString("type"));
+					tmp_facil.setAddress(row.getString("address"));
+					tmp_facil.setContact(row.getString("contact"));
+					//tmp_facil.setLongitude(row.getFloat("longitude"));
+					//tmp_facil.setLatitude(row.getFloat("latitude"));
+					//tmp_facil.setDescription(row.getString("description"));
+					facility_list.add(tmp_facil);
+				} catch (Exception e) {
+					error.accept(e);
+					return;
+				}
 			}
-		}
-		throw new UnsupportedOperationException();
+			callback.accept(facility_list);
+		}, error);
 	}
 
-	/**
-	 * Get details of a medical facility
-	 * @param medicalFacility name of a medical facility
-	 */
-	public MedicalFacility getFacilityDetails(String medicalFacility) {
-		// TODO - implement MedicalFacilityMgr.getFacilityDetails
-		for(MedicalFacility i : medicalFacilityList){
-			if(medicalFacility.equalsIgnoreCase(i.getName())) {
-				//SearchUI searchInstance = new SearchUI();
-				//searchInstance.displayFacilityDetail(i);
-				break;
-			}
-		}
-		throw new UnsupportedOperationException();
+	public void getFacilityList(String input, String filter, int Mode, Consumer<MedicalFacility> callback, Consumer<Exception> error) {
+		// TODO - implement MedicalFacilityMgr.getFacilityList
+
+	}
+
+	public void getFacilityDetails(String facility_name, Consumer<MedicalFacility> callback, Consumer<Exception> error) {
+
 	}
 
 	/**

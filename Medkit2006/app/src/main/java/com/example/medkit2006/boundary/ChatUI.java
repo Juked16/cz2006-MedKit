@@ -1,21 +1,16 @@
 package com.example.medkit2006.boundary;
 
-public class ChatUI {
+import android.os.Bundle;
 
-	/**
-	 * Display successful start of a conversation.
-	 */
-	public void displayConversationStarted() {
-		// TODO - implement ChatUI.displayConversationStarted
-		System.out.println("Conversation has succesfully started.");
-	}
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
-	/**
-	 * Display error message of not finding the user account keyed in.
-	 */
-	public void displayErrorMessage() {
-		// TODO - implement ChatUI.displayErrorMessage
-		System.out.println("Error! User account does not exist.");
-	}
+import com.example.medkit2006.R;
 
+public class ChatUI extends AppCompatActivity {
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.chat);
+    }
 }

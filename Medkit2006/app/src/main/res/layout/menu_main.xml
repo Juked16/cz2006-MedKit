@@ -50,15 +50,14 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/btnChat"
         android:layout_centerHorizontal="true"
-        android:text="Bookmark"
         android:onClick="onClickBookmark"
-        />
+        android:text="@string/btn_bookmark" />
 
     <Button
         android:id="@+id/btnAccount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Account"
+        android:text="@string/btn_accounts"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/btnBookmark"
         android:onClick="onClickAccount"

@@ -19,7 +19,12 @@
     <string name="no_result_warning">Search NO result!</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
-    <string name="action_settings">Setting</string>
+    <string name="btn_accounts">Account</string>
+    <string name="btn_settings">Settings</string>
+    <string name="btn_chat">Chat</string>
+    <string name="btn_forum">Forum</string>
+    <string name="btn_bookmark">Book Mark</string>
+    <string name="btn_login">Login</string>
     <string-array name="gender_array">
         <item />
         <item>M</item>

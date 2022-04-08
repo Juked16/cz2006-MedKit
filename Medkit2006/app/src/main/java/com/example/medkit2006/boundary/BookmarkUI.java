@@ -1,20 +1,16 @@
 package com.example.medkit2006.boundary;
-import com.example.medkit2006.entity.*;
 
-public class BookmarkUI extends SearchUI {
+import android.os.Bundle;
 
-	/**
-	 * 
-	 * @param bookmark
-	 */
-	public void displayBookmarks(Bookmark[] bookmark) {
-		// TODO - implement BookmarkUI.displayBookmarks
-		for(Bookmark b : bookmark){
-				SearchUI searchInstance = new SearchUI();
-				//searchInstance.displayFacilityDetail(b.getFacility());
-			        System.out.println(b.getNotes());
-		throw new UnsupportedOperationException();
-		}
-	}
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.medkit2006.R;
+
+public class BookmarkUI extends AppCompatActivity {
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.bookmark);
+    }
 }

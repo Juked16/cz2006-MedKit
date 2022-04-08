@@ -2,37 +2,17 @@ package com.example.medkit2006.entity;
 import java.util.ArrayList;
 
 public class MedicalFacility {
-
-	/**
-	 * Variable of type of medical facility
-	 */
 	private String type;
-	
-	/**
-	 * Variable of name of medical facility
-	 */
 	private String name;
-	/**
-	 * Variable of address of medical facility
-	 */
 	private String address;
-	/**
-	 * Variable of contact number of medical facility
-	 */
 	private String contact;
-	/**
-	 * Variable of ratings given by patients
-	 */
+	private float latitude;
+	private float longitude;
+	private String description;
 	private ArrayList<Rating> ratings;
-	/**
-	 * Variable of services provided by the medical facility
-	 */
 	private ArrayList<Service> services;
-
-	/**
-	 * Variable of list of users who book marked the medical facility
-	 */
 	private ArrayList<User> notifyList;
+
 
 	/**
 	 * Empty Constructor for medical facility
@@ -114,11 +94,6 @@ public class MedicalFacility {
 		
 		throw new UnsupportedOperationException();
 	}
-
-	/**
-	 * Get average rating of all ratings of the medical facility
-	 * @return Average rating of all ratings
-	 */
 	public float getAverageRating() {
 		// TODO - implement MedicalFacility.getAverageRating
 		int size = ratings.size(); //sum of all ratings
@@ -129,30 +104,26 @@ public class MedicalFacility {
 		return sum/size;
 		
 	}
-
-	/**
-	 * Get list of all services provided by the medical facility
-	 * @return list of all services provided
-	 */
+	public void addServices(Service service) {services.add(service); }
 	public ArrayList<Service> getServices() {
 		return this.services;
-	}
-
-	/**
-	 * Add services provided by the medical facility
-	 * @param service Services provided by medical facility
-	 */
-	public void addServices(Service service) {
-		services.add(service);
 	}
 
 	public void setType(String type){
 		this.type = type;
 	}
 	public String getType(){return this.type;}
-	
+
+	public void addNotifyUser(User user){
+		notifyList.add(user);
+	}
 	public ArrayList<User> getNotifyList() {
 		return this.notifyList;
 	}
-
+	public void setLatitude(float lat){this.latitude = lat; }
+	public float getLatitude(){return this.latitude; }
+	public void setLongitude(float longitude){this.longitude = longitude; }
+	public float getLongitude(){return this.longitude; }
+	public void setDescription(String des){this.description = des; }
+	public String getDescription(){return this.description; }
 }

@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.example.medkit2006.entity.FeedWord;
+import com.example.medkit2006.entity.Post;
 
 import java.util.ArrayList;
 
@@ -17,9 +17,9 @@ import java.util.ArrayList;
  * Created by Student on 4/29/2017.
  */
 
-public class FeedAdapter extends ArrayAdapter<FeedWord>{
+public class FeedAdapter extends ArrayAdapter<Post>{
 
-    public FeedAdapter(Activity context, ArrayList<FeedWord> feeds)
+    public FeedAdapter(Activity context, ArrayList<Post> feeds)
     {
         super(context,0,feeds);
     }
@@ -32,7 +32,7 @@ public class FeedAdapter extends ArrayAdapter<FeedWord>{
             listItemView = LayoutInflater.from(getContext()).inflate(
                     R.layout.feed_tile, parent, false);
         }
-        FeedWord current = getItem(position);
+        Post current = getItem(position);
         TextView question = (TextView) listItemView.findViewById(R.id.question);
         question.setText(current.getQuestion());
 

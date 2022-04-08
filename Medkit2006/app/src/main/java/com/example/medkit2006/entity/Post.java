@@ -1,63 +1,33 @@
 package com.example.medkit2006.entity;
 
-import java.util.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.sql.Timestamp;
+/**
+ * Created by Student on 4/29/2017.
+ */
 
-//***I changed Post to be a subclass of Text here***//
+public class Post {
+    private String question;
+    private String username;
+    private String date;
 
-public class Post extends Text {
-	/**
-	 * Variable of topic of post
-	 */
-	private String question;
-    /**
-	 * Variable of all comments of post
-	 */
-	private ArrayList<Text> comments;
+    public Post(String fquestion, String fusername, String fdate)
+    {
+        question = fquestion;
+        username = fusername;
+        date = fdate;
+    }
 
-	/**
-	 * Constructor for post
-	 * @param user User that posted post
-	 * @param content Content of post
-	 */
-	public Post(User user, String content) {
-		// TODO - implement Post.Post
-        super(user, content);
-	}
+    public String getQuestion()
+    {
+        return question;
+    }
 
-	/**
-	 * Add a new comment to list of all comments
-	 * @param comment New comment to the post
-	 */
-	public void addComment(Text comment) {
-		// TODO - implement Post.addComment
-        comments.add(comment);
-	}
-	
-	/**
-	 * Get list of all comments of post
-	 * @return list of all comments
-	 */
-    public ArrayList<Text> getComment() {
-		// TODO - implement Post.getComment
-        return this.comments;
-	}
+    public String getUsername()
+    {
+        return username;
+    }
 
-	/**
-	 * Delete a comment to the post
-	 * @param comment Comment need to be deleted
-	 */
-	public void deleteComment(Text comment) {
-		// TODO - implement Post.deleteComment
-        for (int i = 0; i < comments.size(); i++) {
-            if (comments.get(i) == comment) {
-                comments.remove(i);
-                break;
-            }
-        }
-	}
-
+    public String getDate()
+    {
+        return date;
+    }
 }
-

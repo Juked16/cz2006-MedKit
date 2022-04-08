@@ -47,8 +47,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".boundary.AccountUI" android:label="Account" android:parentActivityName=".boundary.MainMenuUI"/>
-        <activity android:name=".BookmarkActivity" android:label="BookMark" android:parentActivityName=".MainActivity"/>
-        <activity android:name=".ChatActivity" android:label="Chats" android:parentActivityName=".MainActivity"/>
+        <activity android:name=".boundary.BookmarkUI" android:label="BookMark" android:parentActivityName=".MainActivity"/>
+        <activity android:name=".boundary.ChatUI" android:label="Chats" android:parentActivityName=".MainActivity"/>
         <activity android:name=".boundary.LoginUI" android:label="Login" android:parentActivityName=".boundary.MainMenuUI"/>
         <activity android:name=".boundary.RegistrationUI" android:label="Registration" android:parentActivityName=".boundary.LoginUI"/>
         <activity android:name=".boundary.FacilDetailUI" android:label="Facility Detail" />

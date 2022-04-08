@@ -13,8 +13,10 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medkit2006.boundary.FacilDetailUI;
+import com.example.medkit2006.boundary.SearchUI;
 import com.example.medkit2006.entity.MedicalFacility;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -27,7 +29,7 @@ public class MedicalFacilityAdapter extends RecyclerView.Adapter<MedicalFacility
     LayoutInflater inflater;
     List<MedicalFacility> medicalFacilityList;
 
-    public MedicalFacilityAdapter(Context context, List<MedicalFacility> medicalFacilityList) {
+    public MedicalFacilityAdapter(Context context, ArrayList<MedicalFacility> medicalFacilityList) {
         this.inflater = LayoutInflater.from(context);
         this.medicalFacilityList = medicalFacilityList;
     }
@@ -54,6 +56,7 @@ public class MedicalFacilityAdapter extends RecyclerView.Adapter<MedicalFacility
                 Toast.makeText(inflater.getContext(),
                         "click success bind", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(view.getContext(), FacilDetailUI.class);
+                intent.putExtra(SearchUI.EXTRA_MESSAGE, medicalFacility.getName());
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 view.getContext().startActivity(intent);
             }
@@ -77,5 +80,4 @@ public class MedicalFacilityAdapter extends RecyclerView.Adapter<MedicalFacility
 
         }
     }
-
 }
