@@ -23,8 +23,8 @@
         android:layout_marginTop="60dp"
         android:ems="10"
         android:enabled="false"
-        android:inputType="text"
-        android:text="Verification code" />
+        android:inputType="textCapCharacters"
+        android:hint="Verification code" />
 
     <Button
         android:id="@+id/verificationVerifyButton"

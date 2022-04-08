@@ -15,8 +15,6 @@ import com.example.medkit2006.MainActivity;
 import com.example.medkit2006.R;
 import com.example.medkit2006.entity.User;
 
-import java.security.SecureRandom;
-
 public class VerificationUI extends AppCompatActivity {
 
     private int resendTime;
@@ -44,17 +42,10 @@ public class VerificationUI extends AppCompatActivity {
         send.setOnClickListener(btn -> {
             code.setEnabled(true);
             verify.setEnabled(true);
-            SecureRandom random = new SecureRandom();
-            char[] chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
-            char[] codeBuf = new char[5];
-            for (int idx = 0; idx < codeBuf.length; ++idx)
-                codeBuf[idx] = chars[random.nextInt(chars.length)];
-            String codeStr = new String(codeBuf);
-            code.setText(codeStr); //TODO: remove after implement sending
-            MainActivity.accountMgr.sendVerificationCode(user.getEmail(), codeStr);
+            MainActivity.accountMgr.sendVerificationCode(user.getEmail());
             status.setText("Verification code sent to " + user.getEmail());
             send.setEnabled(false);
-            resendTime = 11;
+            resendTime = 61;
             scheduleTimer(send);
         });
         verify.setOnClickListener(btn -> {
