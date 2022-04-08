@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -39,6 +38,7 @@ public class MainMenuUI extends AppCompatActivity {
         });
 
         new DB();
+        DB.instance.conn.returnCallbackToMainThread(true, this);
 
         //Intent intent = new Intent(MainActivity.this, Success.class);
         //startActivity(intent);
@@ -72,12 +72,6 @@ public class MainMenuUI extends AppCompatActivity {
 
     public void onClickDB(View view) {
         Button btn = ((Button) view);
-        try {
-            DB.instance.conn.returnCallbackToMainThread(true, this);
-        } catch (Exception e) {
-            btn.setText(DB.instance.lastMsg);
-            return;
-        }
         btn.setText("Executing");
         String query = ((EditText) findViewById(R.id.textDBQuery)).getText().toString().trim();
         if (query.toUpperCase().contains("SELECT"))
@@ -99,10 +93,9 @@ public class MainMenuUI extends AppCompatActivity {
                     btn.setText(text);
                 } catch (SQLColumnNotFoundException e) {
                     btn.setText(e.getMessage());
-                    Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }, e -> btn.setText(e.getMessage()));
         else
-            DB.instance.execute(query, () -> btn.setText("OK"));
+            DB.instance.execute(query, () -> btn.setText("OK"), e -> btn.setText(e.getMessage()));
     }
 }
