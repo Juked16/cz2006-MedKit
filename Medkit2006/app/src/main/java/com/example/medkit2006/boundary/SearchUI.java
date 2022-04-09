@@ -31,6 +31,8 @@ import com.android.volley.toolbox.Volley;
 import com.example.medkit2006.MedicalFacilityAdapter;
 import com.example.medkit2006.R;
 import com.example.medkit2006.control.MedicalFacilityMgr;
+import com.example.medkit2006.data.DB;
+import com.example.medkit2006.data.ForumContract;
 import com.example.medkit2006.entity.MedicalFacility;
 
 import org.json.JSONArray;

@@ -51,7 +51,7 @@
         <activity android:name=".boundary.ChatUI" android:label="Chats" android:parentActivityName=".MainActivity"/>
         <activity android:name=".boundary.LoginUI" android:label="Login" android:parentActivityName=".boundary.MainMenuUI"/>
         <activity android:name=".boundary.RegistrationUI" android:label="Registration" android:parentActivityName=".boundary.LoginUI"/>
-        <activity android:name=".boundary.FacilDetailUI" android:label="Facility Detail" />
+        <activity android:name=".boundary.FacilityDetailUI" android:label="Facility Detail" />
         <activity android:name=".boundary.SearchUI" android:label="Search" android:parentActivityName=".MainActivity" />
         <activity android:name=".boundary.AccountSettingsUI" android:label="Account Settings" android:parentActivityName=".boundary.AccountUI" />
         <activity android:name=".boundary.SearchResultUI" android:label="Facility Detail" android:parentActivityName=".boundary.SearchUI"/>

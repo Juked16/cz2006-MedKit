@@ -3,27 +3,22 @@ package com.example.medkit2006.control;
 import android.util.Log;
 
 import com.BoardiesITSolutions.AndroidMySQLConnector.MySQLRow;
-import com.example.medkit2006.DB;
+import com.example.medkit2006.data.DB;
 import com.example.medkit2006.entity.MedicalFacility;
 import com.example.medkit2006.entity.User;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Array;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.function.Consumer;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class MedicalFacilityMgr {
 	
 	/**
 	 * Variable of list of all medical facility in database
 	 */
-	public final String[] filters_type = {"Filters By Type", "hospital", "nursing home"};
-	public final String[] filters_rating = {"Filters By Rating", "Rating>3.5", "Rating>4.0", "Rating>4.5"};
+	public final String[] filters_type = {"Type Unselected", "hospital", "nursing home"};
+	public final String[] filters_rating = {"Rating Unselected", "Rating>3.5", "Rating>4.0", "Rating>4.5"};
 
 	public void getAllFacilityList(@NotNull Consumer<ArrayList<MedicalFacility>> callback, Consumer<Exception> error){
 		String query = "select * from medical_facilities".toUpperCase();

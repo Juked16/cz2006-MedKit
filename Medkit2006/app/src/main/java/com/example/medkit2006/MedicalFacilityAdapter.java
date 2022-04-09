@@ -7,18 +7,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.medkit2006.boundary.FacilDetailUI;
+import com.example.medkit2006.boundary.FacilityDetailUI;
 import com.example.medkit2006.boundary.SearchUI;
 import com.example.medkit2006.entity.MedicalFacility;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -55,7 +53,7 @@ public class MedicalFacilityAdapter extends RecyclerView.Adapter<MedicalFacility
         cv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), FacilDetailUI.class);
+                Intent intent = new Intent(view.getContext(), FacilityDetailUI.class);
                 intent.putExtra(SearchUI.EXTRA_MESSAGE, holder.txtMFName.getText());
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 view.getContext().startActivity(intent);

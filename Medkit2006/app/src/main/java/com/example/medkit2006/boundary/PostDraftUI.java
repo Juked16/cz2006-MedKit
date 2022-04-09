@@ -13,8 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.medkit2006.FeedAdapter;
 import com.example.medkit2006.R;
 import com.example.medkit2006.entity.Post;
-import com.example.student.forum.data.ForumContract;
-import com.example.student.forum.data.ForumDbHelper;
+import com.example.medkit2006.data.ForumContract;
+import com.example.medkit2006.data.ForumDbHelper;
 
 import java.util.ArrayList;
 

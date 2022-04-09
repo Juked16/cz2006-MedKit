@@ -23,7 +23,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class FacilDetailUI extends AppCompatActivity implements OnMapReadyCallback {
+public class FacilityDetailUI extends AppCompatActivity implements OnMapReadyCallback {
     private GoogleMap map;
     SupportMapFragment mapFragment;
     @Override
@@ -47,11 +47,12 @@ public class FacilDetailUI extends AppCompatActivity implements OnMapReadyCallba
                     textView.setText(facility.getName());
                     textView = findViewById(R.id.medfacil_descr);
                     textView.setText(facility.getDescription());
+                    if(facility.getLatitude() != 0.0 || facility.getLongitude() != 0.0){
                     LatLng pos = new LatLng(facility.getLatitude(), facility.getLongitude());
                     map.addMarker(new MarkerOptions()
                             .position(pos)
                             .title(facility.getName()));
-                    map.moveCamera(CameraUpdateFactory.newLatLng(pos));
+                    map.moveCamera(CameraUpdateFactory.newLatLng(pos));}
                 },
                 e -> { Log.d("Received Medical Facility List Unsuccessful", e.toString().trim()); });
         // Capture the layout's TextView and set the string as its text
@@ -60,13 +61,13 @@ public class FacilDetailUI extends AppCompatActivity implements OnMapReadyCallba
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.map = googleMap;
-        /*LatLng sing = new LatLng(1.3340416323795148, 103.84970722221946);
+        LatLng sing = new LatLng(1.287953, 103.851784);
         googleMap.addMarker(new MarkerOptions()
                 .position(sing)
-                .title("Raffles"));*/
+                .title("Downtown Core"));
         // Move the camera to the map coordinates and zoom in closer.
-        //googleMap.moveCamera(CameraUpdateFactory.newLatLng(sing));
-        googleMap.moveCamera(CameraUpdateFactory.zoomTo(17));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sing));
+        googleMap.moveCamera(CameraUpdateFactory.zoomTo(16));
         // Display traffic
         googleMap.setTrafficEnabled(true);
     }

@@ -1,14 +1,8 @@
-package com.example.student.forum.data;
+package com.example.medkit2006.data;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
-/**
- * Created by Student on 4/12/2017.
- */
-
-import com.example.student.forum.data.ForumContract;
 
 public class ForumDbHelper extends SQLiteOpenHelper{
     public static final int DATABASE_VERSION = 1;

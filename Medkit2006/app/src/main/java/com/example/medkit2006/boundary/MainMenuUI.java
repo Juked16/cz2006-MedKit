@@ -2,6 +2,7 @@ package com.example.medkit2006.boundary;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,9 +13,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.BoardiesITSolutions.AndroidMySQLConnector.ColumnDefinition;
 import com.BoardiesITSolutions.AndroidMySQLConnector.Exceptions.SQLColumnNotFoundException;
 import com.BoardiesITSolutions.AndroidMySQLConnector.MySQLRow;
-import com.example.medkit2006.DB;
+import com.example.medkit2006.data.DB;
 import com.example.medkit2006.MainActivity;
 import com.example.medkit2006.R;
+import com.example.medkit2006.data.ForumContract;
 
 import java.util.ArrayList;
 
@@ -73,27 +75,27 @@ public class MainMenuUI extends AppCompatActivity {
         btn.setText("Executing");
         String query = ((EditText) findViewById(R.id.textDBQuery)).getText().toString().trim();
         if (query.toUpperCase().contains("SELECT"))
-            DB.instance.executeQuery(query, resultSet -> {
-                try {
-                    StringBuilder text = new StringBuilder();
-                    ArrayList<String> fields = new ArrayList<>();
-                    for (ColumnDefinition field : resultSet.getFields()) {
-                        fields.add(field.getColumnName());
-                        text.append(" | ").append(field.getColumnName());
-                    }
-                    text.append('\n');
-                    MySQLRow row;
-                    while ((row = resultSet.getNextRow()) != null) {
-                        for (String field : fields)
-                            text.append(" | ").append(row.getString(field));
-                        text.append('\n');
-                    }
-                    btn.setText(text);
-                } catch (SQLColumnNotFoundException e) {
-                    btn.setText(e.getMessage());
+        DB.instance.executeQuery(query, resultSet -> {
+            try {
+                StringBuilder text = new StringBuilder();
+                ArrayList<String> fields = new ArrayList<>();
+                for (ColumnDefinition field : resultSet.getFields()) {
+                    fields.add(field.getColumnName());
+                    text.append(" | ").append(field.getColumnName());
                 }
-            }, e -> btn.setText(e.getMessage()));
+                text.append('\n');
+                MySQLRow row;
+                while ((row = resultSet.getNextRow()) != null) {
+                    for (String field : fields)
+                        text.append(" | ").append(row.getString(field));
+                    text.append('\n');
+                }
+                btn.setText(text);
+            } catch (SQLColumnNotFoundException e) {
+                btn.setText(e.getMessage());
+            }
+        }, e -> btn.setText(e.getMessage()));
         else
-            DB.instance.execute(query, () -> btn.setText("OK"), e -> btn.setText(e.getMessage()));
+        DB.instance.execute(query, () -> btn.setText("OK"), e -> btn.setText(e.getMessage()));
     }
 }

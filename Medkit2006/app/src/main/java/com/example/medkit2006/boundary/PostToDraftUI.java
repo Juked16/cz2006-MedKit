@@ -14,8 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NavUtils;
 
 import com.example.medkit2006.R;
-import com.example.student.forum.data.ForumContract;
-import com.example.student.forum.data.ForumDbHelper;
+import com.example.medkit2006.data.ForumContract;
+import com.example.medkit2006.data.ForumDbHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

@@ -1,4 +1,4 @@
-package com.example.medkit2006;
+package com.example.medkit2006.data;
 
 import android.os.Build;
 import android.util.Log;
@@ -85,6 +85,8 @@ public class DB {
         FOREIGN KEY (username) REFERENCES account(username),
         CONSTRAINT id_username PRIMARY KEY (id,username)
     );
+
+
 
     INSERT INTO medical_facilities VALUES ("Alexandra Hospital","hospital","378 ALEXANDRA ROAD ALEXANDRA HOSPITAL Singapore 159964","64722000",1.2865882,103.7990862,"");
     */
