@@ -22,6 +22,7 @@
     <string name="action_settings">Setting</string>
     <string name="type_a_message_here">Type a message here</string>
     <string name="username">Username</string>
+    <string name="error_in_sending_message">Error in sending message.</string>
     <string-array name="gender_array">
         <item />
         <item>M</item>

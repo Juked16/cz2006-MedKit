@@ -17,6 +17,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.medkit2006.control.AccountMgr;
+import com.example.medkit2006.control.ChatMgr;
 import com.example.medkit2006.entity.MedicalFacility;
 
 import org.json.JSONArray;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private String stContact;
     private String URL = "http://159.138.106.155/mf.php";
     public static AccountMgr accountMgr = new AccountMgr();
+    public static ChatMgr chatMgr = new ChatMgr();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

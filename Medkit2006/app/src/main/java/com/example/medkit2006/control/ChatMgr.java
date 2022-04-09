@@ -1,47 +1,25 @@
 package com.example.medkit2006.control;
 
-import com.example.medkit2006.entity.Text;
-import com.example.medkit2006.entity.User;
+import com.example.medkit2006.DB;
 
-import java.util.ArrayList;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.function.Consumer;
 
 public class ChatMgr {
 
 	/**
-	 * Variable of list of all users in database
-	 */
-	private User[] UserList;
-
-	/**
-	 * Variable of list of all messages in database
-	 */
-	private ArrayList<Text> message;
-
-	/**
 	 * Start a message with someone in forum
-	 * @param user
+	 * @param receiver Receiver of message
+	 * @param sender Sender of message
+	 * @param message Content of message
+	 * @param callback Called when no error
+	 * @param error Called when error
 	 */
-
-
-	/** TEMP TO IGNORE ISLOGIN ERROR TO BUILD
-
-	public void startPrivateMessage(User sender, User receiver, String message) {
+	public void startPrivateMessage(String sender, String receiver, String message, @NotNull Runnable callback, Consumer<Exception> error) {
 		// TODO - implement ChatMgr.startPrivateMessage
-		ChatUI chatInstance = new ChatUI();
-		AccountMgr accountmgr = new AccountMgr();
-		if (accountmgr.isLogin(sender)) {
-			Text chat = new Text(sender, message);
-			message.add(chat);
-			chatInstance.displayConversationStarted();
-		}
-
+		DB.instance.execute("insert into chat (sender, receiver, message) values(\"" + sender + "\",\"" + receiver + "\",\"" + message + "\")", callback, error);
 	}
-
-	/**
-	 * Send message if the user exists and display error message otherwise
-	 * @param user
-	 * @param message
-	 */
 
 
 	/** TEMP TO GET RID OF ERRORS FOR BUILDING

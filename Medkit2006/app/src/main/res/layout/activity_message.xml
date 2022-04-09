@@ -66,18 +66,20 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" >
 
-        <androidx.appcompat.widget.AppCompatImageView
+        <ImageButton
+            android:id="@+id/btn_send"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="4dp"
             android:padding="8dp"
             android:src="@drawable/ic_menu_send"
-            android:tint="@color/white" />
+            android:background="#142232"
+            app:tint="@color/white" />
 
     </FrameLayout>
 
     <EditText
-        android:id="@+id/inputMessage"
+        android:id="@+id/text_send"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginStart="16dp"
@@ -95,5 +97,18 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/layoutSend"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/sendError"
+        android:layout_width="307dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="52dp"
+        android:layout_marginBottom="72dp"
+        android:textColor="#B00020"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@id/layoutSend"
+        app:layout_constraintStart_toStartOf="parent" />
+    <!--android:text="@string/error_in_sending_message"-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
