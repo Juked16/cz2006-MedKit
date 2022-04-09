@@ -1,6 +1,8 @@
-package com.example.medkit2006;
+package com.example.medkit2006.boundary;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,8 +12,15 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.medkit2006.MainActivity;
+import com.example.medkit2006.MessageAdapter;
+import com.example.medkit2006.R;
 import com.example.medkit2006.control.ChatMgr;
+import com.example.medkit2006.entity.Message;
 import com.example.medkit2006.entity.User;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MessageActivity extends AppCompatActivity {
 
@@ -19,13 +28,21 @@ public class MessageActivity extends AppCompatActivity {
     User tmp_user;
     ImageButton btn_send;
     EditText text_send;
+    MessageAdapter messageAdapter;
+    List<Message> mChat;
+    RecyclerView recyclerView;
     Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_message);
+        setContentView(R.layout.activity_message_ui);
 
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+        linearLayoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(linearLayoutManager);
 
         username = findViewById(R.id.username);
         btn_send = findViewById(R.id.btn_send);
@@ -50,6 +67,7 @@ public class MessageActivity extends AppCompatActivity {
         });
 
         username.setText(userName);
+        readMessages(tmp_user.getUsername(), userName);
 
     }
 
@@ -59,5 +77,22 @@ public class MessageActivity extends AppCompatActivity {
         mgr.startPrivateMessage(sender, receiver, message, () -> {
             finish();
         }, e -> error.setText(e.getMessage()));
+        /*i = new Intent(MessageActivity.this, MainActivity.accountMgr.isLoggedIn() ? MessageActivity.class : LoginUI.class);
+        i.putExtra("username", getUser());
+        startActivity(i);*/
+    }
+
+    private void readMessages(final String sender, final String receiver) {
+        mChat = new ArrayList<>();
+        ChatMgr mgr = MainActivity.chatMgr;
+        TextView error = findViewById(R.id.sendError);
+        mgr.getChatSender(sender, receiver, message -> {
+            mChat.add(message);
+        }, e -> error.setText(e.getMessage()));
+        mgr.getChatSender(receiver, sender, message -> {
+            mChat.add(message);
+        }, e -> error.setText(e.getMessage()));
+        messageAdapter = new MessageAdapter(MessageActivity.this, mChat);
+        recyclerView.setAdapter(messageAdapter);
     }
 }

@@ -1,6 +1,5 @@
 package com.example.medkit2006;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -11,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.medkit2006.boundary.MessageActivity;
 import com.example.medkit2006.entity.User;
 
 import java.util.List;

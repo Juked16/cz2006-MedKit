@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:background="#1C2E46"
-    tools:context=".MessageActivity">
+    tools:context=".boundary.MessageActivity">
 
     <View
         android:id="@+id/viewBackground"

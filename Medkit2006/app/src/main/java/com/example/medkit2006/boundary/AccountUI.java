@@ -42,7 +42,7 @@ public class AccountUI extends AppCompatActivity {
 
             findViewById(R.id.AccountToChatBtn).setVisibility(View.VISIBLE);
             findViewById(R.id.AccountToChatBtn).setOnClickListener(btn -> {
-                Intent intent = new Intent(AccountUI.this, ChatUI.class);
+                Intent intent = new Intent(AccountUI.this, ChatUsersUI.class);
                 startActivity(intent);
             });
 
