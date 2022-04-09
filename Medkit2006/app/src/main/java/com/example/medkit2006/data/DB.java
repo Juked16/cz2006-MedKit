@@ -47,6 +47,28 @@ public class DB {
         image VARBINARY(8000) NOT NULL,
         FOREIGN KEY (medical_facility) REFERENCES medical_facilities(name)
     );
+    CREATE TABLE service(
+        medical_facility VARCHAR(45) NOT NULL,
+        type VARCHAR(45) NOT NULL, -- #TODO: ENUM?
+        price DOUBLE NOT NULL CHECK (price > 0),
+        description VARCHAR(1000) NOT NULL,
+        FOREIGN KEY (medical_facility) REFERENCES medical_facilities(name)
+    );
+    CREATE TABLE post(
+        _id INTEGER PRIMARY KEY AUTOINCREMENT,
+        title VARCHAR(150) NOT NULL,
+        post VARCHAR(1000) NOT NULL,
+        comments VARCHAR(300),
+        datetime DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+        username VARCHAR(45) NOT NULL,
+        medical_facility VARCHAR(45) NOT NULL,
+        likes INTEGER NOT NULL,
+        tags VARCHAR(150) NOT NULL,
+        status INTEGER NOT NULL,
+        report INTEGER NOT NULL),
+        FOREIGN KEY (username) REFERENCES account(username),
+        FOREIGN KEY (medical_facility) REFERENCES medical_facilities(name)
+    );
     CREATE TABLE bookmark (
         username VARCHAR(45) NOT NULL,
         medical_facility VARCHAR(45) NOT NULL,

@@ -28,30 +28,11 @@ public class AccountUI extends AppCompatActivity {
             ((TextView) findViewById(R.id.accountName)).setText(loggedIn.getUsername());
             ((TextView) findViewById(R.id.accountEmail)).setText(loggedIn.getEmail());
 
-            findViewById(R.id.AccountToSettingsBtn).setVisibility(View.VISIBLE);
-            findViewById(R.id.AccountToSettingsBtn).setOnClickListener(btn -> {
-                Intent intent = new Intent(AccountUI.this, AccountSettingsUI.class);
+            findViewById(R.id.accountToSettingsBtn).setVisibility(View.VISIBLE);
+            findViewById(R.id.accountToSettingsBtn).setOnClickListener(btn -> {
+                Intent intent = new Intent(this, AccountSettingsUI.class);
                 startActivity(intent);
             });
-
-            findViewById(R.id.AccountToForumBtn).setVisibility(View.VISIBLE);
-            findViewById(R.id.AccountToForumBtn).setOnClickListener(btn -> {
-                Intent intent = new Intent(AccountUI.this, ForumUI.class);
-                startActivity(intent);
-            });
-
-            findViewById(R.id.AccountToChatBtn).setVisibility(View.VISIBLE);
-            findViewById(R.id.AccountToChatBtn).setOnClickListener(btn -> {
-                Intent intent = new Intent(AccountUI.this, ChatUI.class);
-                startActivity(intent);
-            });
-
-            findViewById(R.id.AccountToBookmarkBtn).setVisibility(View.VISIBLE);
-            findViewById(R.id.AccountToBookmarkBtn).setOnClickListener(btn -> {
-                Intent intent = new Intent(AccountUI.this, BookmarkUI.class);
-                startActivity(intent);
-            });
-
             ((Button) findViewById(R.id.accountLoginBtn)).setText("Logout");
         }
     }

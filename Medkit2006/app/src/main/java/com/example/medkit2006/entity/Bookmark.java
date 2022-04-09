@@ -1,35 +1,25 @@
 package com.example.medkit2006.entity;
 
-public class Bookmark  {
+public class Bookmark {
 
-	private MedicalFacility facility;
-	private String notes;
+    private String facilityName;
+    private String notes;
 
-	/**
-	 * 
-	 * @param facility
-	 */
-	public Bookmark(MedicalFacility facility, String notes) {
-		// TODO - implement Bookmark.Bookmark
-		this.facility=facility;
-		this.notes=notes;
-		throw new UnsupportedOperationException();
-	}
+    public Bookmark(String facilityName, String notes) {
+        this.facilityName = facilityName;
+        this.notes = notes;
+    }
 
-	public String getNotes() {
-		return this.notes;
-	}
+    public String getNotes() {
+        return this.notes;
+    }
 
-	/**
-	 * 
-	 * @param notes
-	 */
-	public void setNotes(String notes) {
-		this.notes = notes;
-	}
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
 
-	public MedicalFacility getFacility() {
-		return this.facility;
-	}
+    public String getFacilityName() {
+        return this.facilityName;
+    }
 
 }
