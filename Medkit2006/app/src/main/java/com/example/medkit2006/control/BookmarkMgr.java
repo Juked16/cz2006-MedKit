@@ -1,41 +1,63 @@
 package com.example.medkit2006.control;
+
+import com.BoardiesITSolutions.AndroidMySQLConnector.Exceptions.SQLColumnNotFoundException;
+import com.BoardiesITSolutions.AndroidMySQLConnector.MySQLRow;
+import com.example.medkit2006.MainActivity;
+import com.example.medkit2006.data.DB;
 import com.example.medkit2006.entity.Bookmark;
-import com.example.medkit2006.entity.MedicalFacility;
+import com.example.medkit2006.entity.User;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
 public class BookmarkMgr {
 
-	/**
-	 * 
-	 * @param medicalfacility
-	 */
-	private MedicalFacility[] medicalFacilityList;
-	private ArrayList<Bookmark> bookmarkList;
+    public void get(@NotNull String medicalFacilityName, @NotNull Consumer<Bookmark> bookmarks, Consumer<Exception> error) {
+        User user = MainActivity.accountMgr.getLoggedInUser();
+        DB.instance.executeQuery("select * from bookmark where username = '" + user.getUsername() + "' and medical_facility = '" + medicalFacilityName + "'", resultSet -> {
+            try {
+                MySQLRow row = resultSet.getNextRow();
+                if(row != null)
+                    bookmarks.accept(new Bookmark(row.getString("medical_facility"), row.getString("notes")));
+                else
+                    bookmarks.accept(null);
+            } catch (Exception e) {
+                error.accept(e);
+            }
+        }, error);
+    }
 
-	public boolean addBookmark(MedicalFacility medicalfacility, String notes) {
-		// TODO - implement BookmarkMgr.addBookmark
-		for(MedicalFacility i : medicalFacilityList){
-			if(medicalfacility.getName().equalsIgnoreCase(i.getName())) {
-		Bookmark b=new Bookmark(medicalfacility,notes);
-		return true;
-		}
-		}
-		return false;
-	}
+    public void getAll(Consumer<ArrayList<Bookmark>> bookmarks, Consumer<Exception> error) {
+        User user = MainActivity.accountMgr.getLoggedInUser();
+        DB.instance.executeQuery("select * from bookmark where username = '" + user.getUsername() + "'", resultSet -> {
+            ArrayList<Bookmark> list = new ArrayList<>();
+            MySQLRow row;
+            try {
+                while ((row = resultSet.getNextRow()) != null) {
+                    list.add(new Bookmark(row.getString("medical_facility"), row.getString("notes")));
+                }
+            } catch (SQLColumnNotFoundException e) {
+                error.accept(e);
+                return;
+            }
+            bookmarks.accept(list);
+        }, error);
+    }
 
-	/**
-	 * 
-	 * @param medicalfacility
-	 */
-	public boolean removeBookmark(MedicalFacility medicalfacility) {
-		// TODO - implement BookmarkMgr.removeBookmark
-		for(Bookmark b : bookmarkList){
-			if(b.getFacility().getName().equalsIgnoreCase(medicalfacility.getName())) {
-				bookmarkList.remove(b);
-				return true;}
-			}
-		return false;
-	}
+    public void add(@NotNull Bookmark bookmark, Runnable callback, Consumer<Exception> error) {
+        User user = MainActivity.accountMgr.getLoggedInUser();
+        DB.instance.execute("insert into bookmark values ('" + user.getUsername() + "','" + bookmark.getFacilityName() + "','" + bookmark.getNotes() + "')", callback, error);
+    }
 
+    public void updateNotes(@NotNull Bookmark bookmark, Runnable callback, Consumer<Exception> error) {
+        User user = MainActivity.accountMgr.getLoggedInUser();
+        DB.instance.execute("update bookmark set notes = '" + bookmark.getNotes() + "' where username = '" + user.getUsername() + "' and medical_facility = '" + bookmark.getFacilityName() + "'", callback, error);
+    }
+
+    public void remove(@NotNull Bookmark bookmark, Runnable callback, Consumer<Exception> error) {
+        User user = MainActivity.accountMgr.getLoggedInUser();
+        DB.instance.execute("delete from bookmark where username = '" + user.getUsername() + "' and medical_facility = '" + bookmark.getFacilityName() + "'", callback, error);
+    }
 }
