@@ -28,7 +28,7 @@ public class FacilityDetailUI extends AppCompatActivity implements OnMapReadyCal
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.facil_detail);
+        setContentView(R.layout.facility_detail);
         //Instantiation of map object, get a handle to the fragment and register the callback.
         try{
             mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -41,6 +41,23 @@ public class FacilityDetailUI extends AppCompatActivity implements OnMapReadyCal
         // Get the Intent that started this activity and extract the string
         Intent intent = getIntent();
         String message = intent.getStringExtra(SearchUI.EXTRA_MESSAGE);
+        Log.d("Displaying Detail for Facility:",message);
+        facilityMgr.getFacilityDetails(message, facility -> {
+                    TextView textView = findViewById(R.id.medfacil_name);
+                    textView.setText(facility.getName());
+                    textView = findViewById(R.id.medfacil_descr);
+                    textView.setText(facility.getDescription());
+                    if(facility.getLatitude() != 0.0 || facility.getLongitude() != 0.0){
+                        LatLng pos = new LatLng(facility.getLatitude(), facility.getLongitude());
+                        map.addMarker(new MarkerOptions()
+                                .position(pos)
+                                .title(facility.getName()));
+                        map.moveCamera(CameraUpdateFactory.newLatLng(pos));
+                    }
+                },
+                e -> { Log.d("Received Medical Facility List Unsuccessful", e.toString().trim());
+        });
+
         ImageButton bookmarkBtn = findViewById(R.id.bookmark_btn);
         if (MainActivity.accountMgr.isLoggedIn())
             MainActivity.bookmarkMgr.get(message, bookmark -> {
@@ -73,19 +90,6 @@ public class FacilityDetailUI extends AppCompatActivity implements OnMapReadyCal
                 Toast.makeText(this, "Please login first", Toast.LENGTH_SHORT).show();
         });
         Log.d("Received MF Name", message);
-        facilityMgr.getFacilityDetails(message, facility -> {
-                    TextView textView = findViewById(R.id.medfacil_name);
-                    textView.setText(facility.getName());
-                    textView = findViewById(R.id.medfacil_descr);
-                    textView.setText(facility.getDescription());
-                    if(facility.getLatitude() != 0.0 || facility.getLongitude() != 0.0){
-                    LatLng pos = new LatLng(facility.getLatitude(), facility.getLongitude());
-                    map.addMarker(new MarkerOptions()
-                            .position(pos)
-                            .title(facility.getName()));
-                    map.moveCamera(CameraUpdateFactory.newLatLng(pos));}
-                },
-                e -> { Log.d("Received Medical Facility List Unsuccessful", e.toString().trim()); });
         // Capture the layout's TextView and set the string as its text
     }
 

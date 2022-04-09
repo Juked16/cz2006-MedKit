@@ -30,14 +30,6 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
-
-        </activity>
-        <activity android:name=".Success">
-
-        </activity>
         <activity android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
@@ -46,10 +38,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".boundary.AccountUI" android:label="Account" android:parentActivityName=".boundary.MainMenuUI"/>
+        <activity android:name=".boundary.AccountUI" android:label="Account" android:parentActivityName=".MainActivity"/>
         <activity android:name=".boundary.BookmarkUI" android:label="BookMark" android:parentActivityName=".MainActivity"/>
         <activity android:name=".boundary.ChatUI" android:label="Chats" android:parentActivityName=".MainActivity"/>
-        <activity android:name=".boundary.LoginUI" android:label="Login" android:parentActivityName=".boundary.MainMenuUI"/>
+        <activity android:name=".boundary.LoginUI" android:label="Login" android:parentActivityName=".MainActivity"/>
         <activity android:name=".boundary.RegistrationUI" android:label="Registration" android:parentActivityName=".boundary.LoginUI"/>
         <activity android:name=".boundary.FacilityDetailUI" android:label="Facility Detail" />
         <activity android:name=".boundary.SearchUI" android:label="Search" android:parentActivityName=".MainActivity" />
@@ -57,13 +49,12 @@
         <activity android:name=".boundary.SearchResultUI" android:label="Facility Detail" android:parentActivityName=".boundary.SearchUI"/>
         <activity android:name=".boundary.VerificationUI" android:label="Verification" android:parentActivityName=".boundary.AccountUI"/>
         <activity android:name=".boundary.ForgetPwUI" android:label="Forget Password" android:parentActivityName=".boundary.LoginUI"/>
-
-        <activity android:name=".boundary.ForumUI" android:label="Forget Password" android:parentActivityName=".boundary.MainMenuUI"/>
-        <activity android:name=".boundary.PostDetailUI" android:label="Forget Password" android:parentActivityName=".boundary.ForumUI"/>
-        <activity android:name=".boundary.MyPostUI" android:label="Forget Password" android:parentActivityName=".boundary.ForumUI"/>
-        <activity android:name=".boundary.PostDraftUI" android:label="Forget Password" android:parentActivityName=".boundary.ForumUI"/>
-        <activity android:name=".boundary.PostEditorUI" android:label="Forget Password" android:parentActivityName=".boundary.ForumUI"/>
-        <activity android:name=".boundary.PostToDraftUI" android:label="Forget Password" android:parentActivityName=".boundary.ForumUI"/>
+        <activity android:name=".boundary.ForumUI" android:label="Welcome to Forum" android:parentActivityName=".MainActivity"/>
+        <activity android:name=".boundary.PostDetailUI" android:label="Post Detail" android:parentActivityName=".boundary.ForumUI"/>
+        <activity android:name=".boundary.MyPostUI" android:label="My Posts" android:parentActivityName=".boundary.ForumUI"/>
+        <activity android:name=".boundary.PostDraftUI" android:label="Post Drafts" android:parentActivityName=".boundary.ForumUI"/>
+        <activity android:name=".boundary.PostEditorUI" android:label="Edit New Post" android:parentActivityName=".boundary.ForumUI"/>
+        <activity android:name=".boundary.PostToDraftUI" android:label="Post To Draft" android:parentActivityName=".boundary.ForumUI"/>
 
 
     </application>

@@ -49,9 +49,14 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.14583333333333334" />
         <entry key="app/src/main/res/layout/activity_my_post.xml" value="0.12273550724637682" />
         <entry key="app/src/main/res/layout/activity_post_detail.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_post_drafts.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_post_editor.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_post_to_draft.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_search.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/bookmark.xml" value="0.1" />
         <entry key="app/src/main/res/layout/chat.xml" value="0.1" />
         <entry key="app/src/main/res/layout/facil_detail.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/facility_detail.xml" value="0.1" />
         <entry key="app/src/main/res/layout/feed_tile.xml" value="0.12273550724637682" />
         <entry key="app/src/main/res/layout/login.xml" value="0.1" />
         <entry key="app/src/main/res/layout/menu_main.xml" value="0.14583333333333334" />

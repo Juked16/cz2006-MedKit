@@ -19,6 +19,8 @@ import com.example.medkit2006.boundary.ForumUI;
 import com.example.medkit2006.boundary.LoginUI;
 import com.example.medkit2006.boundary.SearchUI;
 import com.example.medkit2006.control.AccountMgr;
+import com.example.medkit2006.control.BookmarkMgr;
+import com.example.medkit2006.control.ChatMgr;
 import com.example.medkit2006.control.ForumMgr;
 import com.example.medkit2006.control.MedicalFacilityMgr;
 import com.example.medkit2006.data.DB;
@@ -30,13 +32,15 @@ public class MainActivity extends AppCompatActivity {
     public static AccountMgr accountMgr = new AccountMgr();
     public static MedicalFacilityMgr facilityMgr = new MedicalFacilityMgr();
     public static ForumMgr forumMgr = new ForumMgr();
+    public static BookmarkMgr bookmarkMgr = new BookmarkMgr();
+    public static ChatMgr chatMgr = new ChatMgr();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu_main);
 
-        button = (Button) findViewById(R.id.btnSearch);
+        button = (Button) findViewById(R.id.mainSearchBtn);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
     public void onClickDB(View view) {
         Button btn = ((Button) view);
         btn.setText("Executing");
-        String query = ((EditText) findViewById(R.id.textDBQuery)).getText().toString().trim();
+        String query = ((EditText) findViewById(R.id.mainDBQuery)).getText().toString().trim();
         if (query.toUpperCase().contains("SELECT"))
         DB.instance.executeQuery(query, resultSet -> {
             try {
