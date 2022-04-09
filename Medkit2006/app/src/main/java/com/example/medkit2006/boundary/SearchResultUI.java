@@ -1,7 +1,10 @@
 package com.example.medkit2006.boundary;
 
+import static com.example.medkit2006.MainActivity.facilityMgr;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,8 +52,29 @@ public class SearchResultUI extends AppCompatActivity{
 
         recyclerView = findViewById(R.id.mfListRecyclerV);
         medicalFacilityList = new ArrayList<>();
-        extractMedicalFacility();
 
+        Intent intent = getIntent();
+        String query = intent.getStringExtra(SearchUI.QUERY);
+        facilityMgr.getAllFacilityList(medicalFacilityList -> {
+            Log.d("Received Medical Facility List", String.valueOf(medicalFacilityList.size()));
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {// Stuff that updates the UI
+                    recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                    adapter = new MedicalFacilityAdapter(getApplicationContext(), medicalFacilityList);
+                    recyclerView.setAdapter(adapter);
+                }
+            });
+        }, e -> {
+            Log.d("Received Medical Facility List Unsuccessful", e.toString().trim());
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {// Stuff that updates the UI
+                    Toast.makeText(SearchResultUI.this, e.toString().trim(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
+        //extractMedicalFacility();
     }
 
     public void extractMedicalFacility(){
@@ -103,7 +127,7 @@ public class SearchResultUI extends AppCompatActivity{
 
     public void toMFDetails(View view){
         Intent intent = new Intent(getApplicationContext(), MedicalFacility.class);
-        intent.putExtra("MF_name", "Raffles");
+        intent.putExtra(SearchUI.EXTRA_MESSAGE, "Raffles");
         startActivity(intent);
     }
 

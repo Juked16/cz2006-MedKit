@@ -1,20 +1,42 @@
 package com.example.medkit2006.boundary;
-import com.example.medkit2006.entity.*;
 
-public class BookmarkUI extends SearchUI {
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ListView;
+import android.widget.TextView;
 
-	/**
-	 * 
-	 * @param bookmark
-	 */
-	public void displayBookmarks(Bookmark[] bookmark) {
-		// TODO - implement BookmarkUI.displayBookmarks
-		for(Bookmark b : bookmark){
-				SearchUI searchInstance = new SearchUI();
-				//searchInstance.displayFacilityDetail(b.getFacility());
-			        System.out.println(b.getNotes());
-		throw new UnsupportedOperationException();
-		}
-	}
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.medkit2006.BookmarkAdapter;
+import com.example.medkit2006.MainActivity;
+import com.example.medkit2006.R;
+import com.example.medkit2006.entity.User;
+
+public class BookmarkUI extends AppCompatActivity {
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.bookmark);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        User user = MainActivity.accountMgr.getLoggedInUser();
+        if (user == null) {
+            finish();
+            startActivity(new Intent(this, LoginUI.class));
+            return;
+        }
+        ListView list = findViewById(R.id.bookmarkList);
+        list.setOnItemClickListener((adapterView, view, pos, l) -> {
+
+        });
+        MainActivity.bookmarkMgr.getAll(bookmarks -> {
+            list.setAdapter(new BookmarkAdapter(this, bookmarks));
+            findViewById(R.id.bookmarkLoading).setVisibility(View.INVISIBLE);
+        }, e -> ((TextView) findViewById(R.id.bookmarkHeader)).setText(e.getMessage()));
+    }
 }

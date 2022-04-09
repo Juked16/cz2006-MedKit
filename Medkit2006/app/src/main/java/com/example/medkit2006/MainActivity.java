@@ -18,6 +18,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.medkit2006.control.AccountMgr;
 import com.example.medkit2006.control.ChatMgr;
+import com.example.medkit2006.control.BookmarkMgr;
+import com.example.medkit2006.control.MedicalFacilityMgr;
 import com.example.medkit2006.entity.MedicalFacility;
 
 import org.json.JSONArray;
@@ -41,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
     public static AccountMgr accountMgr = new AccountMgr();
     public static ChatMgr chatMgr = new ChatMgr();
 
+    public static MedicalFacilityMgr facilityMgr = new MedicalFacilityMgr();
+    public static BookmarkMgr bookmarkMgr = new BookmarkMgr();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

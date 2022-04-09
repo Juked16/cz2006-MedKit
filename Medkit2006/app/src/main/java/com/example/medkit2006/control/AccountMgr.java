@@ -1,10 +1,12 @@
 package com.example.medkit2006.control;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.BoardiesITSolutions.AndroidMySQLConnector.Exceptions.SQLColumnNotFoundException;
 import com.BoardiesITSolutions.AndroidMySQLConnector.MySQLRow;
-import com.example.medkit2006.DB;
+import com.example.medkit2006.data.DB;
 import com.example.medkit2006.entity.User;
 
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +18,21 @@ import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Properties;
 import java.util.function.Consumer;
+
+import javax.activation.CommandMap;
+import javax.activation.MailcapCommandMap;
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.Multipart;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
 public class AccountMgr {
 
@@ -61,9 +77,45 @@ public class AccountMgr {
         DB.instance.execute("insert into account (username,email,passwordHash,passwordSalt) values (\"" + username + "\",\"" + email + "\",\"" + hash(password, salt) + "\",\"" + bytesToHex(salt) + "\")", callback, error);
     }
 
-    public void sendVerificationCode(@NotNull String email, @NotNull String verificationCode) {
-        this.verificationCode = verificationCode;
-        // TODO - implement email sending
+    public void sendVerificationCode(@NotNull String email) {
+        SecureRandom random = new SecureRandom();
+        char[] chars = "ABCDEFGHIJKLMNPQRSTUVWXYZ123456789".toCharArray();
+        char[] codeBuf = new char[5];
+        for (int idx = 0; idx < codeBuf.length; ++idx)
+            codeBuf[idx] = chars[random.nextInt(chars.length)];
+        verificationCode = new String(codeBuf);
+        new Thread(() -> {
+            Properties prop = new Properties();
+            prop.put("mail.smtp.auth", true);
+            prop.put("mail.smtp.starttls.enable", true);
+            prop.put("mail.smtp.host", "smtp.gmail.com");
+            prop.put("mail.smtp.port", 587);
+            Session session = Session.getInstance(prop, new Authenticator() {
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication("cz2006.blue.medkit@gmail.com", "q^Vk.\\Oc}X3@e43kv<VW");
+                }
+            });
+            ((MailcapCommandMap) CommandMap.getDefaultCommandMap()).addMailcap("multipart/*;; x-java-content-handler=com.sun.mail.handlers.multipart_mixed");
+            Message message = new MimeMessage(session);
+            try {
+                message.setFrom(new InternetAddress("cz2006.blue.medkit@gmail.com"));
+                message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email));
+                message.setSubject("Medkit - Verification Code");
+
+                MimeBodyPart mimeBodyPart = new MimeBodyPart();
+                mimeBodyPart.setContent("Your verification code: " + verificationCode, "text/html; charset=utf-8");
+
+                Multipart multipart = new MimeMultipart();
+                multipart.addBodyPart(mimeBodyPart);
+
+                message.setContent(multipart);
+
+                Transport.send(message);
+            } catch (Exception e) {
+                Log.wtf("Email", e);
+            }
+        }).start();
     }
 
     public boolean isLoggedIn() {
@@ -79,7 +131,7 @@ public class AccountMgr {
     }
 
     public boolean validateVerificationCode(@NotNull String verificationCode) {
-        return verificationCode.equals(this.verificationCode);
+        return verificationCode.equalsIgnoreCase(this.verificationCode);
     }
 
     public boolean isAccountVerified(@NonNull User user) {//TODO: remove?
@@ -105,7 +157,8 @@ public class AccountMgr {
                 }
                 DB.instance.executeQuery("select username from account where username = \"" + username + "\" and passwordHash = cast('" + hash(password, salt) + "' as BINARY(32))",
                         resultSet -> callback.accept(resultSet.getNextRow() != null), error);
-            }
+            } else
+                callback.accept(false);
         }, error);
     }
 
@@ -171,7 +224,7 @@ public class AccountMgr {
     }
 
     /**
-     * @param s String to hash
+     * @param s    String to hash
      * @param salt Salt
      * @return SHA-256 salted hash
      */
@@ -202,7 +255,7 @@ public class AccountMgr {
         byte[] data = new byte[len / 2];
         for (int i = 0; i < len; i += 2) {
             data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
-                    + Character.digit(s.charAt(i+1), 16));
+                    + Character.digit(s.charAt(i + 1), 16));
         }
         return data;
     }

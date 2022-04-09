@@ -1,4 +1,4 @@
-package com.example.student.forum.data;
+package com.example.medkit2006.data;
 
 import android.provider.BaseColumns;
 
@@ -20,9 +20,10 @@ public final class ForumContract {
 
     public static class ForumEntry implements BaseColumns
     {
-        public static final String TABLE_NAME = "forum";
+        public static final String TABLE_NAME = "post";
         public static final String _ID = BaseColumns._ID;
-        public static final String COLUMN_USER = "user";
+        public static final String COLUMN_USER = "username";
+        public static final String COLUMN_MF = "medical_facility";
         public static final String COLUMN_DATE = "datetime";
         public static final String COLUMN_LIKES = "likes";
         public static final String COLUMN_COMMENTS = "comments";

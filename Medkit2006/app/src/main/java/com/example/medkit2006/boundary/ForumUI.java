@@ -17,8 +17,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.medkit2006.FeedAdapter;
+import com.example.medkit2006.MainActivity;
 import com.example.medkit2006.R;
-import com.example.medkit2006.entity.FeedWord;
+import com.example.medkit2006.entity.Post;
+import com.example.medkit2006.entity.User;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
@@ -41,7 +43,7 @@ public class ForumUI extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setTitle("Welcome " + getUser());
-        ArrayList<FeedWord> words = new ArrayList<FeedWord>();
+        ArrayList<Post> words = new ArrayList<Post>();
         //search database below
 
         FeedAdapter itemsAdapter = new FeedAdapter(this,words);
@@ -54,7 +56,7 @@ public class ForumUI extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapter, View v, int position, long arg3)
             {
                 Intent i = new Intent(ForumUI.this, PostDetailUI.class);
-                FeedWord selectedFromList = (FeedWord)(listView.getItemAtPosition(position));
+                Post selectedFromList = (Post)(listView.getItemAtPosition(position));
                 i.putExtra("date" , selectedFromList.getDate());
                 startActivity(i);
             }
@@ -78,12 +80,12 @@ public class ForumUI extends AppCompatActivity {
                 Intent i;
                 switch (id) {
                     case R.id.drafts:
-                        i = new Intent(ForumUI.this, PostDraftUI.class);
+                        i = new Intent(ForumUI.this, MainActivity.accountMgr.isLoggedIn() ? PostDraftUI.class : LoginUI.class);
                         i.putExtra("username", getUser());
                         startActivity(i);
                         break;
                     case R.id.myPost:
-                        i = new Intent(ForumUI.this, MyPostUI.class);
+                        i = new Intent(ForumUI.this, MainActivity.accountMgr.isLoggedIn() ? MyPostUI.class : LoginUI.class);
                         i.putExtra("username", getUser());
                         startActivity(i);
                 }
@@ -96,19 +98,6 @@ public class ForumUI extends AppCompatActivity {
         TextView name;
         name = (TextView)hView.findViewById(R.id.userName);
         name.setText(getUser());
-    }
-
-    public String getUser()
-    {
-        Intent i = getIntent();
-        Bundle bd = i.getExtras();
-        String username = "";
-        if(bd != null)
-        {
-            String name = (String) bd.get("username");
-            username = name;
-        }
-        return username;
     }
 
     @Override
@@ -131,26 +120,19 @@ public class ForumUI extends AppCompatActivity {
                 // Do nothing for now
                 goEdit();
                 return true;
-            case R.id.action_logout:
-                // Do nothing for now
-                goBack();
-                return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     public void goEdit()
     {
-        Intent i = new Intent(ForumUI.this, PostEditorUI.class);
-        i.putExtra("username" , getUser());
+        Intent i = new Intent(ForumUI.this, MainActivity.accountMgr.isLoggedIn() ? PostEditorUI.class : LoginUI.class);
+        i.putExtra("username", getUser());
         startActivity(i);
     }
 
-    public void goBack()
-    {
-        Intent i = new Intent(ForumUI.this, AccountUI.class);
-        i.putExtra("username",getUser());
-        startActivity(i);
-        finish();
+    public String getUser() {
+        User cur_user = MainActivity.accountMgr.getLoggedInUser();
+        return( cur_user == null ? "" : cur_user.getUsername());
     }
 }

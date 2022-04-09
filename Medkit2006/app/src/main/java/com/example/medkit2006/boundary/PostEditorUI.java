@@ -13,8 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NavUtils;
 
 import com.example.medkit2006.R;
-import com.example.student.forum.data.ForumContract;
-import com.example.student.forum.data.ForumDbHelper;
+import com.example.medkit2006.data.ForumContract;
+import com.example.medkit2006.data.ForumDbHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -29,8 +29,6 @@ public class PostEditorUI extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu options from the res/menu/menu_editor.xml file.
-        // This adds menu items to the app bar.
         getMenuInflater().inflate(R.menu.post_editor, menu);
         return true;
     }
@@ -71,7 +69,7 @@ public class PostEditorUI extends AppCompatActivity {
         SQLiteDatabase db = helper.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put(ForumContract.ForumEntry.COLUMN_STATUS , status);
+        values.put(ForumContract.ForumEntry.COLUMN_STATUS, status);
         values.put(ForumContract.ForumEntry.COLUMN_TITLE, head);
         values.put(ForumContract.ForumEntry.COLUMN_TAGS, postTag);
         values.put(ForumContract.ForumEntry.COLUMN_REPORT, 0);

@@ -3,6 +3,8 @@ package com.example.medkit2006.boundary;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -14,7 +16,6 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.medkit2006.DB;
 import com.example.medkit2006.MainActivity;
 import com.example.medkit2006.R;
 import com.example.medkit2006.entity.User;
@@ -45,9 +46,6 @@ public class AccountSettingsUI extends AppCompatActivity {
             username.setEnabled(false);
             username.setText(user.getUsername());
 
-            EditText email = findViewById(R.id.accountSettingsEmail);
-            email.setText(user.getEmail());
-
             CheckBox verified = findViewById(R.id.accountSettingsVerified);
             verified.setEnabled(false);
 
@@ -64,6 +62,25 @@ public class AccountSettingsUI extends AppCompatActivity {
             }
 
             //editable
+            EditText email = findViewById(R.id.accountSettingsEmail);
+            email.setText(user.getEmail());
+
+            email.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    verifyBtn.setVisibility(View.INVISIBLE);
+                }
+            });
             EditText firstName = findViewById(R.id.accountSettingsFirstName);
             firstName.setText(user.getFirstName());
 
@@ -129,9 +146,8 @@ public class AccountSettingsUI extends AppCompatActivity {
                             if (!exist) {
                                 user.setEmail(emailText);
                                 user.setVerified(false);
-                                verifyBtn.setVisibility(View.VISIBLE);
                                 verified.setChecked(false);
-                                afterEmailCheck();
+                                afterEmailCheck(true);
                             } else
                                 status.setText("Please use another email");
                         }, e -> status.setText(e.getMessage()));
@@ -139,12 +155,12 @@ public class AccountSettingsUI extends AppCompatActivity {
                         status.setText("Invalid email");
                     return;
                 }
-                afterEmailCheck();
+                afterEmailCheck(false);
             });
         }
     }
 
-    private void afterEmailCheck() {
+    private void afterEmailCheck(boolean emailChanged) {
         EditText dateOfBirth = findViewById(R.id.accountSettingsDOB);
         EditText firstName = findViewById(R.id.accountSettingsFirstName);
         EditText lastName = findViewById(R.id.accountSettingsLastName);
@@ -173,6 +189,10 @@ public class AccountSettingsUI extends AppCompatActivity {
         user.setGender(gender.getSelectedItem().toString());
         user.setBloodType(bloodType.getSelectedItem().toString());
         status.setText("Saving");
-        MainActivity.accountMgr.saveLoggedInUserDetails(() -> status.setText("Saved"), e -> status.setText(e.getMessage()));
+        MainActivity.accountMgr.saveLoggedInUserDetails(() -> {
+            status.setText("Saved");
+            if(emailChanged)
+                findViewById(R.id.accountSettingsVerifyBtn).setVisibility(View.VISIBLE);
+        }, e -> status.setText(e.getMessage()));
     }
 }

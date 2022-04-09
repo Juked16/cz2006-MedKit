@@ -14,8 +14,6 @@ import com.example.medkit2006.MainActivity;
 import com.example.medkit2006.R;
 import com.example.medkit2006.control.AccountMgr;
 
-import java.security.SecureRandom;
-
 public class ForgetPwUI extends AppCompatActivity {
 
     private int stage = 0;
@@ -43,19 +41,13 @@ public class ForgetPwUI extends AppCompatActivity {
                     email = text.getText().toString();
                     if (mgr.validEmail(email)) {
                         text.setText("");
-                        text.setInputType(InputType.TYPE_TEXT_VARIATION_NORMAL);
+                        text.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
                         text.setHint("Verification code");
-                        SecureRandom random = new SecureRandom();
-                        char[] chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
-                        char[] codeBuf = new char[5];
-                        for (int idx = 0; idx < codeBuf.length; ++idx)
-                            codeBuf[idx] = chars[random.nextInt(chars.length)];
-                        String codeStr = new String(codeBuf);
-                        text.setText(codeStr); //TODO: remove after implement sending
                         mgr.emailExist(email, emailExist -> {
                             if (emailExist)
-                                mgr.sendVerificationCode(email, codeStr);
-                            //else send "email does not exist in our records"?
+                                mgr.sendVerificationCode(email);
+                            else
+                                status.setText("Email does not exist in our records");
                         }, e -> status.setText(e.getMessage()));
                         status.setText("Verification code sent to " + email);
                         stage++;

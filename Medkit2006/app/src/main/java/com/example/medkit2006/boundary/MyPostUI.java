@@ -12,9 +12,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.medkit2006.FeedAdapter;
 import com.example.medkit2006.R;
-import com.example.medkit2006.entity.FeedWord;
-import com.example.student.forum.data.ForumContract;
-import com.example.student.forum.data.ForumDbHelper;
+import com.example.medkit2006.entity.Post;
+import com.example.medkit2006.data.ForumContract;
+import com.example.medkit2006.data.ForumDbHelper;
 
 import java.util.ArrayList;
 
@@ -26,7 +26,7 @@ public class MyPostUI extends AppCompatActivity {
         setContentView(R.layout.activity_my_post);
 
         setTitle("Your Posts");
-        ArrayList<FeedWord> words = new ArrayList<FeedWord>();
+        ArrayList<Post> words = new ArrayList<Post>();
         ForumDbHelper helper = new ForumDbHelper(this);
         SQLiteDatabase db = helper.getReadableDatabase();
         String projection[] = {
@@ -47,7 +47,7 @@ public class MyPostUI extends AppCompatActivity {
                 String userID = cursor.getString(userColumnIndex);
                 String date = cursor.getString(dateColumnIndex);
                 String title = cursor.getString(titleColumnIndex);
-                words.add(new FeedWord(title,userID,date));
+                words.add(new Post(title,userID,date));
             }
         } finally {
             cursor.close();
@@ -62,7 +62,7 @@ public class MyPostUI extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapter, View v, int position, long arg3)
             {
                 Intent i = new Intent(MyPostUI.this, PostDetailUI.class);
-                FeedWord selectedFromList = (FeedWord)(listView.getItemAtPosition(position));
+                Post selectedFromList = (Post)(listView.getItemAtPosition(position));
                 i.putExtra("date" , selectedFromList.getDate());
                 startActivity(i);
             }

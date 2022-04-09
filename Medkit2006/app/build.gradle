@@ -66,4 +66,5 @@ dependencies {
 
     implementation 'com.github.BoardiesITSolutions:Android-MySQL-Connector:0.28'
     implementation 'cat.ereza:customactivityoncrash:2.3.0'
+    implementation 'com.sun.mail:android-mail:1.5.6'
 }
