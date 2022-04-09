@@ -26,7 +26,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:autofillHints="@string/MF_name"
-        android:text="@string/search_hint"
+        android:hint="@string/search_hint"
         tools:ignore="LabelFor" />
 
     <TextView

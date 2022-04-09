@@ -32,7 +32,7 @@
         android:text="" />
 
     <Button
-        android:id="@+id/AccountToSettingsBtn"
+        android:id="@+id/accountToSettingsBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -51,36 +51,6 @@
         android:text="@string/btn_login"
         android:onClick="toLogin"
         />
-
-    <Button
-        android:id="@+id/AccountToForumBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="200dp"
-        android:visibility="invisible"
-        android:text="@string/btn_forum" />
-
-    <Button
-        android:id="@+id/AccountToChatBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="150dp"
-        android:visibility="invisible"
-        android:text="@string/btn_chat" />
-
-    <Button
-        android:id="@+id/AccountToBookmarkBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="100dp"
-        android:visibility="invisible"
-        android:text="@string/btn_settings" />
 
 
 </RelativeLayout>

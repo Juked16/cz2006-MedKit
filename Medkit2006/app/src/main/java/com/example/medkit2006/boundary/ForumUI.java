@@ -1,9 +1,11 @@
 package com.example.medkit2006.boundary;
 
+import static com.example.medkit2006.MainActivity.facilityMgr;
 import static com.example.medkit2006.R.string.open;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -11,13 +13,16 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.medkit2006.FeedAdapter;
 import com.example.medkit2006.MainActivity;
+import com.example.medkit2006.MedicalFacilityAdapter;
 import com.example.medkit2006.R;
 import com.example.medkit2006.entity.Post;
 import com.example.medkit2006.entity.User;
@@ -43,12 +48,27 @@ public class ForumUI extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setTitle("Welcome " + getUser());
-        ArrayList<Post> words = new ArrayList<Post>();
+        final ListView listView = findViewById(R.id.list);
         //search database below
-
-        FeedAdapter itemsAdapter = new FeedAdapter(this,words);
-        final ListView listView = (ListView) findViewById(R.id.list);
-        listView.setAdapter(itemsAdapter);
+        MainActivity.forumMgr.getAllPost(postList -> {
+            Log.d("Received Post List", String.valueOf(postList.size()));
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {// Stuff that updates the UI
+                    FeedAdapter itemsAdapter = new FeedAdapter(ForumUI.this, postList);
+                    listView.setAdapter(itemsAdapter);
+                }
+            });
+        },
+                e -> {
+                    Log.d("Received Medical Facility List Unsuccessful", e.toString().trim());
+                    runOnUiThread(new Runnable() {
+                @Override
+                public void run() {// Stuff that updates the UI
+                    Toast.makeText(getApplicationContext(), e.toString().trim(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
@@ -101,25 +121,29 @@ public class ForumUI extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        User loggedIn = MainActivity.accountMgr.getLoggedInUser();
+        if (loggedIn == null){
+            Toast.makeText(this, "You haven't log in!",Toast.LENGTH_SHORT);
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu options from the res/menu/menu_catalog.xml file.
-        // This adds menu items to the app bar.
         getMenuInflater().inflate(R.menu.feed_action, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // User clicked on a menu option in the app bar overflow menu
         if(mToggle.onOptionsItemSelected(item))
         {
             return true;
         }
-        switch (item.getItemId()) {
-            case R.id.action_new_post:
-                // Do nothing for now
-                goEdit();
-                return true;
+        if(item.getItemId() == R.id.action_new_post) {
+            goEdit();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

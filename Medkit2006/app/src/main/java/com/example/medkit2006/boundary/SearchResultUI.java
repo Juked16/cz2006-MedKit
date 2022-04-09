@@ -55,7 +55,7 @@ public class SearchResultUI extends AppCompatActivity{
 
         Intent intent = getIntent();
         String query = intent.getStringExtra(SearchUI.QUERY);
-        facilityMgr.getAllFacilityList(medicalFacilityList -> {
+        facilityMgr.getAllFacilityAbstract(medicalFacilityList -> {
             Log.d("Received Medical Facility List", String.valueOf(medicalFacilityList.size()));
             runOnUiThread(new Runnable() {
                 @Override

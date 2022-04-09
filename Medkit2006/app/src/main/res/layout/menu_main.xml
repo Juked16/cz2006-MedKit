@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/txtAppName"
+        android:id="@+id/mainAppNameHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -16,58 +16,60 @@
         android:layout_marginBottom="20sp"/>
 
     <Button
-        android:id="@+id/btnSearch"
+        android:id="@+id/mainSearchBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/txtAppName"
+        android:layout_below="@+id/mainAppNameHeader"
         android:layout_centerHorizontal="true"
         android:onClick="onClickSearch"
         android:text="Search" />
 
     <Button
-        android:id="@+id/btnForum"
+        android:id="@+id/mainForumBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Forum"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/btnSearch"
+        android:layout_below="@+id/mainSearchBtn"
         android:onClick="onClickForum"
         />
 
     <Button
-        android:id="@+id/btnChat"
+        android:id="@+id/mainChatBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Chat"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/btnForum"
+        android:layout_below="@id/mainForumBtn"
         android:onClick="onClickChat"
+        android:visibility="invisible"
         />
 
     <Button
-        android:id="@+id/btnBookmark"
+        android:id="@+id/mainBookmarkBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/btnChat"
+        android:layout_below="@id/mainChatBtn"
         android:layout_centerHorizontal="true"
         android:onClick="onClickBookmark"
+        android:visibility="invisible"
         android:text="@string/btn_bookmark" />
 
     <Button
-        android:id="@+id/btnAccount"
+        android:id="@+id/mainAccountBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/btn_accounts"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/btnBookmark"
+        android:layout_below="@id/mainBookmarkBtn"
         android:onClick="onClickAccount"
         />
 
     <EditText
-        android:id="@+id/textDBQuery"
+        android:id="@+id/mainDBQuery"
         android:layout_width="309dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/btnBookmark"
+        android:layout_below="@id/mainBookmarkBtn"
         android:layout_marginTop="-450dp"
         android:ems="10"
         android:inputType="textMultiLine"
@@ -75,10 +77,10 @@
         android:text="select * from medical_facilities" />
 
     <Button
-        android:id="@+id/btnDBTest"
+        android:id="@+id/mainDBTestBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/textDBQuery"
+        android:layout_below="@id/mainDBQuery"
         android:layout_centerHorizontal="true"
         android:onClick="onClickDB"
         android:textAllCaps="false"

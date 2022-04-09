@@ -77,6 +77,15 @@ public class DB {
         FOREIGN KEY (medical_facility) REFERENCES medical_facilities(name),
         CONSTRAINT user_mf PRIMARY KEY (username,medical_facility)
     );
+    CREATE TABLE text (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        username VARCHAR(45) NOT NULL,
+        content VARCHAR(1000) NOT NULL,
+        timestamp DATETIME NOT NULL,
+        postId INT CHECK (chatId = NULL),
+        chatId INT CHECK (postId = NULL),
+        FOREIGN KEY (username) REFERENCES account(username)
+    );
     CREATE TABLE rating(
         username VARCHAR(45) NOT NULL,
         medical_facility VARCHAR(45) NOT NULL,
@@ -85,7 +94,32 @@ public class DB {
         FOREIGN KEY (medical_facility) REFERENCES medical_facilities(name),
         CONSTRAINT user_mf PRIMARY KEY (username,medical_facility)
     );
+    CREATE TABLE service(
+        medical_facility VARCHAR(45) NOT NULL,
+        type VARCHAR(45) NOT NULL, -- #TODO: ENUM?
+        price DOUBLE NOT NULL CHECK (price > 0),
+        description VARCHAR(1000) NOT NULL,
+        FOREIGN KEY (medical_facility) REFERENCES medical_facilities(name)
+    );
+    CREATE TABLE chat(
+        id INT NOT NULL,
+        username VARCHAR(45) NOT NULL,
+        FOREIGN KEY (username) REFERENCES account(username),
+        CONSTRAINT id_username PRIMARY KEY (id,username)
+    );
 
+    CREATE TABLE post(
+        title VARCHAR(150) NOT NULL,
+        content VARCHAR(1000) NOT NULL,
+        comments VARCHAR(300),
+        timestamp DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+        username VARCHAR(45) NOT NULL,
+        medical_facility VARCHAR(45) NOT NULL,
+        likes INTEGER NOT NULL,
+        tags VARCHAR(100) NOT NULL,
+        status INTEGER NOT NULL,
+        report INTEGER NOT NULL
+    );
 
     INSERT INTO medical_facilities VALUES ("Alexandra Hospital","hospital","378 ALEXANDRA ROAD ALEXANDRA HOSPITAL Singapore 159964","64722000",1.2865882,103.7990862,"");
     */
