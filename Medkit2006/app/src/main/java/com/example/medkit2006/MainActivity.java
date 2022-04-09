@@ -14,7 +14,7 @@ import com.BoardiesITSolutions.AndroidMySQLConnector.Exceptions.SQLColumnNotFoun
 import com.BoardiesITSolutions.AndroidMySQLConnector.MySQLRow;
 import com.example.medkit2006.boundary.AccountUI;
 import com.example.medkit2006.boundary.BookmarkUI;
-import com.example.medkit2006.boundary.ChatUI;
+import com.example.medkit2006.boundary.ChatUsersUI;
 import com.example.medkit2006.boundary.ForumUI;
 import com.example.medkit2006.boundary.LoginUI;
 import com.example.medkit2006.boundary.SearchUI;
@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickChat(View view) {
-        Intent intent = new Intent(MainActivity.this, accountMgr.isLoggedIn() ? ChatUI.class : LoginUI.class);
+        Intent intent = new Intent(MainActivity.this, accountMgr.isLoggedIn() ? ChatUsersUI.class : LoginUI.class);
         startActivity(intent);
     }
 
