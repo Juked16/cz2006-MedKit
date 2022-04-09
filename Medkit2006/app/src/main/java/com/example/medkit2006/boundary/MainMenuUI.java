@@ -2,7 +2,6 @@ package com.example.medkit2006.boundary;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,36 +12,41 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.BoardiesITSolutions.AndroidMySQLConnector.ColumnDefinition;
 import com.BoardiesITSolutions.AndroidMySQLConnector.Exceptions.SQLColumnNotFoundException;
 import com.BoardiesITSolutions.AndroidMySQLConnector.MySQLRow;
-import com.example.medkit2006.data.DB;
 import com.example.medkit2006.MainActivity;
 import com.example.medkit2006.R;
-import com.example.medkit2006.data.ForumContract;
+import com.example.medkit2006.data.DB;
 
 import java.util.ArrayList;
 
 public class MainMenuUI extends AppCompatActivity {
-    private Button button;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu_main);
 
-        button = (Button) findViewById(R.id.btnSearch);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainMenuUI.this, SearchUI.class);
-                startActivity(intent);
-            }
-        });
-
         new DB();
         DB.instance.conn.returnCallbackToMainThread(true, this);
+    }
 
-        //Intent intent = new Intent(MainActivity.this, Success.class);
-        //startActivity(intent);
-        //finish();
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(MainActivity.accountMgr.isLoggedIn()) {
+
+            findViewById(R.id.mainChatBtn).setVisibility(View.VISIBLE);
+            findViewById(R.id.mainChatBtn).setOnClickListener(btn -> {
+                Intent intent = new Intent(this, ChatUI.class);
+                startActivity(intent);
+            });
+
+            findViewById(R.id.bookmark_btn).setVisibility(View.VISIBLE);
+            findViewById(R.id.bookmark_btn).setOnClickListener(btn -> {
+                Intent intent = new Intent(this, BookmarkUI.class);
+                startActivity(intent);
+            });
+        }
     }
 
     public void onClickSearch(View view) {
@@ -61,7 +65,7 @@ public class MainMenuUI extends AppCompatActivity {
     }
 
     public void onClickBookmark(View view) {
-        Intent intent = new Intent(MainMenuUI.this, MainActivity.accountMgr.isLoggedIn() ? BookmarkUI.class : LoginUI.class);
+        Intent intent = new Intent(MainMenuUI.this, BookmarkUI.class);
         startActivity(intent);
     }
 
@@ -73,7 +77,7 @@ public class MainMenuUI extends AppCompatActivity {
     public void onClickDB(View view) {
         Button btn = ((Button) view);
         btn.setText("Executing");
-        String query = ((EditText) findViewById(R.id.textDBQuery)).getText().toString().trim();
+        String query = ((EditText) findViewById(R.id.mainDBQuery)).getText().toString().trim();
         if (query.toUpperCase().contains("SELECT"))
         DB.instance.executeQuery(query, resultSet -> {
             try {

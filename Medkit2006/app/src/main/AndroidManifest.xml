@@ -37,7 +37,6 @@
         <activity
             android:name=".MainActivity"
             android:exported="true" />
-        <activity android:name=".Success" />
         <activity
             android:name=".boundary.MainMenuUI"
             android:exported="true">
