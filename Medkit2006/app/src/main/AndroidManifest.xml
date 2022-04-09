@@ -20,16 +20,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Medkit2006"
-        tools:replace="android:theme">
+        android:networkSecurityConfig="@xml/network_security_config">
         <activity
             android:name=".boundary.ChatUsersUI"
             android:exported="false"
             android:label="Chats"
-            android:parentActivityName=".boundary.MainMenuUI" />
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".boundary.MessageActivity"
             android:exported="false" />
-        android:networkSecurityConfig="@xml/network_security_config">
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -49,7 +48,6 @@
         </activity>
         <activity android:name=".boundary.AccountUI" android:label="Account" android:parentActivityName=".MainActivity"/>
         <activity android:name=".boundary.BookmarkUI" android:label="BookMark" android:parentActivityName=".MainActivity"/>
-        <activity android:name=".boundary.ChatUI" android:label="Chats" android:parentActivityName=".MainActivity"/>
         <activity android:name=".boundary.LoginUI" android:label="Login" android:parentActivityName=".MainActivity"/>
         <activity android:name=".boundary.RegistrationUI" android:label="Registration" android:parentActivityName=".boundary.LoginUI"/>
         <activity android:name=".boundary.FacilityDetailUI" android:label="Facility Detail" />
