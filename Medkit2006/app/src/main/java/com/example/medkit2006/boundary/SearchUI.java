@@ -69,13 +69,12 @@ public class SearchUI extends AppCompatActivity implements AdapterView.OnItemSel
         rating_ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         rating_spin.setAdapter(rating_ad);
 
-        ArrayList<MedicalFacility> medicalFacilityList = new ArrayList<MedicalFacility>();
         recyclerView = findViewById(R.id.search_result_rv);
         displayAllFacility();
     }
 
     public void displayAllFacility(){
-        facilityMgr.getAllFacilityList(medicalFacilityList -> {
+        facilityMgr.getAllFacilityAbstract(medicalFacilityList -> {
             Log.d("Received Medical Facility List", String.valueOf(medicalFacilityList.size()));
             runOnUiThread(new Runnable() {
                 @Override

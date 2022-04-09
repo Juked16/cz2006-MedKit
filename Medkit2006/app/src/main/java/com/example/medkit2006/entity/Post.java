@@ -5,20 +5,21 @@ package com.example.medkit2006.entity;
  */
 
 public class Post {
-    private String question;
-    private String username;
-    private String date;
+    private final String title;
+    private final String username;
+    private final String date;
 
+    //Used to initialize database tile
     public Post(String fquestion, String fusername, String fdate)
     {
-        question = fquestion;
+        title = fquestion;
         username = fusername;
         date = fdate;
     }
 
     public String getQuestion()
     {
-        return question;
+        return title;
     }
 
     public String getUsername()

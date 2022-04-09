@@ -86,7 +86,18 @@ public class DB {
         CONSTRAINT id_username PRIMARY KEY (id,username)
     );
 
-
+    CREATE TABLE post(
+        title VARCHAR(150) NOT NULL,
+        content VARCHAR(1000) NOT NULL,
+        comments VARCHAR(300),
+        timestamp DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+        username VARCHAR(45) NOT NULL,
+        medical_facility VARCHAR(45) NOT NULL,
+        likes INTEGER NOT NULL,
+        tags VARCHAR(100) NOT NULL,
+        status INTEGER NOT NULL,
+        report INTEGER NOT NULL
+    );
 
     INSERT INTO medical_facilities VALUES ("Alexandra Hospital","hospital","378 ALEXANDRA ROAD ALEXANDRA HOSPITAL Singapore 159964","64722000",1.2865882,103.7990862,"");
     */
