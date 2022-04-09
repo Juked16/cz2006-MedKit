@@ -1,6 +1,6 @@
 package com.example.medkit2006.control;
 
-import com.example.medkit2006.DB;
+import com.example.medkit2006.data.DB;
 
 import org.jetbrains.annotations.NotNull;
 
