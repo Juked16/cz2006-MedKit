@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:background="#1C2E46"
-    tools:context=".boundary.ChatUI">
+    tools:context=".MessageActivity">
 
     <View
         android:id="@+id/viewBackground"
@@ -16,7 +16,6 @@
         android:background="@drawable/background_content_top"
         app:layout_constraintBottom_toTopOf="@id/layoutSend"
         app:layout_constraintTop_toTopOf="parent"/>
-
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imageBack"
@@ -30,14 +29,13 @@
         app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
-        android:id="@+id/textName"
+        android:id="@+id/username"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:ellipsize="end"
         android:gravity="center"
         android:maxLines="1"
-        android:text="@string/username"
         android:textColor="#212121"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -58,16 +56,6 @@
         app:layout_constraintBottom_toBottomOf="@id/viewBackground"
         app:layout_constraintTop_toTopOf="@id/imageBack" />
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        app:layout_constraintBottom_toBottomOf="@id/viewBackground"
-        app:layout_constraintEnd_toEndOf="@id/viewBackground"
-        app:layout_constraintStart_toStartOf="@id/viewBackground"
-        app:layout_constraintTop_toTopOf="@id/viewBackground" />
-
-
     <FrameLayout
         android:id="@+id/layoutSend"
         android:layout_width="40dp"
@@ -78,15 +66,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" >
 
-
-        <androidx.appcompat.widget.AppCompatImageView
+        <ImageButton
             android:id="@+id/btn_send"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="4dp"
             android:padding="8dp"
             android:src="@drawable/ic_menu_send"
-            android:tint="@color/white" />
+            android:background="#142232"
+            app:tint="@color/white" />
 
     </FrameLayout>
 
@@ -109,5 +97,18 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/layoutSend"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/sendError"
+        android:layout_width="307dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="52dp"
+        android:layout_marginBottom="72dp"
+        android:textColor="#B00020"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@id/layoutSend"
+        app:layout_constraintStart_toStartOf="parent" />
+    <!--android:text="@string/error_in_sending_message"-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

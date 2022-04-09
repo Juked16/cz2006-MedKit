@@ -56,7 +56,7 @@ public class MainMenuUI extends AppCompatActivity {
     }
 
     public void onClickChat(View view) {
-        Intent intent = new Intent(MainMenuUI.this, MainActivity.accountMgr.isLoggedIn() ? ChatUI.class : LoginUI.class);
+        Intent intent = new Intent(MainMenuUI.this, ChatUsersUI.class);
         startActivity(intent);
     }
 
