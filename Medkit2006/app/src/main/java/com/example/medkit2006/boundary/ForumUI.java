@@ -1,6 +1,5 @@
 package com.example.medkit2006.boundary;
 
-import static com.example.medkit2006.MainActivity.facilityMgr;
 import static com.example.medkit2006.R.string.open;
 
 import android.content.Intent;
@@ -18,17 +17,13 @@ import android.widget.Toast;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.medkit2006.FeedAdapter;
 import com.example.medkit2006.MainActivity;
-import com.example.medkit2006.MedicalFacilityAdapter;
 import com.example.medkit2006.R;
 import com.example.medkit2006.entity.Post;
 import com.example.medkit2006.entity.User;
 import com.google.android.material.navigation.NavigationView;
-
-import java.util.ArrayList;
 
 public class ForumUI extends AppCompatActivity {
 

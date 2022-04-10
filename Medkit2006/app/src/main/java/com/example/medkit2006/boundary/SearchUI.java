@@ -2,10 +2,7 @@ package com.example.medkit2006.boundary;
 
 import static com.example.medkit2006.MainActivity.facilityMgr;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,32 +13,12 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.medkit2006.MedicalFacilityAdapter;
 import com.example.medkit2006.R;
-import com.example.medkit2006.control.MedicalFacilityMgr;
-import com.example.medkit2006.data.DB;
-import com.example.medkit2006.data.ForumContract;
-import com.example.medkit2006.entity.MedicalFacility;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class SearchUI extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
     public static final String EXTRA_MESSAGE = "@string/MF_name";

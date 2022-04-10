@@ -1,5 +1,6 @@
 package com.example.medkit2006.boundary;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -37,6 +38,11 @@ public class ChatUsersUI extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         tmp_user = MainActivity.accountMgr.getLoggedInUser();
+        if (tmp_user == null) {
+            finish();
+            startActivity(new Intent(this, LoginUI.class));
+            return;
+        }
         updateChats();
         findViewById(R.id.chatTestBtn).setVisibility(View.VISIBLE);
         findViewById(R.id.chatTestBtn).setOnClickListener(btn -> MainActivity.chatMgr.startPrivateMessage(tmp_user.getUsername(), "test2", this::updateChats, Throwable::printStackTrace));//TODO: remove
