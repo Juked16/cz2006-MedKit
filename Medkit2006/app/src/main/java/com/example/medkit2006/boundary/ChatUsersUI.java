@@ -1,11 +1,11 @@
 package com.example.medkit2006.boundary;
 
+import android.os.Bundle;
+import android.view.View;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.os.Bundle;
-import android.widget.TextView;
 
 import com.example.medkit2006.MainActivity;
 import com.example.medkit2006.R;
@@ -14,14 +14,13 @@ import com.example.medkit2006.control.ChatMgr;
 import com.example.medkit2006.entity.User;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 public class ChatUsersUI extends AppCompatActivity {
 
     private RecyclerView recyclerView;
 
     private UserAdapter userAdapter;
-    private List<User> mUsers;
     User tmp_user;
 
     @Override
@@ -32,30 +31,30 @@ public class ChatUsersUI extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        mUsers = new ArrayList<>();
-        tmp_user = MainActivity.accountMgr.getLoggedInUser();
-        ChatMgr mgr = MainActivity.chatMgr;
-        TextView error = findViewById(R.id.sendError);
-        mgr.getReceiver(tmp_user.getUsername(), user -> {
-            if (!mUsers.contains(user)) {
-                mUsers.add(user);
-            }
-        }, e -> error.setText(e.getMessage()));
-        mgr.getSender(tmp_user.getUsername(), user -> {
-            if (!mUsers.contains(user)) {
-                mUsers.add(user);
-            }
-        }, e -> error.setText(e.getMessage()));
-
-        readUsers();
     }
 
-    private void readUsers() {
-        mUsers.add(new User("Tom"));
-        mUsers.add(new User("Elira"));
-        //TODO: Read users from database/Forum instead
-        userAdapter = new UserAdapter(this, mUsers);
-        recyclerView.setAdapter(userAdapter);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        tmp_user = MainActivity.accountMgr.getLoggedInUser();
+        updateChats();
+        findViewById(R.id.chatTestBtn).setVisibility(View.VISIBLE);
+        findViewById(R.id.chatTestBtn).setOnClickListener(btn -> MainActivity.chatMgr.startPrivateMessage(tmp_user.getUsername(), "test2", this::updateChats, Throwable::printStackTrace));//TODO: remove
+    }
+
+    /**
+     * Called whenever chat list needs to be updated (member add,remove, new chat etc)
+     */
+    public void updateChats() {
+        ChatMgr mgr = MainActivity.chatMgr;
+        mgr.getChats(tmp_user.getUsername(), chatIds -> {
+            HashMap<Integer, ArrayList<String>> map = new HashMap<>();
+            for (Integer id : chatIds)
+                mgr.getMembers(id, usernames -> {
+                    map.put(id,usernames);
+                    userAdapter = new UserAdapter(this, map);
+                    recyclerView.setAdapter(userAdapter);
+                }, Throwable::printStackTrace);
+        }, Throwable::printStackTrace);
     }
 }

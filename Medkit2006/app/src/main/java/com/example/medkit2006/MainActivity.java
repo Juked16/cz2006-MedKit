@@ -18,7 +18,6 @@ import com.example.medkit2006.boundary.AccountUI;
 import com.example.medkit2006.boundary.BookmarkUI;
 import com.example.medkit2006.boundary.ChatUsersUI;
 import com.example.medkit2006.boundary.ForumUI;
-import com.example.medkit2006.boundary.LoginUI;
 import com.example.medkit2006.boundary.SearchUI;
 import com.example.medkit2006.control.AccountMgr;
 import com.example.medkit2006.control.BookmarkMgr;
@@ -46,12 +45,24 @@ public class MainActivity extends AppCompatActivity {
         builder.setTitle("Connecting");
         AlertDialog dialog = builder.show();
         new DB(
-                dialog::dismiss,
+                () -> {
+                    dialog.dismiss();
+                    chatMgr.init();
+                },
                 e -> runOnUiThread(() -> {
                     dialog.setTitle("Connection failed");
                 })
         );
         DB.instance.conn.returnCallbackToMainThread(true, this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (MainActivity.accountMgr.isLoggedIn()) {
+            findViewById(R.id.mainChatBtn).setVisibility(View.VISIBLE);
+            findViewById(R.id.mainBookmarkBtn).setVisibility(View.VISIBLE);
+        }
     }
 
     public void onClickSearch(View view) {
@@ -65,12 +76,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickChat(View view) {
-        Intent intent = new Intent(MainActivity.this, accountMgr.isLoggedIn() ? ChatUsersUI.class : LoginUI.class);
+        Intent intent = new Intent(MainActivity.this, ChatUsersUI.class);
         startActivity(intent);
     }
 
     public void onClickBookmark(View view) {
-        Intent intent = new Intent(MainActivity.this, accountMgr.isLoggedIn() ? BookmarkUI.class : LoginUI.class);
+        Intent intent = new Intent(MainActivity.this, BookmarkUI.class);
         startActivity(intent);
     }
 

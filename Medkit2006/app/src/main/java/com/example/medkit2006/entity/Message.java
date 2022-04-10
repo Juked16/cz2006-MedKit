@@ -1,31 +1,23 @@
 package com.example.medkit2006.entity;
 
+import java.time.Instant;
 import java.util.Date;
 
 public class Message {
 
-    private String sender;
-    private String reciever;
+    private final String sender;
     private String content;
-    private Date timestamp;
+    private final Date timestamp;
 
-    public Message(String sender) {
-        this.sender = sender;
-        this.reciever = "";
-        this.content = "";
-        this.timestamp = new Date();
+
+    public Message(String sender, String content) {
+        this(sender, content, Date.from(Instant.now()));
     }
 
-    public Message(String sender, String receiver, String content) {
+    public Message(String sender, String content, Date timestamp) {
         this.sender = sender;
-        this.reciever = receiver;
         this.content = content;
-        this.timestamp = new Date();
-    }
-
-
-    public String getReciever() {
-        return reciever;
+        this.timestamp = timestamp;
     }
 
     public String getSender() {
@@ -38,10 +30,6 @@ public class Message {
 
     public Date getTimestamp() {
         return timestamp;
-    }
-
-    public void setReciever(String reciever) {
-        this.reciever = reciever;
     }
 
     public void setContent(String content) {

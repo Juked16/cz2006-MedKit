@@ -11,18 +11,20 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medkit2006.boundary.MessageActivity;
-import com.example.medkit2006.entity.User;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.StringJoiner;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
-    private Context mContext;
-    private List<User> mUsers;
+    private final Context mContext;
+    private final HashMap<Integer, ArrayList<String>> chats;
 
-    public UserAdapter(Context mContext, List<User> mUsers) {
+    public UserAdapter(Context mContext, HashMap<Integer, ArrayList<String>> chats) {
         this.mContext = mContext;
-        this.mUsers = mUsers;
+        this.chats = chats;
     }
 
     @NonNull
@@ -34,22 +36,29 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        User user = mUsers.get(position);
-        holder.username.setText(user.getUsername());
-
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(mContext, MessageActivity.class);
-                intent.putExtra("username", user.getUsername());
-                mContext.startActivity(intent);
+        int pos = 0;
+        for(Map.Entry<Integer,ArrayList<String>> chat : chats.entrySet()){
+            if(pos++ == position){
+                StringJoiner join = new StringJoiner(",");
+                for(String username : chat.getValue()) {
+                    if(!username.equals(MainActivity.accountMgr.getLoggedInUser().getUsername()))
+                        join.add(username);
+                }
+                holder.username.setText(join.toString());
+                holder.itemView.setOnClickListener(view -> {
+                    Intent intent = new Intent(mContext, MessageActivity.class);
+                    intent.putExtra("chatId", chat.getKey());
+                    intent.putExtra("chatName", holder.username.getText().toString());
+                    mContext.startActivity(intent);
+                });
+                break;
             }
-        });
+        }
     }
 
     @Override
     public int getItemCount() {
-        return mUsers.size();
+        return chats.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -59,7 +68,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         public ViewHolder(View itemView) {
             super(itemView);
 
-            username = itemView.findViewById(R.id.username);
+            username = itemView.findViewById(R.id.chatName);
         }
     }
 }

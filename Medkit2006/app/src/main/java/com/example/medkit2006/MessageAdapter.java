@@ -1,7 +1,6 @@
 package com.example.medkit2006;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +18,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
     public static final int MSG_TYPE_RECEIVED = 0;
     public static final int MSG_TYPE_SENT = 1;
-    private Context mContext;
-    private List<Message> mChat;
+    private final Context mContext;
+    private final List<Message> mChat;
     User tmp_user;
 
     public MessageAdapter(Context mContext, List<Message> mChat) {
