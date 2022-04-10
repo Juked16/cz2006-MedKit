@@ -1,0 +1,1913 @@
+Index: app/src/main/res/layout/activity_post_to_draft.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<ScrollView xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"match_parent\"\n    android:fillViewport=\"true\">\n\n<LinearLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:tools=\"http://schemas.android.com/tools\"\n    android:id=\"@+id/activity_editor\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"match_parent\"\n    android:orientation=\"vertical\"\n    android:paddingBottom=\"@dimen/activity_vertical_margin\"\n    android:paddingLeft=\"@dimen/activity_horizontal_margin\"\n    android:paddingRight=\"@dimen/activity_horizontal_margin\"\n    android:paddingTop=\"@dimen/activity_vertical_margin\"\n    tools:context=\"com.example.student.forum.Editor\">\n\n    <EditText\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:id=\"@+id/title\"\n        android:hint = \"Enter the title\"/>\n\n    <EditText\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"wrap_content\"\n        android:id=\"@+id/post\"\n        android:inputType=\"textMultiLine\"\n        android:lines=\"8\"\n        android:layout_gravity=\"top|left\"\n        android:scrollbars=\"vertical\"\n        android:hint = \"Enter the post\"\n        android:layout_marginBottom=\"20dp\"/>\n\n    <EditText\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:hint=\"Enter Tags\"\n        android:id=\"@+id/tags\"/>\n</LinearLayout>\n\n\n    </ScrollView>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_post_to_draft.xml b/app/src/main/res/layout/activity_post_to_draft.xml
+--- a/app/src/main/res/layout/activity_post_to_draft.xml	(revision c384dbff5588a8ec8d5fa0df80581471b784f932)
++++ b/app/src/main/res/layout/activity_post_to_draft.xml	(date 1649560805590)
+@@ -38,6 +38,16 @@
+         android:layout_height="wrap_content"
+         android:hint="Enter Tags"
+         android:id="@+id/tags"/>
++
++    <RatingBar
++        android:id="@+id/ratingBar"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content" />
++
++    <Spinner
++        android:id="@+id/post_facility_selection_spinner"
++        android:layout_width="380dp"
++        android:layout_height="53dp" />
+ </LinearLayout>
+ 
+ 
+Index: app/src/main/java/com/example/medkit2006/MainActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.medkit2006;\n\nimport android.content.Intent;\nimport android.os.Bundle;\nimport android.view.View;\nimport android.widget.Button;\nimport android.widget.EditText;\n\nimport androidx.annotation.Nullable;\nimport androidx.appcompat.app.AppCompatActivity;\n\nimport com.BoardiesITSolutions.AndroidMySQLConnector.ColumnDefinition;\nimport com.BoardiesITSolutions.AndroidMySQLConnector.Exceptions.SQLColumnNotFoundException;\nimport com.BoardiesITSolutions.AndroidMySQLConnector.MySQLRow;\nimport com.example.medkit2006.boundary.AccountUI;\nimport com.example.medkit2006.boundary.BookmarkUI;\nimport com.example.medkit2006.boundary.ChatUI;\nimport com.example.medkit2006.boundary.ForumUI;\nimport com.example.medkit2006.boundary.LoginUI;\nimport com.example.medkit2006.boundary.SearchUI;\nimport com.example.medkit2006.control.AccountMgr;\nimport com.example.medkit2006.control.BookmarkMgr;\nimport com.example.medkit2006.control.ChatMgr;\nimport com.example.medkit2006.control.ForumMgr;\nimport com.example.medkit2006.control.MedicalFacilityMgr;\nimport com.example.medkit2006.data.DB;\n\nimport java.util.ArrayList;\n\npublic class MainActivity extends AppCompatActivity {\n    private Button button;\n    public static AccountMgr accountMgr = new AccountMgr();\n    public static MedicalFacilityMgr facilityMgr = new MedicalFacilityMgr();\n    public static ForumMgr forumMgr = new ForumMgr();\n    public static BookmarkMgr bookmarkMgr = new BookmarkMgr();\n    public static ChatMgr chatMgr = new ChatMgr();\n\n    @Override\n    protected void onCreate(@Nullable Bundle savedInstanceState) {\n        super.onCreate(savedInstanceState);\n        setContentView(R.layout.menu_main);\n\n        button = (Button) findViewById(R.id.mainSearchBtn);\n        button.setOnClickListener(new View.OnClickListener() {\n            @Override\n            public void onClick(View view) {\n                Intent intent = new Intent(MainActivity.this, SearchUI.class);\n                startActivity(intent);\n            }\n        });\n\n        new DB();\n        DB.instance.conn.returnCallbackToMainThread(true, this);\n\n        //Intent intent = new Intent(MainActivity.this, Success.class);\n        //startActivity(intent);\n        //finish();\n    }\n\n    public void onClickSearch(View view) {\n        Intent intent = new Intent(MainActivity.this, SearchUI.class);\n        startActivity(intent);\n    }\n\n    public void onClickForum(View view) {\n        Intent intent = new Intent(MainActivity.this, ForumUI.class);\n        startActivity(intent);\n    }\n\n    public void onClickChat(View view) {\n        Intent intent = new Intent(MainActivity.this, accountMgr.isLoggedIn() ? ChatUI.class : LoginUI.class);\n        startActivity(intent);\n    }\n\n    public void onClickBookmark(View view) {\n        Intent intent = new Intent(MainActivity.this, accountMgr.isLoggedIn() ? BookmarkUI.class : LoginUI.class);\n        startActivity(intent);\n    }\n\n    public void onClickAccount(View view) {\n        Intent intent = new Intent(MainActivity.this, AccountUI.class);\n        startActivity(intent);\n    }\n\n    public void onClickDB(View view) {\n        Button btn = ((Button) view);\n        btn.setText(\"Executing\");\n        String query = ((EditText) findViewById(R.id.mainDBQuery)).getText().toString().trim();\n        if (query.toUpperCase().contains(\"SELECT\"))\n        DB.instance.executeQuery(query, resultSet -> {\n            try {\n                StringBuilder text = new StringBuilder();\n                ArrayList<String> fields = new ArrayList<>();\n                for (ColumnDefinition field : resultSet.getFields()) {\n                    fields.add(field.getColumnName());\n                    text.append(\" | \").append(field.getColumnName());\n                }\n                text.append('\\n');\n                MySQLRow row;\n                while ((row = resultSet.getNextRow()) != null) {\n                    for (String field : fields)\n                        text.append(\" | \").append(row.getString(field));\n                    text.append('\\n');\n                }\n                btn.setText(text);\n            } catch (SQLColumnNotFoundException e) {\n                btn.setText(e.getMessage());\n            }\n        }, e -> btn.setText(e.getMessage()));\n        else\n        DB.instance.execute(query, () -> btn.setText(\"OK\"), e -> btn.setText(e.getMessage()));\n    }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/medkit2006/MainActivity.java b/app/src/main/java/com/example/medkit2006/MainActivity.java
+--- a/app/src/main/java/com/example/medkit2006/MainActivity.java	(revision c384dbff5588a8ec8d5fa0df80581471b784f932)
++++ b/app/src/main/java/com/example/medkit2006/MainActivity.java	(date 1649573905994)
+@@ -2,6 +2,7 @@
+ 
+ import android.content.Intent;
+ import android.os.Bundle;
++import android.util.Log;
+ import android.view.View;
+ import android.widget.Button;
+ import android.widget.EditText;
+@@ -35,6 +36,7 @@
+     public static BookmarkMgr bookmarkMgr = new BookmarkMgr();
+     public static ChatMgr chatMgr = new ChatMgr();
+ 
++
+     @Override
+     protected void onCreate(@Nullable Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+@@ -51,10 +53,6 @@
+ 
+         new DB();
+         DB.instance.conn.returnCallbackToMainThread(true, this);
+-
+-        //Intent intent = new Intent(MainActivity.this, Success.class);
+-        //startActivity(intent);
+-        //finish();
+     }
+ 
+     public void onClickSearch(View view) {
+Index: app/src/main/java/com/example/medkit2006/control/ForumMgr.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.medkit2006.control;\n\nimport android.util.Log;\n\nimport com.BoardiesITSolutions.AndroidMySQLConnector.MySQLRow;\nimport com.example.medkit2006.data.DB;\nimport com.example.medkit2006.entity.MedicalFacility;\nimport com.example.medkit2006.entity.Post;\n\nimport org.jetbrains.annotations.NotNull;\n\nimport java.util.ArrayList;\nimport java.util.function.Consumer;\n\npublic class ForumMgr {\n\n\tpublic void getAllPost(Consumer<ArrayList<Post>> callback, Consumer<Exception> error) {\n\t\tString query = \"select * from POST\".toUpperCase();\n\t\tDB.instance.executeQuery(query, resultSet -> {\n\t\t\tArrayList<Post> post_list = new ArrayList<Post>();\n\t\t\ttry {\n\t\t\t\tMySQLRow row;\n\t\t\t\twhile ((row = resultSet.getNextRow()) != null) {\n\t\t\t\t\tPost tmp_post = new Post(row.getString(\"title\"), row.getString(\"username\"), row.getString(\"date\"));\n\t\t\t\t\tpost_list.add(tmp_post);\n\t\t\t\t\tLog.d(\"MF_Search Result\", tmp_post.getQuestion());\n\t\t\t\t}\n\t\t\t\tLog.d(\"DB_search\", String.valueOf(post_list.size()) + \"medical facility records retrieved\");\n\t\t\t} catch (Exception e) {\n\t\t\t\terror.accept(e);\n\t\t\t\treturn;\n\t\t\t}\n\t\t\tcallback.accept(post_list);\n\t\t}, error);\n\t}\n\n\t public void addPost(String title, String content, String username, String medical_facility, String tags, int status, int rating, @NotNull Runnable callback, Consumer<Exception> error) {\n\t\t DB.instance.execute(\"insert into post (title, post, comments, username, medical_facility, likes, tags, status, report) values (\\\"\"\n\t\t\t\t + title + \"\\\",\\\"\"\n\t\t\t\t + content + \"\\\",\\\"\"\n\t\t\t\t + \"\" + \"\\\",\\\"\"\n\t\t\t\t + username + \"\\\",\\\"\"\n\t\t\t\t + medical_facility + \"\\\",\\\"\"\n\t\t\t\t + \"\" + \"\\\",\\\"\"\n\t\t\t\t + tags + \"\\\",\\\"\"\n\t\t\t\t + status + \"\\\",\\\"\"\n\t\t\t\t + \"\" + \"\\\")\", callback, error);\n\t\t DB.instance.execute(\"insert into rating (username, medical_facility, rating) values (\\\"\"\n\t\t\t\t + username + \"\\\",\\\"\"\n\t\t\t\t + medical_facility + \"\\\",\\\"\"\n\t\t\t\t + rating + \"\\\")\", callback, error);\n\t }\n\n\t/**\n\t * Add comment to post if logged in and display error message otherwise\n\t * @param post\n\t * @param comment\n\t */\n\n/** TEMP TO GET RID OF ERRORS FOR BUILDING\n\n public boolean addComment(Post post, Text comment) {\n\t\t// TODO - implement ForumMgr.addComment\n\t\tForumUI forumInstance = new ForumUI();\n\t\tAccountMgr accountmgr = new AccountMgr();\n\t\tif (accountmgr.isLogin(comment.getUser()) == 0) {\n\t\t\tforumInstance.displayErrorMessage();\n\t\t\treturn false;\n\t\t}\n\t\tpost.addComment(comment);\n\t\treturn true;\n\t}\n */\n\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/medkit2006/control/ForumMgr.java b/app/src/main/java/com/example/medkit2006/control/ForumMgr.java
+--- a/app/src/main/java/com/example/medkit2006/control/ForumMgr.java	(revision c384dbff5588a8ec8d5fa0df80581471b784f932)
++++ b/app/src/main/java/com/example/medkit2006/control/ForumMgr.java	(date 1649579472143)
+@@ -4,7 +4,6 @@
+ 
+ import com.BoardiesITSolutions.AndroidMySQLConnector.MySQLRow;
+ import com.example.medkit2006.data.DB;
+-import com.example.medkit2006.entity.MedicalFacility;
+ import com.example.medkit2006.entity.Post;
+ 
+ import org.jetbrains.annotations.NotNull;
+@@ -13,17 +12,19 @@
+ import java.util.function.Consumer;
+ 
+ public class ForumMgr {
+-
+-	public void getAllPost(Consumer<ArrayList<Post>> callback, Consumer<Exception> error) {
+-		String query = "select * from POST".toUpperCase();
++	public void getPostAbstract(String query, Consumer<ArrayList<Post>> callback, Consumer<Exception> error){
+ 		DB.instance.executeQuery(query, resultSet -> {
+ 			ArrayList<Post> post_list = new ArrayList<Post>();
+ 			try {
+ 				MySQLRow row;
+ 				while ((row = resultSet.getNextRow()) != null) {
+-					Post tmp_post = new Post(row.getString("title"), row.getString("username"), row.getString("date"));
++					Post tmp_post = new Post(row.getInt("_ID"),
++							row.getString("TITLE"),
++							row.getString("USERNAME"),
++							row.getString("DATETIME"),
++							row.getString("MEDICAL_FACILITY"));
+ 					post_list.add(tmp_post);
+-					Log.d("MF_Search Result", tmp_post.getQuestion());
++					Log.d("MF_Search Result", tmp_post.getTitle());
+ 				}
+ 				Log.d("DB_search", String.valueOf(post_list.size()) + "medical facility records retrieved");
+ 			} catch (Exception e) {
+@@ -33,43 +34,85 @@
+ 			callback.accept(post_list);
+ 		}, error);
+ 	}
+-
+-	 public void addPost(String title, String content, String username, String medical_facility, String tags, int status, int rating, @NotNull Runnable callback, Consumer<Exception> error) {
++	public void getAllPostAbstract(Consumer<ArrayList<Post>> callback, Consumer<Exception> error) {
++		String query = "select * from POST order by _id".toUpperCase();
++		getPostAbstract(query, callback::accept, error::accept);
++	}
++	public void getMyPostAbstract(String username, Consumer<ArrayList<Post>> callback, Consumer<Exception> error){
++		String query = "select * from POST where USERNAME = '" + username +"' and STATUS = 1 order by _id";
++		getPostAbstract(query, callback::accept, error::accept);
++	}
++	public void getMyDraftAbstract(String username, Consumer<ArrayList<Post>> callback, Consumer<Exception> error){
++		String query = "select * from POST where USERNAME = '" + username +"' and STATUS = 0 order by _id";
++		getPostAbstract(query, callback::accept, error::accept);
++
++	}
++	public void getPostDetail(int post_id, Consumer<Post> callback, Consumer<Exception> error) {
++		String query = "select * from POST where _ID = " + post_id;
++		DB.instance.executeQuery(query, resultSet -> {
++			Post tmp_post = null;
++			try {
++				MySQLRow row;
++				while ((row = resultSet.getNextRow()) != null) {
++					int like, report;
++					try{ like = row.getInt("LIKES");}catch(Exception e){ like = 0; }
++					try{ report = row.getInt("REPORTS");}catch(Exception e){ report = 0; }
++					 tmp_post = new Post(
++							row.getInt("_ID"),
++							row.getString("TITLE"),
++							row.getString("POST"),
++							row.getString("COMMENTS"),
++							row.getString("DATETIME"),
++							row.getString("USERNAME"),
++							row.getString("MEDICAL_FACILITY"),
++							row.getString("TAGS"),
++							like, report);
++					Log.d("MF_Search Result", tmp_post.getTitle());
++				}
++				Log.d("Forum_mgr get detail of", tmp_post.getTitle());
++			} catch (Exception e) {
++				error.accept(e);
++				return;
++			}
++			callback.accept(tmp_post);
++		}, error);
++	}
++	public void addPost(String title, String content, String username, String medical_facility, String tags, int status, int rating, @NotNull Runnable callback, Consumer<Exception> error) {
+ 		 DB.instance.execute("insert into post (title, post, comments, username, medical_facility, likes, tags, status, report) values (\""
+ 				 + title + "\",\""
+ 				 + content + "\",\""
+ 				 + "" + "\",\""
+ 				 + username + "\",\""
+ 				 + medical_facility + "\",\""
+-				 + "" + "\",\""
++				 + 0 + "\",\""
+ 				 + tags + "\",\""
+ 				 + status + "\",\""
+-				 + "" + "\")", callback, error);
++				 + 0 + "\")", callback, error);
++		 if(status == 1 ){
+ 		 DB.instance.execute("insert into rating (username, medical_facility, rating) values (\""
+ 				 + username + "\",\""
+ 				 + medical_facility + "\",\""
+-				 + rating + "\")", callback, error);
++				 + rating + "\")", callback, error);}
+ 	 }
+-
+-	/**
+-	 * Add comment to post if logged in and display error message otherwise
+-	 * @param post
+-	 * @param comment
+-	 */
+-
+-/** TEMP TO GET RID OF ERRORS FOR BUILDING
+-
+- public boolean addComment(Post post, Text comment) {
+-		// TODO - implement ForumMgr.addComment
+-		ForumUI forumInstance = new ForumUI();
+-		AccountMgr accountmgr = new AccountMgr();
+-		if (accountmgr.isLogin(comment.getUser()) == 0) {
+-			forumInstance.displayErrorMessage();
+-			return false;
+-		}
+-		post.addComment(comment);
+-		return true;
++	public void updatePost(int ID, String title, String content, String newDate, String username, String medical_facility, String tags, int status, int rating, @NotNull Runnable callback, Consumer<Exception> error) {
++		DB.instance.execute("update post set"
++				+ " TITLE = '" + title + "',"
++				+ " POST = '" + content + "',"
++				+ " DATETIME = '" + newDate + "',"
++				+ " MEDICAL_FACILITY = '" + medical_facility + "',"
++				+ " TAGS = '" + tags + "',"
++				+ " STATUS = " + status +" WHERE _ID = " + ID , callback, error);
++		if(status == 1){
++		DB.instance.execute("insert into rating (username, medical_facility, rating) values (\""
++				+ username + "\",\""
++				+ medical_facility + "\",\""
++				+ rating + "\")", callback, error);}
++	}
++	public void deletePost(int post_id){
++		String query = "delete from post where _ID = "+post_id;
++		DB.instance.execute(query, ()->{}, e -> {
++			Log.d("ForumMgr delete post failure", e.getMessage());
++		});
+ 	}
+- */
+ 
+ }
+\ No newline at end of file
+Index: app/src/main/res/layout/feed_tile.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<LinearLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    android:layout_width=\"match_parent\"\n    android:orientation=\"vertical\"\n    android:padding=\"10dp\"\n    android:layout_height=\"match_parent\">\n\n    <TextView\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"wrap_content\"\n        android:padding=\"5dp\"\n        android:textSize=\"13dp\"\n        android:id=\"@+id/question\"/>\n\n    <LinearLayout\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"wrap_content\"\n        android:padding=\"5dp\"\n        android:orientation=\"horizontal\">\n        <TextView\n            android:layout_width=\"0dp\"\n            android:layout_height=\"wrap_content\"\n            android:textSize=\"10dp\"\n            android:layout_weight=\"1\"\n            android:id=\"@+id/userId\"/>\n\n        <TextView\n            android:layout_width=\"0dp\"\n            android:layout_height=\"wrap_content\"\n            android:layout_weight=\"1\"\n            android:textSize=\"10dp\"\n            android:id=\"@+id/date\"/>\n    </LinearLayout>\n\n</LinearLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/feed_tile.xml b/app/src/main/res/layout/feed_tile.xml
+--- a/app/src/main/res/layout/feed_tile.xml	(revision c384dbff5588a8ec8d5fa0df80581471b784f932)
++++ b/app/src/main/res/layout/feed_tile.xml	(date 1649557590640)
+@@ -11,6 +11,12 @@
+         android:padding="5dp"
+         android:textSize="13dp"
+         android:id="@+id/question"/>
++    <TextView
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:padding="5dp"
++        android:textSize="13dp"
++        android:id="@+id/post_facility"/>
+ 
+     <LinearLayout
+         android:layout_width="match_parent"
+Index: app/src/main/java/com/example/medkit2006/entity/MedicalFacility.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.medkit2006.entity;\nimport java.util.ArrayList;\n\npublic class MedicalFacility {\n\tprivate String type;\n\tprivate String name;\n\tprivate String address;\n\tprivate String contact;\n\tprivate float latitude;\n\tprivate float longitude;\n\tprivate String description;\n\tprivate ArrayList<Rating> ratings;\n\tprivate ArrayList<Service> services;\n\tprivate ArrayList<User> notifyList;\n\n\n\t/**\n\t * Empty Constructor for medical facility\n\t * \t */\n\tpublic MedicalFacility() {\n\t}\n\n\t/**\n\t * Constructor for medical facility\n\t * @param name Name of medical Facility\n\t */\n\tpublic MedicalFacility(String name) {\n\t\tthis.name = name;\n\t}\n\t\n\t/**\n\t * Set name of medical facility name\n\t * @param name medical facility name\n\t */\n\tpublic void setName(String name) {\n\t\tthis.name = name;\n\t}\n\n\t/**\n\t * Get name of medical facility\n\t * @return medical facility name\n\t */\n\tpublic String getName() {\n\t\treturn this.name;\n\t}\n\n\t/**\n\t * Get address of medical facility\n\t * @return medical facility address\n\t */\n\tpublic String getAddress() {\n\t\treturn this.address;\n\t}\n\n\t/**\n\t * Set Address of medical facility\n\t * @param address Medical facility address\n\t */\n\tpublic void setAddress(String address) {\n\t\tthis.address = address;\n\t}\n\n\t/**\n\t * Get contact number of medical facility\n\t * @return contact number\n\t */\n\tpublic String getContact() {\n\t\treturn this.contact;\n\t}\n\n\t/**\n\t * Set contact number of medical facility\n\t * @param contact Medical facility contact number\n\t */\n\tpublic void setContact(String contact) {\n\t\tthis.contact = contact;\n\t}\n\n\t/**\n\t * Get list of all ratings of the medical facility \n\t * @return list of all ratings\n\t */\n\tpublic ArrayList<Rating> getRatings() {\n\t\treturn  this.ratings;\n\t}\n\n\t/**\n\t * Add a new rating to list of all ratings\n\t * @param rating Medical facility rating\n\t */\n\tpublic void addRating(Rating rating) {\n\t\t// TODO - implement MedicalFacility.addRating\n\t\tratings.add(rating); //add a new rating to the array list\n\t\t\n\t\tthrow new UnsupportedOperationException();\n\t}\n\tpublic float getAverageRating() {\n\t\t// TODO - implement MedicalFacility.getAverageRating\n\t\tint size = ratings.size(); //sum of all ratings\n\t\tfloat sum=0;\n\t\tfor(Rating i: ratings) {\n\t\t\tsum += i.getRating();\n\t\t}\n\t\treturn sum/size;\n\t\t\n\t}\n\tpublic void addServices(Service service) {services.add(service); }\n\tpublic ArrayList<Service> getServices() {\n\t\treturn this.services;\n\t}\n\n\tpublic void setType(String type){\n\t\tthis.type = type;\n\t}\n\tpublic String getType(){return this.type;}\n\n\tpublic void addNotifyUser(User user){\n\t\tnotifyList.add(user);\n\t}\n\tpublic ArrayList<User> getNotifyList() {\n\t\treturn this.notifyList;\n\t}\n\tpublic void setLatitude(float lat){this.latitude = lat; }\n\tpublic float getLatitude(){return this.latitude; }\n\tpublic void setLongitude(float longitude){this.longitude = longitude; }\n\tpublic float getLongitude(){return this.longitude; }\n\tpublic void setDescription(String des){this.description = des; }\n\tpublic String getDescription(){return this.description; }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/medkit2006/entity/MedicalFacility.java b/app/src/main/java/com/example/medkit2006/entity/MedicalFacility.java
+--- a/app/src/main/java/com/example/medkit2006/entity/MedicalFacility.java	(revision c384dbff5588a8ec8d5fa0df80581471b784f932)
++++ b/app/src/main/java/com/example/medkit2006/entity/MedicalFacility.java	(date 1649524807764)
+@@ -9,11 +9,10 @@
+ 	private float latitude;
+ 	private float longitude;
+ 	private String description;
+-	private ArrayList<Rating> ratings;
++	private float aveRating;
+ 	private ArrayList<Service> services;
+ 	private ArrayList<User> notifyList;
+ 
+-
+ 	/**
+ 	 * Empty Constructor for medical facility
+ 	 * 	 */
+@@ -80,46 +79,16 @@
+ 	 * Get list of all ratings of the medical facility 
+ 	 * @return list of all ratings
+ 	 */
+-	public ArrayList<Rating> getRatings() {
+-		return  this.ratings;
+-	}
+-
+-	/**
+-	 * Add a new rating to list of all ratings
+-	 * @param rating Medical facility rating
+-	 */
+-	public void addRating(Rating rating) {
+-		// TODO - implement MedicalFacility.addRating
+-		ratings.add(rating); //add a new rating to the array list
+-		
+-		throw new UnsupportedOperationException();
+-	}
+-	public float getAverageRating() {
+-		// TODO - implement MedicalFacility.getAverageRating
+-		int size = ratings.size(); //sum of all ratings
+-		float sum=0;
+-		for(Rating i: ratings) {
+-			sum += i.getRating();
+-		}
+-		return sum/size;
+-		
+-	}
++	public void setAveRating(float rating) { this.aveRating = rating; }
++	public float getAveRating() { return this.aveRating; }
+ 	public void addServices(Service service) {services.add(service); }
+ 	public ArrayList<Service> getServices() {
+ 		return this.services;
+ 	}
+-
+-	public void setType(String type){
+-		this.type = type;
+-	}
++	public void setType(String type){ this.type = type; }
+ 	public String getType(){return this.type;}
+-
+-	public void addNotifyUser(User user){
+-		notifyList.add(user);
+-	}
+-	public ArrayList<User> getNotifyList() {
+-		return this.notifyList;
+-	}
++	public void addNotifyUser(User user){ notifyList.add(user); }
++	public ArrayList<User> getNotifyList() { return this.notifyList; }
+ 	public void setLatitude(float lat){this.latitude = lat; }
+ 	public float getLatitude(){return this.latitude; }
+ 	public void setLongitude(float longitude){this.longitude = longitude; }
+Index: app/src/main/java/com/example/medkit2006/FeedAdapter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.medkit2006;\n\nimport android.app.Activity;\nimport android.view.LayoutInflater;\nimport android.view.View;\nimport android.view.ViewGroup;\nimport android.widget.ArrayAdapter;\nimport android.widget.TextView;\n\nimport androidx.annotation.NonNull;\n\nimport com.example.medkit2006.entity.Post;\n\nimport java.util.ArrayList;\n\n/**\n * Created by Student on 4/29/2017.\n */\n\npublic class FeedAdapter extends ArrayAdapter<Post>{\n\n    public FeedAdapter(Activity context, ArrayList<Post> feeds)\n    {\n        super(context,0,feeds);\n    }\n\n    @NonNull\n    @Override\n    public View getView(int position, View convertView, ViewGroup parent) {\n        View listItemView = convertView;\n        if(listItemView == null) {\n            listItemView = LayoutInflater.from(getContext()).inflate(\n                    R.layout.feed_tile, parent, false);\n        }\n        Post current = getItem(position);\n        TextView question = (TextView) listItemView.findViewById(R.id.question);\n        question.setText(current.getQuestion());\n\n        TextView username = (TextView) listItemView.findViewById(R.id.userId);\n        username.setText(current.getUsername());\n\n        TextView date = (TextView) listItemView.findViewById(R.id.date);\n        date.setText(current.getDate());\n\n        // Return the whole list item layout (containing 2 TextViews and an ImageView)\n        // so that it can be shown in the ListView\n        return listItemView;\n    }\n\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/medkit2006/FeedAdapter.java b/app/src/main/java/com/example/medkit2006/FeedAdapter.java
+--- a/app/src/main/java/com/example/medkit2006/FeedAdapter.java	(revision c384dbff5588a8ec8d5fa0df80581471b784f932)
++++ b/app/src/main/java/com/example/medkit2006/FeedAdapter.java	(date 1649559012112)
+@@ -33,17 +33,18 @@
+                     R.layout.feed_tile, parent, false);
+         }
+         Post current = getItem(position);
+-        TextView question = (TextView) listItemView.findViewById(R.id.question);
+-        question.setText(current.getQuestion());
++        TextView question = listItemView.findViewById(R.id.question);
++        question.setText(current.getTitle());
+ 
+-        TextView username = (TextView) listItemView.findViewById(R.id.userId);
++        TextView facility = listItemView.findViewById(R.id.post_facility);
++        question.setText(current.getFacility());
++
++        TextView username = listItemView.findViewById(R.id.userId);
+         username.setText(current.getUsername());
+ 
+-        TextView date = (TextView) listItemView.findViewById(R.id.date);
++        TextView date = listItemView.findViewById(R.id.date);
+         date.setText(current.getDate());
+ 
+-        // Return the whole list item layout (containing 2 TextViews and an ImageView)
+-        // so that it can be shown in the ListView
+         return listItemView;
+     }
+ 
+Index: app/src/main/java/com/example/medkit2006/boundary/PostDraftUI.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.medkit2006.boundary;\n\nimport android.content.Intent;\nimport android.database.Cursor;\nimport android.database.sqlite.SQLiteDatabase;\nimport android.os.Bundle;\nimport android.view.View;\nimport android.widget.AdapterView;\nimport android.widget.ListView;\n\nimport androidx.appcompat.app.AppCompatActivity;\n\nimport com.example.medkit2006.FeedAdapter;\nimport com.example.medkit2006.R;\nimport com.example.medkit2006.entity.Post;\nimport com.example.medkit2006.data.ForumContract;\nimport com.example.medkit2006.data.ForumDbHelper;\n\nimport java.util.ArrayList;\n\npublic class PostDraftUI extends AppCompatActivity {\n\n    @Override\n    protected void onCreate(Bundle savedInstanceState) {\n        super.onCreate(savedInstanceState);\n        setContentView(R.layout.activity_post_drafts);\n        setTitle(\"Your Drafts\");\n        ArrayList<Post> words = new ArrayList<Post>();\n        ForumDbHelper helper = new ForumDbHelper(this);\n        SQLiteDatabase db = helper.getReadableDatabase();\n        String projection[] = {\n                ForumContract.ForumEntry.COLUMN_TITLE,\n                ForumContract.ForumEntry.COLUMN_USER,\n                ForumContract.ForumEntry.COLUMN_DATE,\n                ForumContract.ForumEntry.COLUMN_STATUS\n        };\n        String selection = ForumContract.ForumEntry.COLUMN_STATUS + \"=? AND \" + ForumContract.ForumEntry.COLUMN_USER + \"=?\";\n        String[] selectionArgs = {\"0\",getUser()};\n        Cursor cursor = db.query(ForumContract.ForumEntry.TABLE_NAME, projection,selection,selectionArgs,null,null,null);\n        try {\n            int userColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_USER);\n            int dateColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_DATE);\n            int titleColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_TITLE);\n            while(cursor.moveToNext())\n            {\n                String userID = cursor.getString(userColumnIndex);\n                String date = cursor.getString(dateColumnIndex);\n                String title = cursor.getString(titleColumnIndex);\n                words.add(new Post(title,userID,date));\n            }\n        } finally {\n            cursor.close();\n        }\n        FeedAdapter itemsAdapter = new FeedAdapter(this,words);\n        final ListView listView = (ListView) findViewById(R.id.list);\n        listView.setAdapter(itemsAdapter);\n\n        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()\n        {\n            @Override\n            public void onItemClick(AdapterView<?> adapter, View v, int position, long arg3)\n            {\n                Intent i = new Intent(PostDraftUI.this, PostToDraftUI.class);\n                Post selectedFromList = (Post)(listView.getItemAtPosition(position));\n                i.putExtra(\"date\" , selectedFromList.getDate());\n                i.putExtra(\"username\", getUser());\n                startActivity(i);\n            }\n        });\n    }\n\n    public String getUser()\n    {\n        Intent i = getIntent();\n        Bundle bd = i.getExtras();\n        String username = \"\";\n        if(bd != null)\n        {\n            String name = (String) bd.get(\"username\");\n            username = name;\n        }\n        return username;\n    }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/medkit2006/boundary/PostDraftUI.java b/app/src/main/java/com/example/medkit2006/boundary/PostDraftUI.java
+--- a/app/src/main/java/com/example/medkit2006/boundary/PostDraftUI.java	(revision c384dbff5588a8ec8d5fa0df80581471b784f932)
++++ b/app/src/main/java/com/example/medkit2006/boundary/PostDraftUI.java	(date 1649562112241)
+@@ -4,6 +4,7 @@
+ import android.database.Cursor;
+ import android.database.sqlite.SQLiteDatabase;
+ import android.os.Bundle;
++import android.util.Log;
+ import android.view.View;
+ import android.widget.AdapterView;
+ import android.widget.ListView;
+@@ -11,6 +12,7 @@
+ import androidx.appcompat.app.AppCompatActivity;
+ 
+ import com.example.medkit2006.FeedAdapter;
++import com.example.medkit2006.MainActivity;
+ import com.example.medkit2006.R;
+ import com.example.medkit2006.entity.Post;
+ import com.example.medkit2006.data.ForumContract;
+@@ -25,35 +27,18 @@
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_post_drafts);
+         setTitle("Your Drafts");
+-        ArrayList<Post> words = new ArrayList<Post>();
+-        ForumDbHelper helper = new ForumDbHelper(this);
+-        SQLiteDatabase db = helper.getReadableDatabase();
+-        String projection[] = {
+-                ForumContract.ForumEntry.COLUMN_TITLE,
+-                ForumContract.ForumEntry.COLUMN_USER,
+-                ForumContract.ForumEntry.COLUMN_DATE,
+-                ForumContract.ForumEntry.COLUMN_STATUS
+-        };
+-        String selection = ForumContract.ForumEntry.COLUMN_STATUS + "=? AND " + ForumContract.ForumEntry.COLUMN_USER + "=?";
+-        String[] selectionArgs = {"0",getUser()};
+-        Cursor cursor = db.query(ForumContract.ForumEntry.TABLE_NAME, projection,selection,selectionArgs,null,null,null);
+-        try {
+-            int userColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_USER);
+-            int dateColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_DATE);
+-            int titleColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_TITLE);
+-            while(cursor.moveToNext())
+-            {
+-                String userID = cursor.getString(userColumnIndex);
+-                String date = cursor.getString(dateColumnIndex);
+-                String title = cursor.getString(titleColumnIndex);
+-                words.add(new Post(title,userID,date));
+-            }
+-        } finally {
+-            cursor.close();
+-        }
+-        FeedAdapter itemsAdapter = new FeedAdapter(this,words);
+         final ListView listView = (ListView) findViewById(R.id.list);
+-        listView.setAdapter(itemsAdapter);
++        MainActivity.forumMgr.getMyDraftAbstract(getUser(), postList->{
++            runOnUiThread(new Runnable() {
++                @Override
++                public void run() {
++                    FeedAdapter itemsAdapter = new FeedAdapter(PostDraftUI.this,postList);
++                    listView.setAdapter(itemsAdapter);
++                }
++            });
++        }, error->{
++            Log.d("Post Draft OnCreate error", error.getMessage());
++        });
+ 
+         listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+         {
+@@ -62,8 +47,8 @@
+             {
+                 Intent i = new Intent(PostDraftUI.this, PostToDraftUI.class);
+                 Post selectedFromList = (Post)(listView.getItemAtPosition(position));
+-                i.putExtra("date" , selectedFromList.getDate());
+-                i.putExtra("username", getUser());
++                i.putExtra(ForumUI.EXTRA, selectedFromList.getID());
++                i.putExtra(ForumUI.USEREXTRA, getUser());
+                 startActivity(i);
+             }
+         });
+@@ -72,13 +57,7 @@
+     public String getUser()
+     {
+         Intent i = getIntent();
+-        Bundle bd = i.getExtras();
+-        String username = "";
+-        if(bd != null)
+-        {
+-            String name = (String) bd.get("username");
+-            username = name;
+-        }
++        String username = i.getStringExtra(ForumUI.USEREXTRA);
+         return username;
+     }
+ }
+Index: app/src/main/java/com/example/medkit2006/entity/Post.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.medkit2006.entity;\n\n/**\n * Created by Student on 4/29/2017.\n */\n\npublic class Post {\n    private final String title;\n    private final String username;\n    private final String date;\n\n    //Used to initialize database tile\n    public Post(String fquestion, String fusername, String fdate)\n    {\n        title = fquestion;\n        username = fusername;\n        date = fdate;\n    }\n\n    public String getQuestion()\n    {\n        return title;\n    }\n\n    public String getUsername()\n    {\n        return username;\n    }\n\n    public String getDate()\n    {\n        return date;\n    }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/medkit2006/entity/Post.java b/app/src/main/java/com/example/medkit2006/entity/Post.java
+--- a/app/src/main/java/com/example/medkit2006/entity/Post.java	(revision c384dbff5588a8ec8d5fa0df80581471b784f932)
++++ b/app/src/main/java/com/example/medkit2006/entity/Post.java	(date 1649562112247)
+@@ -5,19 +5,74 @@
+  */
+ 
+ public class Post {
+-    private final String title;
+-    private final String username;
+-    private final String date;
++
++    private int _id;
++    private String title;
++    private String content;
++    private String comments;
++    private String date;
++    private String username;
++    private String facility;
++    private String tags;
++    private int likeNum;
++    private int reportNum;
+ 
+     //Used to initialize database tile
+-    public Post(String fquestion, String fusername, String fdate)
++    public Post(){}
++    public Post(int id, String fquestion, String fusername, String fdate, String ffacility)
+     {
+         title = fquestion;
+         username = fusername;
+         date = fdate;
++        _id = id;
++        facility = ffacility;
++    }
++    public Post(int id, String ftitle, String fcontent, String fcomments, String fdate, String fusername, String ffacility, String ftags, int numLikes, int numReports)
++    {
++        _id = id;
++        title = ftitle;
++        content = fcontent;
++        comments = fcomments;
++        date = fdate;
++        username = fusername;
++        facility = ffacility;
++        tags = ftags;
++        likeNum = numLikes;
++        reportNum = numReports;
+     }
+ 
+-    public String getQuestion()
++
++
++    public void setDate(String a) { date = a; }
++
++    public String getDate() { return date; }
++
++    public void setLikeNum(int a) { likeNum = a; }
++
++    public String getContent() { return content; }
++
++    public int getLikeNum() { return likeNum; }
++
++    public void setReportNum(int a) { reportNum = a; }
++
++    public int getReportNum()
++    {
++        return reportNum;
++    }
++
++    public void setComments(String a)
++    {
++        comments = a;
++    }
++
++    public String getFacility() { return facility; }
++
++    public String getComments()
++    {
++        return comments;
++    }
++
++    public String getTitle()
+     {
+         return title;
+     }
+@@ -27,8 +82,10 @@
+         return username;
+     }
+ 
+-    public String getDate()
++    public int getID()
+     {
+-        return date;
++        return _id;
+     }
++
++    public String getTags() { return tags; }
+ }
+Index: app/src/main/java/com/example/medkit2006/boundary/PostDetailUI.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.medkit2006.boundary;\n\nimport android.content.ContentValues;\nimport android.content.Intent;\nimport android.database.Cursor;\nimport android.database.sqlite.SQLiteDatabase;\nimport android.os.Bundle;\nimport android.view.View;\nimport android.widget.AdapterView;\nimport android.widget.ArrayAdapter;\nimport android.widget.Button;\nimport android.widget.EditText;\nimport android.widget.ListView;\nimport android.widget.TextView;\n\nimport androidx.appcompat.app.AppCompatActivity;\n\nimport com.example.medkit2006.R;\nimport com.example.medkit2006.data.ForumContract;\nimport com.example.medkit2006.data.ForumDbHelper;\n\npublic class PostDetailUI extends AppCompatActivity {\n\n    private int likeRef;\n    private int reportRef;\n    private String comments;\n    private String theDate;\n    private int likeFlag = 0;\n    private int reportFlag = 0;\n\n    public void setDate(String a)\n    {\n        theDate = a;\n    }\n\n    public String getDate()\n    {\n        return theDate;\n    }\n\n    public void setLikeFlag()\n    {\n        likeFlag = 1;\n    }\n\n    public int getLikeFlag()\n    {\n        return likeFlag;\n    }\n\n    public void setReportFlag()\n    {\n        reportFlag = 1;\n    }\n\n    public int getReportFlag()\n    {\n        return reportFlag;\n    }\n\n    public void setLikeRef(int a)\n    {\n        likeRef = a;\n    }\n\n    public int getLikeRef()\n    {\n        return likeRef;\n    }\n\n    public void setReportRef(int a)\n    {\n        reportRef = a;\n    }\n\n    public int getReportRef()\n    {\n        return reportRef;\n    }\n\n    public void setComments(String a)\n    {\n        comments = a;\n    }\n\n    public String getComments()\n    {\n        return comments;\n    }\n\n    @Override\n    protected void onCreate(Bundle savedInstanceState) {\n        super.onCreate(savedInstanceState);\n        setContentView(R.layout.activity_post_detail);\n        Intent i = getIntent();\n        Bundle bd = i.getExtras();\n        String date = \"\";\n        if(bd != null)\n        {\n            String fdate = (String) bd.get(\"date\");\n            date = fdate;\n        }\n\n        TextView title = (TextView) findViewById(R.id.title);\n        TextView user = (TextView) findViewById(R.id.user);\n        TextView datef = (TextView) findViewById(R.id.date);\n        TextView tags = (TextView) findViewById(R.id.tags);\n        TextView post = (TextView) findViewById(R.id.post);\n        final TextView numLikes = (TextView) findViewById(R.id.numLikes);\n\n        ForumDbHelper helper = new ForumDbHelper(this);\n        SQLiteDatabase db = helper.getReadableDatabase();\n        String projection[] = {\n                ForumContract.ForumEntry.COLUMN_TITLE,\n                ForumContract.ForumEntry.COLUMN_USER,\n                ForumContract.ForumEntry.COLUMN_DATE,\n                ForumContract.ForumEntry.COLUMN_REPORT,\n                ForumContract.ForumEntry.COLUMN_COMMENTS,\n                ForumContract.ForumEntry.COLUMN_LIKES,\n                ForumContract.ForumEntry.COLUMN_TAGS,\n                ForumContract.ForumEntry.COLUMN_POST\n        };\n\n        String selection = ForumContract.ForumEntry.COLUMN_DATE + \"=?\";\n        String[] selectionArgs = {date};\n        Cursor cursor = db.query(ForumContract.ForumEntry.TABLE_NAME, projection,selection,selectionArgs,null,null,null);\n        try {\n            int userColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_USER);\n            int dateColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_DATE);\n            int titleColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_TITLE);\n            int reportColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_REPORT);\n            int commentColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_COMMENTS);\n            int likesColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_LIKES);\n            int tagsColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_TAGS);\n            int postColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_POST);\n            while(cursor.moveToNext())\n            {\n                String userID = cursor.getString(userColumnIndex);\n                String postDate = cursor.getString(dateColumnIndex);\n                setDate(postDate);\n                String postTitle = cursor.getString(titleColumnIndex);\n                int reportPost = cursor.getInt(reportColumnIndex);\n                setReportRef(reportPost);\n                String commentPost = cursor.getString(commentColumnIndex);\n                setComments(commentPost);\n                int postLikes = cursor.getInt(likesColumnIndex);\n                setLikeRef(postLikes);\n                String postTags = cursor.getString(tagsColumnIndex);\n                String mainPost = cursor.getString(postColumnIndex);\n                if(reportPost == 5)\n                {\n                    setTitle(\"Reported Post\");\n                }\n                else\n                {\n                    setTitle(postTitle);\n                    user.append(userID);\n                    title.setText(postTitle);\n                    datef.setText(postDate);\n                    tags.append(postTags);\n                    post.setText(mainPost);\n                    numLikes.append(\"\" + postLikes);\n                    String items[] = commentPost.split(\"\\n\");\n                    ArrayAdapter<String> itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items);\n                    ListView listView = (ListView) findViewById(R.id.commList);\n                    listView.setAdapter(itemsAdapter);\n                }\n            }\n        } finally {\n            cursor.close();\n        }\n\n        final Button like = (Button) findViewById(R.id.like);\n        final Button report = (Button) findViewById(R.id.report);\n        Button comIt = (Button) findViewById(R.id.comIt);\n        final EditText comment = (EditText) findViewById(R.id.comment);\n        final SQLiteDatabase wdb = helper.getWritableDatabase();\n        final ContentValues values = new ContentValues();\n        final int likeFlag = 0;\n        like.setOnClickListener(new View.OnClickListener() {\n            @Override\n            public void onClick(View view) {\n                if(getLikeFlag() == 0) {\n                    values.put(ForumContract.ForumEntry.COLUMN_LIKES, getLikeRef() + 1);\n                    String selection = ForumContract.ForumEntry.COLUMN_DATE + \"=?\";\n                    String selectionArgs[] = {getDate()};\n                    wdb.update(ForumContract.ForumEntry.TABLE_NAME,values,selection,selectionArgs);\n                    TextView newNumLikes = (TextView) findViewById(R.id.numLikes);\n                    newNumLikes.setText(\"Likes: \" + Integer.toString(getLikeRef() + 1));\n                    setLikeFlag();\n                }\n            }\n        });\n\n        report.setOnClickListener(new View.OnClickListener() {\n            @Override\n            public void onClick(View view) {\n                if(getReportFlag() == 0)\n                {\n                    values.put(ForumContract.ForumEntry.COLUMN_REPORT, getReportRef() + 1);\n                    String selection = ForumContract.ForumEntry.COLUMN_DATE + \"=?\";\n                    String selectionArgs[] = {getDate()};\n                    wdb.update(ForumContract.ForumEntry.TABLE_NAME,values,selection,selectionArgs);\n                    setReportFlag();\n                    Intent intent = getIntent();\n                    finish();\n                    startActivity(intent);\n                }\n            }\n        });\n\n        comIt.setOnClickListener(new View.OnClickListener() {\n            @Override\n            public void onClick(View view) {\n                values.put(ForumContract.ForumEntry.COLUMN_COMMENTS, getComments() + comment.getText().toString().trim() + '\\n');\n                String selection = ForumContract.ForumEntry.COLUMN_DATE + \"=?\";\n                String selectionArgs[] = {getDate()};\n                wdb.update(ForumContract.ForumEntry.TABLE_NAME,values,selection,selectionArgs);\n                Intent intent = getIntent();\n                finish();\n                startActivity(intent);\n            }\n        });\n    }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/medkit2006/boundary/PostDetailUI.java b/app/src/main/java/com/example/medkit2006/boundary/PostDetailUI.java
+--- a/app/src/main/java/com/example/medkit2006/boundary/PostDetailUI.java	(revision c384dbff5588a8ec8d5fa0df80581471b784f932)
++++ b/app/src/main/java/com/example/medkit2006/boundary/PostDetailUI.java	(date 1649577330498)
+@@ -5,6 +5,7 @@
+ import android.database.Cursor;
+ import android.database.sqlite.SQLiteDatabase;
+ import android.os.Bundle;
++import android.util.Log;
+ import android.view.View;
+ import android.widget.AdapterView;
+ import android.widget.ArrayAdapter;
+@@ -12,182 +13,90 @@
+ import android.widget.EditText;
+ import android.widget.ListView;
+ import android.widget.TextView;
++import android.widget.Toast;
+ 
+ import androidx.appcompat.app.AppCompatActivity;
+ 
++import com.BoardiesITSolutions.AndroidMySQLConnector.Exceptions.SQLColumnNotFoundException;
++import com.BoardiesITSolutions.AndroidMySQLConnector.MySQLRow;
++import com.example.medkit2006.MainActivity;
+ import com.example.medkit2006.R;
++import com.example.medkit2006.data.DB;
+ import com.example.medkit2006.data.ForumContract;
+ import com.example.medkit2006.data.ForumDbHelper;
++import com.example.medkit2006.entity.Post;
+ 
+ public class PostDetailUI extends AppCompatActivity {
+-
+-    private int likeRef;
+-    private int reportRef;
+-    private String comments;
+-    private String theDate;
++    private int post_id;
+     private int likeFlag = 0;
+     private int reportFlag = 0;
+-
+-    public void setDate(String a)
+-    {
+-        theDate = a;
+-    }
+-
+-    public String getDate()
+-    {
+-        return theDate;
+-    }
+-
+-    public void setLikeFlag()
+-    {
+-        likeFlag = 1;
+-    }
+-
+-    public int getLikeFlag()
+-    {
+-        return likeFlag;
+-    }
+-
+-    public void setReportFlag()
+-    {
+-        reportFlag = 1;
+-    }
+-
+-    public int getReportFlag()
+-    {
+-        return reportFlag;
+-    }
+-
+-    public void setLikeRef(int a)
+-    {
+-        likeRef = a;
+-    }
+-
+-    public int getLikeRef()
+-    {
+-        return likeRef;
+-    }
+-
+-    public void setReportRef(int a)
+-    {
+-        reportRef = a;
+-    }
+-
+-    public int getReportRef()
+-    {
+-        return reportRef;
+-    }
+-
+-    public void setComments(String a)
+-    {
+-        comments = a;
+-    }
+-
+-    public String getComments()
+-    {
+-        return comments;
+-    }
++    private int likeNum = 0;
++    private int reportNum = 0;
++    private String comments = null;
++    public void setLikeFlag() { likeFlag = 1; }
++    public int getLikeFlag() { return likeFlag; }
++    public void setReportFlag() { reportFlag = 1; }
++    public int getReportFlag() { return reportFlag; }
+ 
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_post_detail);
+         Intent i = getIntent();
+-        Bundle bd = i.getExtras();
+-        String date = "";
+-        if(bd != null)
+-        {
+-            String fdate = (String) bd.get("date");
+-            date = fdate;
+-        }
+-
+-        TextView title = (TextView) findViewById(R.id.title);
+-        TextView user = (TextView) findViewById(R.id.user);
+-        TextView datef = (TextView) findViewById(R.id.date);
+-        TextView tags = (TextView) findViewById(R.id.tags);
+-        TextView post = (TextView) findViewById(R.id.post);
+-        final TextView numLikes = (TextView) findViewById(R.id.numLikes);
++        post_id = i.getIntExtra(ForumUI.EXTRA, -1);
+ 
+-        ForumDbHelper helper = new ForumDbHelper(this);
+-        SQLiteDatabase db = helper.getReadableDatabase();
+-        String projection[] = {
+-                ForumContract.ForumEntry.COLUMN_TITLE,
+-                ForumContract.ForumEntry.COLUMN_USER,
+-                ForumContract.ForumEntry.COLUMN_DATE,
+-                ForumContract.ForumEntry.COLUMN_REPORT,
+-                ForumContract.ForumEntry.COLUMN_COMMENTS,
+-                ForumContract.ForumEntry.COLUMN_LIKES,
+-                ForumContract.ForumEntry.COLUMN_TAGS,
+-                ForumContract.ForumEntry.COLUMN_POST
+-        };
+-
+-        String selection = ForumContract.ForumEntry.COLUMN_DATE + "=?";
+-        String[] selectionArgs = {date};
+-        Cursor cursor = db.query(ForumContract.ForumEntry.TABLE_NAME, projection,selection,selectionArgs,null,null,null);
+-        try {
+-            int userColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_USER);
+-            int dateColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_DATE);
+-            int titleColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_TITLE);
+-            int reportColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_REPORT);
+-            int commentColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_COMMENTS);
+-            int likesColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_LIKES);
+-            int tagsColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_TAGS);
+-            int postColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_POST);
+-            while(cursor.moveToNext())
+-            {
+-                String userID = cursor.getString(userColumnIndex);
+-                String postDate = cursor.getString(dateColumnIndex);
+-                setDate(postDate);
+-                String postTitle = cursor.getString(titleColumnIndex);
+-                int reportPost = cursor.getInt(reportColumnIndex);
+-                setReportRef(reportPost);
+-                String commentPost = cursor.getString(commentColumnIndex);
+-                setComments(commentPost);
+-                int postLikes = cursor.getInt(likesColumnIndex);
+-                setLikeRef(postLikes);
+-                String postTags = cursor.getString(tagsColumnIndex);
+-                String mainPost = cursor.getString(postColumnIndex);
+-                if(reportPost == 5)
+-                {
+-                    setTitle("Reported Post");
+-                }
+-                else
+-                {
+-                    setTitle(postTitle);
+-                    user.append(userID);
+-                    title.setText(postTitle);
+-                    datef.setText(postDate);
+-                    tags.append(postTags);
+-                    post.setText(mainPost);
+-                    numLikes.append("" + postLikes);
+-                    String items[] = commentPost.split("\n");
+-                    ArrayAdapter<String> itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items);
+-                    ListView listView = (ListView) findViewById(R.id.commList);
+-                    listView.setAdapter(itemsAdapter);
+-                }
+-            }
+-        } finally {
+-            cursor.close();
++        TextView title = findViewById(R.id.title);
++        TextView user = findViewById(R.id.user);
++        TextView date = findViewById(R.id.date);
++        TextView tags = findViewById(R.id.tags);
++        TextView content = findViewById(R.id.post);
++        final TextView numLikes = findViewById(R.id.numLikes);
++        if(post_id == -1)
++            Toast.makeText(this, "Can't find post!", Toast.LENGTH_SHORT).show();
++        else {
++            MainActivity.forumMgr.getPostDetail(post_id, searchPost -> {
++                runOnUiThread(new Runnable() {
++                    @Override
++                    public void run() {
++                        if (searchPost.getReportNum() >= 5)
++                            setTitle("Reported Post");
++                        else {
++                            setTitle(searchPost.getTitle());
++                            user.append(searchPost.getUsername());
++                            title.setText(searchPost.getTitle());
++                            date.setText(searchPost.getDate());
++                            tags.append(searchPost.getTags());
++                            content.setText(searchPost.getContent());
++                            likeNum = searchPost.getLikeNum();
++                            reportNum = searchPost.getReportNum();
++                            numLikes.append("" + likeNum);
++                            comments = searchPost.getComments();
++                            String items[] = comments.split("\n");
++                            ArrayAdapter<String> itemsAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, items);
++                            ListView listView = findViewById(R.id.commList);
++                            listView.setAdapter(itemsAdapter);
++                        }
++                    }
++                });
++            }, error -> {
++                Log.d("Detail Getting Failed", error.getMessage());
++            });
+         }
+ 
+-        final Button like = (Button) findViewById(R.id.like);
+-        final Button report = (Button) findViewById(R.id.report);
+-        Button comIt = (Button) findViewById(R.id.comIt);
+-        final EditText comment = (EditText) findViewById(R.id.comment);
+-        final SQLiteDatabase wdb = helper.getWritableDatabase();
+-        final ContentValues values = new ContentValues();
+-        final int likeFlag = 0;
++        final Button like = findViewById(R.id.like);
++        final Button report = findViewById(R.id.report);
++        Button comIt = findViewById(R.id.comIt);
++        final EditText comment = findViewById(R.id.comment);
++
+         like.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view) {
+                 if(getLikeFlag() == 0) {
+-                    values.put(ForumContract.ForumEntry.COLUMN_LIKES, getLikeRef() + 1);
+-                    String selection = ForumContract.ForumEntry.COLUMN_DATE + "=?";
+-                    String selectionArgs[] = {getDate()};
+-                    wdb.update(ForumContract.ForumEntry.TABLE_NAME,values,selection,selectionArgs);
+                     TextView newNumLikes = (TextView) findViewById(R.id.numLikes);
+-                    newNumLikes.setText("Likes: " + Integer.toString(getLikeRef() + 1));
++                    newNumLikes.setText("Likes: " + (likeNum + 1));
+                     setLikeFlag();
++                    //update the like into database
++                    DB.instance.execute(("update post set likes = " + (likeNum + 1) + " where _ID = "+post_id).toUpperCase(), ()->{}, error->{Log.d("Update Likes Fail", error.getMessage());});
+                 }
+             }
+         });
+@@ -195,12 +104,19 @@
+         report.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view) {
+-                if(getReportFlag() == 0)
++                if(getReportFlag() != 0)
++                    Toast.makeText(getApplicationContext(), "Already Reported", Toast.LENGTH_LONG);
++                else
+                 {
+-                    values.put(ForumContract.ForumEntry.COLUMN_REPORT, getReportRef() + 1);
+-                    String selection = ForumContract.ForumEntry.COLUMN_DATE + "=?";
+-                    String selectionArgs[] = {getDate()};
+-                    wdb.update(ForumContract.ForumEntry.TABLE_NAME,values,selection,selectionArgs);
++                    DB.instance.execute(("update post set reports = " + (reportNum + 1) + " where _ID = "+post_id).toUpperCase(),
++                            ()->{
++                        runOnUiThread(new Runnable() {
++                            @Override
++                            public void run() {
++                                Toast.makeText(getApplicationContext(),"Reported!", Toast.LENGTH_LONG);
++                            }
++                        });
++                            }, error->{Log.d("Update Reports Fail", error.getMessage());});
+                     setReportFlag();
+                     Intent intent = getIntent();
+                     finish();
+@@ -212,10 +128,16 @@
+         comIt.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view) {
+-                values.put(ForumContract.ForumEntry.COLUMN_COMMENTS, getComments() + comment.getText().toString().trim() + '\n');
+-                String selection = ForumContract.ForumEntry.COLUMN_DATE + "=?";
+-                String selectionArgs[] = {getDate()};
+-                wdb.update(ForumContract.ForumEntry.TABLE_NAME,values,selection,selectionArgs);
++                String newComments = comments + comment.getText().toString().trim() + '\n';
++                DB.instance.execute(("update post set COMMENTS = '" + newComments + "' where _ID = "+post_id),
++                        ()->{
++                    runOnUiThread(new Runnable() {
++                        @Override
++                        public void run() {
++                            Toast.makeText(getApplicationContext(), "Commented!", Toast.LENGTH_SHORT);
++                        }
++                    });
++                }, error->{Log.d("Update Comments Fail", error.getMessage());});
+                 Intent intent = getIntent();
+                 finish();
+                 startActivity(intent);
+Index: app/src/main/java/com/example/medkit2006/boundary/PostToDraftUI.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.medkit2006.boundary;\n\nimport android.content.ContentValues;\nimport android.content.Intent;\nimport android.database.Cursor;\nimport android.database.sqlite.SQLiteDatabase;\nimport android.os.Bundle;\nimport android.view.Menu;\nimport android.view.MenuItem;\nimport android.widget.EditText;\nimport android.widget.Toast;\n\nimport androidx.appcompat.app.AppCompatActivity;\nimport androidx.core.app.NavUtils;\n\nimport com.example.medkit2006.R;\nimport com.example.medkit2006.data.ForumContract;\nimport com.example.medkit2006.data.ForumDbHelper;\n\nimport java.text.SimpleDateFormat;\nimport java.util.Date;\n\npublic class PostToDraftUI extends AppCompatActivity {\n\n    @Override\n    protected void onCreate(Bundle savedInstanceState) {\n        super.onCreate(savedInstanceState);\n        setContentView(R.layout.activity_post_to_draft);\n\n        EditText title = (EditText) findViewById(R.id.title);\n        EditText post = (EditText) findViewById(R.id.post);\n        EditText tags = (EditText) findViewById(R.id.tags);\n\n        ForumDbHelper helper = new ForumDbHelper(this);\n        SQLiteDatabase db = helper.getReadableDatabase();\n        String projection[] = {\n                ForumContract.ForumEntry.COLUMN_TITLE,\n                ForumContract.ForumEntry.COLUMN_TAGS,\n                ForumContract.ForumEntry.COLUMN_POST\n        };\n\n        String selection = ForumContract.ForumEntry.COLUMN_DATE + \"=?\";\n        String[] selectionArgs = {getDate()};\n        Cursor cursor = db.query(ForumContract.ForumEntry.TABLE_NAME, projection,selection,selectionArgs,null,null,null);\n        try {\n            int titleColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_TITLE);\n            int tagsColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_TAGS);\n            int postColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_POST);\n            while(cursor.moveToNext())\n            {\n                String postTitle = cursor.getString(titleColumnIndex);\n                String postTags = cursor.getString(tagsColumnIndex);\n                String mainPost = cursor.getString(postColumnIndex);\n                title.setText(postTitle);\n                post.setText(mainPost);\n                tags.setText(postTags);\n            }\n        } finally {\n            cursor.close();\n        }\n    }\n\n    @Override\n    public boolean onCreateOptionsMenu(Menu menu) {\n        // Inflate the menu options from the res/menu/menu_editor.xml file.\n        // This adds menu items to the app bar.\n        getMenuInflater().inflate(R.menu.draft_post_editor, menu);\n        return true;\n    }\n\n    @Override\n    public boolean onOptionsItemSelected(MenuItem item) {\n        // User clicked on a menu option in the app bar overflow menu\n        switch (item.getItemId()) {\n            // Respond to a click on the \"Save\" menu option\n            case R.id.action_save:\n                updateData(1);\n                return true;\n            // Respond to a click on the \"Delete\" menu option\n            case R.id.action_draft:\n                // Do nothing for now\n                updateData(0);\n                return true;\n            case R.id.action_discard:\n                deletePost();\n                finish();\n            // Respond to a click on the \"Up\" arrow button in the app bar\n            case android.R.id.home:\n                // Navigate back to parent activity (CatalogActivity)\n                NavUtils.navigateUpFromSameTask(this);\n                return true;\n        }\n        return super.onOptionsItemSelected(item);\n    }\n\n    public void updateData(int status)\n    {\n        EditText title = (EditText) findViewById(R.id.title);\n        EditText post = (EditText) findViewById(R.id.post);\n        EditText tags = (EditText) findViewById(R.id.tags);\n\n        ForumDbHelper helper = new ForumDbHelper(PostToDraftUI.this);\n        SQLiteDatabase db = helper.getWritableDatabase();\n        ContentValues values = new ContentValues();\n\n        values.put(ForumContract.ForumEntry.COLUMN_POST, post.getText().toString().trim());\n        values.put(ForumContract.ForumEntry.COLUMN_TAGS, tags.getText().toString().trim());\n        values.put(ForumContract.ForumEntry.COLUMN_TITLE, tags.getText().toString().trim());\n        values.put(ForumContract.ForumEntry.COLUMN_REPORT,0);\n        values.put(ForumContract.ForumEntry.COLUMN_COMMENTS,\"\");\n        values.put(ForumContract.ForumEntry.COLUMN_USER,getUser());\n        values.put(ForumContract.ForumEntry.COLUMN_DATE, getNewDate());\n        values.put(ForumContract.ForumEntry.COLUMN_LIKES,0);\n        values.put(ForumContract.ForumEntry.COLUMN_STATUS,status);\n        long updated = db.update(ForumContract.ForumEntry.TABLE_NAME, values, ForumContract.ForumEntry.COLUMN_DATE + \"=? AND \" + ForumContract.ForumEntry.COLUMN_USER + \"=?\", new String[]{getDate(),getUser()});\n\n        if(updated != 0)\n        {\n            Toast.makeText(PostToDraftUI.this,\"Successfully posted\", Toast.LENGTH_LONG).show();\n        }\n        else\n        {\n            Toast.makeText(PostToDraftUI.this,\"Error posting, please check and try again\", Toast.LENGTH_LONG).show();\n        }\n    }\n\n    public String getDate()\n    {\n        Intent i = getIntent();\n        Bundle bd = i.getExtras();\n        String date = \"\";\n        if(bd != null)\n        {\n            String fdate = (String) bd.get(\"date\");\n            date = fdate;\n        }\n        return date;\n    }\n\n    public String getUser()\n    {\n        Intent i = getIntent();\n        Bundle bd = i.getExtras();\n        String name = null;\n        if(bd != null) {\n            name = (String) bd.get(\"username\");\n        }\n        return name;\n    }\n\n    public String getNewDate()\n    {\n        SimpleDateFormat sdf = new SimpleDateFormat(\"yyyy-MM-dd HH:mm:ss\");\n        String strDate = sdf.format(new Date());\n        return strDate;\n    }\n\n    public void deletePost()\n    {\n        ForumDbHelper helper = new ForumDbHelper(PostToDraftUI.this);\n        SQLiteDatabase db = helper.getWritableDatabase();\n        String whereClause = ForumContract.ForumEntry.COLUMN_DATE + \"=?\";\n        String[] whereArgs = new String[] {getDate()};\n        db.delete(ForumContract.ForumEntry.TABLE_NAME, whereClause, whereArgs);\n    }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/medkit2006/boundary/PostToDraftUI.java b/app/src/main/java/com/example/medkit2006/boundary/PostToDraftUI.java
+--- a/app/src/main/java/com/example/medkit2006/boundary/PostToDraftUI.java	(revision c384dbff5588a8ec8d5fa0df80581471b784f932)
++++ b/app/src/main/java/com/example/medkit2006/boundary/PostToDraftUI.java	(date 1649579472133)
+@@ -5,58 +5,68 @@
+ import android.database.Cursor;
+ import android.database.sqlite.SQLiteDatabase;
+ import android.os.Bundle;
++import android.util.Log;
+ import android.view.Menu;
+ import android.view.MenuItem;
++import android.view.View;
++import android.widget.AdapterView;
++import android.widget.ArrayAdapter;
+ import android.widget.EditText;
++import android.widget.RatingBar;
++import android.widget.Spinner;
+ import android.widget.Toast;
+ 
+ import androidx.appcompat.app.AppCompatActivity;
+ import androidx.core.app.NavUtils;
+ 
++import com.example.medkit2006.MainActivity;
+ import com.example.medkit2006.R;
+ import com.example.medkit2006.data.ForumContract;
+ import com.example.medkit2006.data.ForumDbHelper;
++import com.example.medkit2006.entity.Post;
+ 
+ import java.text.SimpleDateFormat;
+ import java.util.Date;
+ 
+-public class PostToDraftUI extends AppCompatActivity {
++public class PostToDraftUI extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
++
++    private int post_id;
+ 
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_post_to_draft);
+ 
+-        EditText title = (EditText) findViewById(R.id.title);
+-        EditText post = (EditText) findViewById(R.id.post);
+-        EditText tags = (EditText) findViewById(R.id.tags);
++        Intent i = getIntent();
++        post_id = i.getIntExtra(ForumUI.EXTRA, -1);
++        EditText title = findViewById(R.id.title);
++        EditText content = findViewById(R.id.post);
++        EditText tags = findViewById(R.id.tags);
++        RatingBar ratingBar = findViewById(R.id.ratingBar);
+ 
+-        ForumDbHelper helper = new ForumDbHelper(this);
+-        SQLiteDatabase db = helper.getReadableDatabase();
+-        String projection[] = {
+-                ForumContract.ForumEntry.COLUMN_TITLE,
+-                ForumContract.ForumEntry.COLUMN_TAGS,
+-                ForumContract.ForumEntry.COLUMN_POST
+-        };
++        Spinner mSpinner = findViewById(R.id.post_facility_selection_spinner);
++        mSpinner.setOnItemSelectedListener(this);
++        ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_item, MainActivity.facilityMgr.all_facility_names);
++        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
++        mSpinner.setAdapter(adapter);
+ 
+-        String selection = ForumContract.ForumEntry.COLUMN_DATE + "=?";
+-        String[] selectionArgs = {getDate()};
+-        Cursor cursor = db.query(ForumContract.ForumEntry.TABLE_NAME, projection,selection,selectionArgs,null,null,null);
+-        try {
+-            int titleColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_TITLE);
+-            int tagsColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_TAGS);
+-            int postColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_POST);
+-            while(cursor.moveToNext())
+-            {
+-                String postTitle = cursor.getString(titleColumnIndex);
+-                String postTags = cursor.getString(tagsColumnIndex);
+-                String mainPost = cursor.getString(postColumnIndex);
+-                title.setText(postTitle);
+-                post.setText(mainPost);
+-                tags.setText(postTags);
+-            }
+-        } finally {
+-            cursor.close();
++        if(post_id == -1)
++            Toast.makeText(this, "Can't find post!", Toast.LENGTH_SHORT).show();
++        else{
++        MainActivity.forumMgr.getPostDetail(post_id, post->{
++            runOnUiThread(new Runnable() {
++                @Override
++                public void run() {
++                    title.setText(post.getTitle());
++                    content.setText(post.getContent());
++                    tags.setText(post.getTags());
++                    int spinnerPosition = adapter.getPosition(post.getFacility());
++                    mSpinner.setSelection(spinnerPosition);
++                }
++            });
++        }, error->{
++            Log.d("PostToDraftUI",error.getMessage());
++        });
+         }
+     }
+ 
+@@ -82,7 +92,7 @@
+                 updateData(0);
+                 return true;
+             case R.id.action_discard:
+-                deletePost();
++                MainActivity.forumMgr.deletePost(post_id);
+                 finish();
+             // Respond to a click on the "Up" arrow button in the app bar
+             case android.R.id.home:
+@@ -95,57 +105,32 @@
+ 
+     public void updateData(int status)
+     {
+-        EditText title = (EditText) findViewById(R.id.title);
+-        EditText post = (EditText) findViewById(R.id.post);
+-        EditText tags = (EditText) findViewById(R.id.tags);
+-
+-        ForumDbHelper helper = new ForumDbHelper(PostToDraftUI.this);
+-        SQLiteDatabase db = helper.getWritableDatabase();
+-        ContentValues values = new ContentValues();
+-
+-        values.put(ForumContract.ForumEntry.COLUMN_POST, post.getText().toString().trim());
+-        values.put(ForumContract.ForumEntry.COLUMN_TAGS, tags.getText().toString().trim());
+-        values.put(ForumContract.ForumEntry.COLUMN_TITLE, tags.getText().toString().trim());
+-        values.put(ForumContract.ForumEntry.COLUMN_REPORT,0);
+-        values.put(ForumContract.ForumEntry.COLUMN_COMMENTS,"");
+-        values.put(ForumContract.ForumEntry.COLUMN_USER,getUser());
+-        values.put(ForumContract.ForumEntry.COLUMN_DATE, getNewDate());
+-        values.put(ForumContract.ForumEntry.COLUMN_LIKES,0);
+-        values.put(ForumContract.ForumEntry.COLUMN_STATUS,status);
+-        long updated = db.update(ForumContract.ForumEntry.TABLE_NAME, values, ForumContract.ForumEntry.COLUMN_DATE + "=? AND " + ForumContract.ForumEntry.COLUMN_USER + "=?", new String[]{getDate(),getUser()});
+-
+-        if(updated != 0)
+-        {
+-            Toast.makeText(PostToDraftUI.this,"Successfully posted", Toast.LENGTH_LONG).show();
+-        }
+-        else
+-        {
+-            Toast.makeText(PostToDraftUI.this,"Error posting, please check and try again", Toast.LENGTH_LONG).show();
+-        }
+-    }
++        EditText title = findViewById(R.id.title);
++        EditText content = findViewById(R.id.post);
++        EditText tags = findViewById(R.id.tags);
++        RatingBar ratingbar = findViewById(R.id.ratingBar);
++        Spinner med_spinner = findViewById(R.id.post_facility_selection_spinner);
+ 
+-    public String getDate()
+-    {
+-        Intent i = getIntent();
+-        Bundle bd = i.getExtras();
+-        String date = "";
+-        if(bd != null)
+-        {
+-            String fdate = (String) bd.get("date");
+-            date = fdate;
+-        }
+-        return date;
+-    }
+-
+-    public String getUser()
+-    {
+-        Intent i = getIntent();
+-        Bundle bd = i.getExtras();
+-        String name = null;
+-        if(bd != null) {
+-            name = (String) bd.get("username");
+-        }
+-        return name;
++        MainActivity.forumMgr.updatePost(post_id, //post_id
++                title.getText().toString().trim(),//title
++            content.getText().toString().trim(),//content
++            getNewDate(), //newDate
++            getUsername(),//username
++            MainActivity.facilityMgr.all_facility_names[med_spinner.getSelectedItemPosition()],//medical_mecility
++            tags.getText().toString().toLowerCase().trim(),//tags
++            status,//status
++            ratingbar.getNumStars(),//ratings
++            ()->{},//callback
++            e->{
++                Log.d("Add Post Fail",e.getMessage());
++                runOnUiThread(new Runnable() {
++                    @Override
++                    public void run() {// Stuff that updates the UI
++                        Toast.makeText(getApplicationContext(), e.toString().trim(), Toast.LENGTH_SHORT).show();
++                    }
++                });
++            }
++        );
+     }
+ 
+     public String getNewDate()
+@@ -155,12 +140,20 @@
+         return strDate;
+     }
+ 
+-    public void deletePost()
+-    {
+-        ForumDbHelper helper = new ForumDbHelper(PostToDraftUI.this);
+-        SQLiteDatabase db = helper.getWritableDatabase();
+-        String whereClause = ForumContract.ForumEntry.COLUMN_DATE + "=?";
+-        String[] whereArgs = new String[] {getDate()};
+-        db.delete(ForumContract.ForumEntry.TABLE_NAME, whereClause, whereArgs);
++    public String getUsername(){
++        Intent i = getIntent();
++        String name = i.getStringExtra(ForumUI.USEREXTRA);
++        return name;
++    }
++
++
++    @Override
++    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
++
++    }
++
++    @Override
++    public void onNothingSelected(AdapterView<?> adapterView) {
++
+     }
+ }
+Index: app/src/main/java/com/example/medkit2006/boundary/ForumUI.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.medkit2006.boundary;\n\nimport static com.example.medkit2006.MainActivity.facilityMgr;\nimport static com.example.medkit2006.R.string.open;\n\nimport android.content.Intent;\nimport android.os.Bundle;\nimport android.util.Log;\nimport android.view.Menu;\nimport android.view.MenuItem;\nimport android.view.MotionEvent;\nimport android.view.View;\nimport android.widget.AdapterView;\nimport android.widget.ListView;\nimport android.widget.TextView;\nimport android.widget.Toast;\n\nimport androidx.appcompat.app.ActionBarDrawerToggle;\nimport androidx.appcompat.app.AppCompatActivity;\nimport androidx.drawerlayout.widget.DrawerLayout;\nimport androidx.recyclerview.widget.LinearLayoutManager;\n\nimport com.example.medkit2006.FeedAdapter;\nimport com.example.medkit2006.MainActivity;\nimport com.example.medkit2006.MedicalFacilityAdapter;\nimport com.example.medkit2006.R;\nimport com.example.medkit2006.entity.Post;\nimport com.example.medkit2006.entity.User;\nimport com.google.android.material.navigation.NavigationView;\n\nimport java.util.ArrayList;\n\npublic class ForumUI extends AppCompatActivity {\n\n    private DrawerLayout mDrawerlayout;\n    private ActionBarDrawerToggle mToggle;\n    private NavigationView navigation;\n\n    @Override\n    protected void onCreate(Bundle savedInstanceState) {\n        super.onCreate(savedInstanceState);\n        setContentView(R.layout.activity_forum);\n\n        mDrawerlayout = (DrawerLayout) findViewById(R.id.drawer_layout);\n        mToggle = new ActionBarDrawerToggle(this,mDrawerlayout, open,R.string.close);\n        mDrawerlayout.addDrawerListener(mToggle);\n        mToggle.syncState();\n        getSupportActionBar().setDisplayHomeAsUpEnabled(true);\n\n        setTitle(\"Welcome \" + getUser());\n        final ListView listView = findViewById(R.id.list);\n        //search database below\n        MainActivity.forumMgr.getAllPost(postList -> {\n            Log.d(\"Received Post List\", String.valueOf(postList.size()));\n            runOnUiThread(new Runnable() {\n                @Override\n                public void run() {// Stuff that updates the UI\n                    FeedAdapter itemsAdapter = new FeedAdapter(ForumUI.this, postList);\n                    listView.setAdapter(itemsAdapter);\n                }\n            });\n        },\n                e -> {\n                    Log.d(\"Received Medical Facility List Unsuccessful\", e.toString().trim());\n                    runOnUiThread(new Runnable() {\n                @Override\n                public void run() {// Stuff that updates the UI\n                    Toast.makeText(getApplicationContext(), e.toString().trim(), Toast.LENGTH_SHORT).show();\n                }\n            });\n        });\n\n        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()\n        {\n            @Override\n            public void onItemClick(AdapterView<?> adapter, View v, int position, long arg3)\n            {\n                Intent i = new Intent(ForumUI.this, PostDetailUI.class);\n                Post selectedFromList = (Post)(listView.getItemAtPosition(position));\n                i.putExtra(\"date\" , selectedFromList.getDate());\n                startActivity(i);\n            }\n        });\n\n        listView.setOnTouchListener(new View.OnTouchListener() {\n            // Setting on Touch Listener for handling the touch inside ScrollView\n            @Override\n            public boolean onTouch(View v, MotionEvent event) {\n                // Disallow the touch request for parent scroll on touch of child view\n                v.getParent().requestDisallowInterceptTouchEvent(true);\n                return false;\n            }\n        });\n\n        navigation = (NavigationView) findViewById(R.id.nav_view);\n        navigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {\n            @Override\n            public boolean onNavigationItemSelected(MenuItem menuItem) {\n                int id = menuItem.getItemId();\n                Intent i;\n                switch (id) {\n                    case R.id.drafts:\n                        i = new Intent(ForumUI.this, MainActivity.accountMgr.isLoggedIn() ? PostDraftUI.class : LoginUI.class);\n                        i.putExtra(\"username\", getUser());\n                        startActivity(i);\n                        break;\n                    case R.id.myPost:\n                        i = new Intent(ForumUI.this, MainActivity.accountMgr.isLoggedIn() ? MyPostUI.class : LoginUI.class);\n                        i.putExtra(\"username\", getUser());\n                        startActivity(i);\n                }\n                return false;\n            }\n        });\n\n        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);\n        View hView =  navigationView.getHeaderView(0);\n        TextView name;\n        name = (TextView)hView.findViewById(R.id.userName);\n        name.setText(getUser());\n    }\n\n    @Override\n    protected void onResume() {\n        super.onResume();\n        User loggedIn = MainActivity.accountMgr.getLoggedInUser();\n        if (loggedIn == null){\n            Toast.makeText(this, \"You haven't log in!\",Toast.LENGTH_SHORT);\n        }\n    }\n\n    @Override\n    public boolean onCreateOptionsMenu(Menu menu) {\n        getMenuInflater().inflate(R.menu.feed_action, menu);\n        return true;\n    }\n\n    @Override\n    public boolean onOptionsItemSelected(MenuItem item) {\n        if(mToggle.onOptionsItemSelected(item))\n        {\n            return true;\n        }\n        if(item.getItemId() == R.id.action_new_post) {\n            goEdit();\n            return true;\n        }\n        return super.onOptionsItemSelected(item);\n    }\n\n    public void goEdit()\n    {\n        Intent i = new Intent(ForumUI.this, MainActivity.accountMgr.isLoggedIn() ? PostEditorUI.class : LoginUI.class);\n        i.putExtra(\"username\", getUser());\n        startActivity(i);\n    }\n\n    public String getUser() {\n        User cur_user = MainActivity.accountMgr.getLoggedInUser();\n        return( cur_user == null ? \"\" : cur_user.getUsername());\n    }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/medkit2006/boundary/ForumUI.java b/app/src/main/java/com/example/medkit2006/boundary/ForumUI.java
+--- a/app/src/main/java/com/example/medkit2006/boundary/ForumUI.java	(revision c384dbff5588a8ec8d5fa0df80581471b784f932)
++++ b/app/src/main/java/com/example/medkit2006/boundary/ForumUI.java	(date 1649574044996)
+@@ -32,6 +32,8 @@
+ 
+ public class ForumUI extends AppCompatActivity {
+ 
++    public static String EXTRA = "post_id";
++    public static String USEREXTRA = "username";
+     private DrawerLayout mDrawerlayout;
+     private ActionBarDrawerToggle mToggle;
+     private NavigationView navigation;
+@@ -41,6 +43,10 @@
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_forum);
+ 
++        MainActivity.facilityMgr.getAllFacilityName(names->{
++            facilityMgr.all_facility_names = names;
++        }, error->{Log.d("ForumUI get facility names error", error.getMessage());});
++
+         mDrawerlayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+         mToggle = new ActionBarDrawerToggle(this,mDrawerlayout, open,R.string.close);
+         mDrawerlayout.addDrawerListener(mToggle);
+@@ -50,7 +56,7 @@
+         setTitle("Welcome " + getUser());
+         final ListView listView = findViewById(R.id.list);
+         //search database below
+-        MainActivity.forumMgr.getAllPost(postList -> {
++        MainActivity.forumMgr.getAllPostAbstract(postList -> {
+             Log.d("Received Post List", String.valueOf(postList.size()));
+             runOnUiThread(new Runnable() {
+                 @Override
+@@ -59,9 +65,8 @@
+                     listView.setAdapter(itemsAdapter);
+                 }
+             });
+-        },
+-                e -> {
+-                    Log.d("Received Medical Facility List Unsuccessful", e.toString().trim());
++        }, e -> {
++                    Log.d("Received Post List Unsuccessful", e.toString().trim());
+                     runOnUiThread(new Runnable() {
+                 @Override
+                 public void run() {// Stuff that updates the UI
+@@ -77,7 +82,7 @@
+             {
+                 Intent i = new Intent(ForumUI.this, PostDetailUI.class);
+                 Post selectedFromList = (Post)(listView.getItemAtPosition(position));
+-                i.putExtra("date" , selectedFromList.getDate());
++                i.putExtra(ForumUI.EXTRA, selectedFromList.getID());
+                 startActivity(i);
+             }
+         });
+@@ -92,7 +97,7 @@
+             }
+         });
+ 
+-        navigation = (NavigationView) findViewById(R.id.nav_view);
++        navigation = findViewById(R.id.nav_view);
+         navigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+             @Override
+             public boolean onNavigationItemSelected(MenuItem menuItem) {
+@@ -101,22 +106,22 @@
+                 switch (id) {
+                     case R.id.drafts:
+                         i = new Intent(ForumUI.this, MainActivity.accountMgr.isLoggedIn() ? PostDraftUI.class : LoginUI.class);
+-                        i.putExtra("username", getUser());
++                        i.putExtra(USEREXTRA, getUser());
+                         startActivity(i);
+                         break;
+                     case R.id.myPost:
+                         i = new Intent(ForumUI.this, MainActivity.accountMgr.isLoggedIn() ? MyPostUI.class : LoginUI.class);
+-                        i.putExtra("username", getUser());
++                        i.putExtra(USEREXTRA, getUser());
+                         startActivity(i);
+                 }
+                 return false;
+             }
+         });
+ 
+-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
++        NavigationView navigationView = findViewById(R.id.nav_view);
+         View hView =  navigationView.getHeaderView(0);
+         TextView name;
+-        name = (TextView)hView.findViewById(R.id.userName);
++        name = hView.findViewById(R.id.userName);
+         name.setText(getUser());
+     }
+ 
+@@ -144,14 +149,23 @@
+         if(item.getItemId() == R.id.action_new_post) {
+             goEdit();
+             return true;
++        }
++        if(item.getItemId() == R.id.action_go_main) {
++            goBack();
++            return true;
+         }
+         return super.onOptionsItemSelected(item);
+     }
+ 
++    private void goBack() {
++        Intent i = new Intent(ForumUI.this, MainActivity.class);
++        startActivity(i);
++    }
++
+     public void goEdit()
+     {
+         Intent i = new Intent(ForumUI.this, MainActivity.accountMgr.isLoggedIn() ? PostEditorUI.class : LoginUI.class);
+-        i.putExtra("username", getUser());
++        i.putExtra(ForumUI.USEREXTRA, getUser());
+         startActivity(i);
+     }
+ 
+Index: app/src/main/res/layout/activity_post_detail.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n\n<ScrollView xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"match_parent\"\n    android:fillViewport=\"true\">\n\n<LinearLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:tools=\"http://schemas.android.com/tools\"\n    android:id=\"@+id/activity_post_detail\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"match_parent\"\n    android:paddingBottom=\"@dimen/activity_vertical_margin\"\n    android:orientation=\"vertical\"\n    android:paddingLeft=\"@dimen/activity_horizontal_margin\"\n    android:paddingRight=\"@dimen/activity_horizontal_margin\"\n    android:paddingTop=\"@dimen/activity_vertical_margin\"\n    tools:context=\"com.example.student.forum.post_detail\">\n\n    <TextView\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"wrap_content\"\n        android:textSize=\"30dp\"\n        android:id=\"@+id/title\"/>\n\n    <TextView\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:textColor=\"#FFF\"\n        android:id=\"@+id/user\"\n        android:text=\"By \"/>\n\n    <TextView\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:textColor=\"#FFF\"\n        android:id=\"@+id/date\"/>\n\n    <TextView\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:textColor=\"#FFF\"\n        android:text=\"Tags: \"\n        android:id=\"@+id/tags\"/>\n\n    <TextView\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:textColor=\"#FFF\"\n        android:text=\"\\n\"/>\n\n    <View\n        android:layout_width=\"fill_parent\"\n        android:layout_height=\"2dp\"\n        android:background=\"#c0c0c0\"/>\n\n    <TextView\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:text=\"\\n\"/>\n\n    <TextView\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:padding=\"10dp\"\n        android:textSize=\"15dp\"\n        android:background=\"#1A000000\"\n        android:textColor=\"#FFF\"\n        android:id=\"@+id/post\"/>\n\n    <TextView\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:textColor=\"#FFF\"\n        android:id=\"@+id/numLikes\"\n        android:text=\"\\nLikes: \"/>\n\n\n    <LinearLayout\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:orientation=\"horizontal\">\n        <Button\n            android:layout_width=\"wrap_content\"\n            android:layout_height=\"wrap_content\"\n            android:text=\"Like\"\n            android:id=\"@+id/like\"/>\n\n        <Button\n            android:layout_width=\"wrap_content\"\n            android:layout_height=\"wrap_content\"\n            android:id=\"@+id/report\"\n            android:text=\"Report\"/>\n    </LinearLayout>\n\n    <LinearLayout\n        android:layout_width=\"match_parent\"\n        android:orientation=\"horizontal\"\n        android:layout_height=\"wrap_content\">\n        <EditText\n            android:layout_width=\"0dp\"\n            android:layout_weight=\"4\"\n            android:layout_height=\"wrap_content\"\n            android:textColor=\"#FFF\"\n            android:hint=\"Comment\"\n            android:id=\"@+id/comment\"/>\n\n        <Button\n            android:layout_width=\"0dp\"\n            android:layout_weight=\"2\"\n            android:layout_height=\"wrap_content\"\n            android:text=\"Comment\"\n            android:id=\"@+id/comIt\"/>\n    </LinearLayout>\n\n    <TextView\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:text=\"\\nPREVIOUS COMMENTS\\n\"/>\n\n    <ListView xmlns:android=\"http://schemas.android.com/apk/res/android\"\n        xmlns:tools=\"http://schemas.android.com/tools\"\n        android:id=\"@+id/commList\"\n        android:paddingTop=\"15dp\"\n        android:paddingBottom=\"15dp\"\n        android:orientation=\"vertical\"\n        android:layout_width=\"match_parent\"\n        android:textColor=\"#FFF\"\n        android:layout_height=\"wrap_content\"\n        tools:context=\"com.example.student.forum.feed\"/>\n\n    <TextView\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:text=\"\\n\"/>\n</LinearLayout>\n\n</ScrollView>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_post_detail.xml b/app/src/main/res/layout/activity_post_detail.xml
+--- a/app/src/main/res/layout/activity_post_detail.xml	(revision c384dbff5588a8ec8d5fa0df80581471b784f932)
++++ b/app/src/main/res/layout/activity_post_detail.xml	(date 1649576933646)
+@@ -26,20 +26,20 @@
+     <TextView
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+-        android:textColor="#FFF"
++        android:textColor="#000"
+         android:id="@+id/user"
+         android:text="By "/>
+ 
+     <TextView
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+-        android:textColor="#FFF"
++        android:textColor="#000"
+         android:id="@+id/date"/>
+ 
+     <TextView
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+-        android:textColor="#FFF"
++        android:textColor="#000"
+         android:text="Tags: "
+         android:id="@+id/tags"/>
+ 
+@@ -63,15 +63,15 @@
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:padding="10dp"
+-        android:textSize="15dp"
+-        android:background="#1A000000"
++        android:textSize="20dp"
++        android:background="#b07c1a"
+         android:textColor="#FFF"
+         android:id="@+id/post"/>
+ 
+     <TextView
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+-        android:textColor="#FFF"
++        android:textColor="#800000"
+         android:id="@+id/numLikes"
+         android:text="\nLikes: "/>
+ 
+@@ -101,7 +101,7 @@
+             android:layout_width="0dp"
+             android:layout_weight="4"
+             android:layout_height="wrap_content"
+-            android:textColor="#FFF"
++            android:textColor="#000"
+             android:hint="Comment"
+             android:id="@+id/comment"/>
+ 
+@@ -118,16 +118,15 @@
+         android:layout_height="wrap_content"
+         android:text="\nPREVIOUS COMMENTS\n"/>
+ 
+-    <ListView xmlns:android="http://schemas.android.com/apk/res/android"
+-        xmlns:tools="http://schemas.android.com/tools"
++    <ListView xmlns:tools="http://schemas.android.com/tools"
+         android:id="@+id/commList"
+         android:paddingTop="15dp"
+         android:paddingBottom="15dp"
+         android:orientation="vertical"
+         android:layout_width="match_parent"
+-        android:textColor="#FFF"
++        android:textColor="#000"
+         android:layout_height="wrap_content"
+-        tools:context="com.example.student.forum.feed"/>
++        />
+ 
+     <TextView
+         android:layout_width="wrap_content"
+Index: app/src/main/res/layout/forum.xml
+===================================================================
+diff --git a/app/src/main/res/layout/forum.xml b/app/src/main/res/layout/forum.xml
+deleted file mode 100644
+--- a/app/src/main/res/layout/forum.xml	(revision c384dbff5588a8ec8d5fa0df80581471b784f932)
++++ /dev/null	(revision c384dbff5588a8ec8d5fa0df80581471b784f932)
+@@ -1,15 +0,0 @@
+-<?xml version="1.0" encoding="utf-8"?>
+-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+-    android:layout_width="match_parent"
+-    android:layout_height="match_parent">
+-
+-    <TextView
+-        android:id="@+id/textView4"
+-        android:layout_width="wrap_content"
+-        android:layout_height="wrap_content"
+-        android:layout_alignParentStart="true"
+-        android:layout_alignParentTop="true"
+-        android:layout_marginStart="196dp"
+-        android:layout_marginTop="42dp"
+-        android:text="Forum" />
+-</RelativeLayout>
+\ No newline at end of file
+Index: app/src/main/java/com/example/medkit2006/data/DB.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.medkit2006.data;\n\nimport android.os.Build;\nimport android.util.Log;\n\nimport androidx.annotation.RequiresApi;\n\nimport com.BoardiesITSolutions.AndroidMySQLConnector.Connection;\nimport com.BoardiesITSolutions.AndroidMySQLConnector.Exceptions.InvalidSQLPacketException;\nimport com.BoardiesITSolutions.AndroidMySQLConnector.Exceptions.MySQLConnException;\nimport com.BoardiesITSolutions.AndroidMySQLConnector.Exceptions.MySQLException;\nimport com.BoardiesITSolutions.AndroidMySQLConnector.IConnectionInterface;\nimport com.BoardiesITSolutions.AndroidMySQLConnector.IResultInterface;\nimport com.BoardiesITSolutions.AndroidMySQLConnector.ResultSet;\n\nimport org.jetbrains.annotations.NotNull;\n\nimport java.io.IOException;\nimport java.util.function.Consumer;\n\npublic class DB {\n\n    /*\n    CREATE TABLE account (\n        username VARCHAR(45) PRIMARY KEY,\n        email VARCHAR(45) NOT NULL UNIQUE,\n        passwordHash BINARY(32) NOT NULL,\n        passwordSalt BINARY(32) NOT NULL,\n        verified INT DEFAULT 0, -- #should be BIT but lib can't get BIT datatype\n        firstName VARCHAR(45),\n        lastName VARCHAR(45),\n        gender ENUM(\"M\",\"F\",\"O\"),\n        bloodType ENUM(\"A+\",\"A-\",\"B+\",\"B-\",\"AB+\",\"AB-\",\"O+\",\"O-\"),\n        dateOfBirth DATE\n    );\n    CREATE TABLE medical_facilities(\n        name VARCHAR(45) PRIMARY KEY,\n        type VARCHAR(45) NOT NULL, -- #TODO: ENUM?\n        address VARCHAR(100) NOT NULL,\n        contact VARCHAR(45) NOT NULL,\n        latitude DECIMAL(11,7) NOT NULL,\n        longitude DECIMAL(12,7) NOT NULL,\n        description VARCHAR(1000) DEFAULT \"\"\n    );\n    CREATE TABLE mf_photo(\n        medical_facility VARCHAR(45) NOT NULL,\n        image VARBINARY(8000) NOT NULL,\n        FOREIGN KEY (medical_facility) REFERENCES medical_facilities(name)\n    );\n    CREATE TABLE service(\n        medical_facility VARCHAR(45) NOT NULL,\n        type VARCHAR(45) NOT NULL, -- #TODO: ENUM?\n        price DOUBLE NOT NULL CHECK (price > 0),\n        description VARCHAR(1000) NOT NULL,\n        FOREIGN KEY (medical_facility) REFERENCES medical_facilities(name)\n    );\n    CREATE TABLE post(\n        _id INTEGER PRIMARY KEY AUTOINCREMENT,\n        title VARCHAR(150) NOT NULL,\n        post VARCHAR(1000) NOT NULL,\n        comments VARCHAR(300),\n        datetime DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,\n        username VARCHAR(45) NOT NULL,\n        medical_facility VARCHAR(45) NOT NULL,\n        likes INTEGER NOT NULL,\n        tags VARCHAR(150) NOT NULL,\n        status INTEGER NOT NULL,\n        report INTEGER NOT NULL),\n        FOREIGN KEY (username) REFERENCES account(username),\n        FOREIGN KEY (medical_facility) REFERENCES medical_facilities(name)\n    );\n    CREATE TABLE bookmark (\n        username VARCHAR(45) NOT NULL,\n        medical_facility VARCHAR(45) NOT NULL,\n        notes VARCHAR(100) DEFAULT \"\",\n        FOREIGN KEY (username) REFERENCES account(username),\n        FOREIGN KEY (medical_facility) REFERENCES medical_facilities(name),\n        CONSTRAINT user_mf PRIMARY KEY (username,medical_facility)\n    );\n    CREATE TABLE text (\n        id INT AUTO_INCREMENT PRIMARY KEY,\n        username VARCHAR(45) NOT NULL,\n        content VARCHAR(1000) NOT NULL,\n        timestamp DATETIME NOT NULL,\n        postId INT CHECK (chatId = NULL),\n        chatId INT CHECK (postId = NULL),\n        FOREIGN KEY (username) REFERENCES account(username)\n    );\n    CREATE TABLE rating(\n        username VARCHAR(45) NOT NULL,\n        medical_facility VARCHAR(45) NOT NULL,\n        rating INT NOT NULL CHECK(rating >= 1 AND rating <= 5),\n        FOREIGN KEY (username) REFERENCES account(username),\n        FOREIGN KEY (medical_facility) REFERENCES medical_facilities(name),\n        CONSTRAINT user_mf PRIMARY KEY (username,medical_facility)\n    );\n    CREATE TABLE service(\n        medical_facility VARCHAR(45) NOT NULL,\n        type VARCHAR(45) NOT NULL, -- #TODO: ENUM?\n        price DOUBLE NOT NULL CHECK (price > 0),\n        description VARCHAR(1000) NOT NULL,\n        FOREIGN KEY (medical_facility) REFERENCES medical_facilities(name)\n    );\n    CREATE TABLE chat(\n        id INT NOT NULL,\n        username VARCHAR(45) NOT NULL,\n        FOREIGN KEY (username) REFERENCES account(username),\n        CONSTRAINT id_username PRIMARY KEY (id,username)\n    );\n\n    CREATE TABLE post(\n        title VARCHAR(150) NOT NULL,\n        content VARCHAR(1000) NOT NULL,\n        comments VARCHAR(300),\n        timestamp DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,\n        username VARCHAR(45) NOT NULL,\n        medical_facility VARCHAR(45) NOT NULL,\n        likes INTEGER NOT NULL,\n        tags VARCHAR(100) NOT NULL,\n        status INTEGER NOT NULL,\n        report INTEGER NOT NULL\n    );\n\n    INSERT INTO medical_facilities VALUES (\"Alexandra Hospital\",\"hospital\",\"378 ALEXANDRA ROAD ALEXANDRA HOSPITAL Singapore 159964\",\"64722000\",1.2865882,103.7990862,\"\");\n    */\n\n    public Connection conn;\n    public String lastMsg;\n    public static DB instance = null;\n\n    public DB() {\n        connect();\n        instance = this;\n    }\n\n    public void connect() {\n        Log.i(\"DB\", \"Connecting\");\n        lastMsg = \"connecting\";\n        conn = new Connection(\"94.74.80.1\", \"test\", \"Blue!$!$!$\", 3306, \"medkit\", new DefaultResultInterface(e -> lastMsg = e.getMessage()));\n    }\n\n    /**\n     *\n     * @param statement Sql statement without result\n     * @param whenDone Called when done without error\n     */\n    public void execute(@NotNull String statement, Runnable whenDone) {\n        execute(statement, whenDone, null);\n    }\n\n    /**\n     *\n     * @param statement Sql statement without result\n     * @param whenDone Called when done without error\n     * @param onError Called when error\n     */\n    public void execute(@NotNull String statement, Runnable whenDone, Consumer<Exception> onError) {\n        conn.createStatement().execute(statement, new DefaultResultInterface(onError) {\n            @RequiresApi(api = Build.VERSION_CODES.N)\n            @Override\n            public void actionCompleted() {\n                try {\n                    if (whenDone != null)\n                        whenDone.run();\n                } catch (Exception e) {\n                    lastMsg = e.getMessage();\n                    Log.wtf(\"DB\", e);\n                }\n            }\n        });\n    }\n\n    /**\n     *\n     * @param query Select statement\n     * @param whenDone Called when done without error\n     */\n    public void executeQuery(@NotNull String query, @NotNull Consumer<ResultSet> whenDone) {\n        executeQuery(query, whenDone, null);\n    }\n\n    /**\n     *\n     * @param query Select statement\n     * @param whenDone Called when done with no error\n     * @param onError Called when error\n     */\n    public void executeQuery(@NotNull String query, @NotNull Consumer<ResultSet> whenDone, Consumer<Exception> onError) {\n        conn.createStatement().executeQuery(query, new DefaultResultInterface(onError) {\n            @RequiresApi(api = Build.VERSION_CODES.N)\n            @Override\n            public void executionComplete(ResultSet resultSet) {\n                try {\n                    whenDone.accept(resultSet);\n                } catch (Exception e) {\n                    lastMsg = e.getMessage();\n                    Log.wtf(\"DB\", e);\n                }\n            }\n        });\n    }\n\n    class DefaultResultInterface implements IConnectionInterface, IResultInterface {\n\n        private final Consumer<Exception> onError;\n\n        public DefaultResultInterface(Consumer<Exception> onError) {\n            this.onError = onError;\n        }\n\n        public void actionCompleted() {\n            lastMsg = \"Connect OK\";\n            Log.i(\"DB\", \"Connect OK\");\n        }\n\n        @Override\n        public void executionComplete(ResultSet resultSet) {\n            lastMsg = \"Result OK\";\n        }\n\n        @Override\n        public void handleInvalidSQLPacketException(InvalidSQLPacketException ex) {\n            lastMsg = ex.getMessage();\n            if (onError != null)\n                onError.accept(ex);\n            Log.wtf(\"DB\", ex);\n        }\n\n        @Override\n        public void handleMySQLException(MySQLException ex) {\n            lastMsg = ex.getMessage();\n            if (onError != null)\n                onError.accept(ex);\n            Log.wtf(\"DB\", ex);\n        }\n\n        @Override\n        public void handleIOException(IOException ex) {\n            lastMsg = ex.getMessage();\n            if (onError != null)\n                onError.accept(ex);\n            Log.wtf(\"DB\", ex);\n        }\n\n        @Override\n        public void handleMySQLConnException(MySQLConnException ex) {\n            lastMsg = ex.getMessage();\n            if (onError != null)\n                onError.accept(ex);\n            Log.wtf(\"DB\", ex);\n        }\n\n        @Override\n        public void handleException(Exception exception) {\n            lastMsg = exception.getMessage();\n            if (onError != null)\n                onError.accept(exception);\n            Log.wtf(\"DB\", exception);\n        }\n    }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/medkit2006/data/DB.java b/app/src/main/java/com/example/medkit2006/data/DB.java
+--- a/app/src/main/java/com/example/medkit2006/data/DB.java	(revision c384dbff5588a8ec8d5fa0df80581471b784f932)
++++ b/app/src/main/java/com/example/medkit2006/data/DB.java	(date 1649538743774)
+@@ -109,6 +109,7 @@
+     );
+ 
+     CREATE TABLE post(
++        _id INT AUTOINCREMENT PRIMARY KEY,
+         title VARCHAR(150) NOT NULL,
+         content VARCHAR(1000) NOT NULL,
+         comments VARCHAR(300),
+Index: app/src/main/java/com/example/medkit2006/control/MedicalFacilityMgr.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.medkit2006.control;\n\nimport android.util.Log;\n\nimport com.BoardiesITSolutions.AndroidMySQLConnector.MySQLRow;\nimport com.example.medkit2006.data.DB;\nimport com.example.medkit2006.entity.MedicalFacility;\nimport com.example.medkit2006.entity.User;\n\nimport org.jetbrains.annotations.NotNull;\n\nimport java.lang.reflect.Array;\nimport java.util.ArrayList;\nimport java.util.function.Consumer;\n\npublic class MedicalFacilityMgr {\n\t\n\t/**\n\t * Variable of list of all medical facility in database\n\t */\n\tpublic final String[] filters_type = {\"Type Unselected\", \"hospital\", \"nursing home\"};\n\tpublic final String[] filters_rating = {\"Rating Unselected\", \"Rating>3.5\", \"Rating>4.0\", \"Rating>4.5\"};\n\n\tpublic void getAllFacilityName(@NotNull Consumer<String[]> callback, Consumer<Exception> error){\n\t\tString query = \"select name from medical_facilities\";\n\t\tDB.instance.executeQuery(query, resultSet -> {\n\t\t\tString[] names = new String[150];\n\t\t\ttry{\n\t\t\t\tMySQLRow row;\n\t\t\t\tint i = 0;\n\t\t\t\twhile((row = resultSet.getNextRow()) != null && i<150){\n\t\t\t\t\tnames[i] = row.getString(\"name\");\n\t\t\t\t\ti++;\n\t\t\t\t}\n\t\t\t}catch(Exception e){\n\t\t\t\terror.accept(e);\n\t\t\t}\n\t\t\tcallback.accept(names);\n\t\t}, error);\n\t}\n\n\tpublic void getAllFacilityAbstract(@NotNull Consumer<ArrayList<MedicalFacility>> callback, Consumer<Exception> error){\n\t\tString query = \"select * from medical_facilities\";\n\t\tgetFacilityList(query, callback::accept, error::accept);\n\t}\n\n\tpublic void getFacilityList(String name, int[] filter_pos, String order, Consumer<ArrayList<MedicalFacility>> callback, Consumer<Exception> error) {\n\t\t// TODO - implement MedicalFacilityMgr.getFacilityList\n\t\t//String query = \"select *, avg(r.rating) as aveRating from medical_facilities m, Rating r where m.name like '%\".toUpperCase()+name+\"%'\".toUpperCase();\n\t\tString query = \"select * from medical_facilities m where m.name like '%\"+name+\"%'\";\n\t\tswitch(filter_pos[0]){\n\t\t\tcase 0: break;\n\t\t\tcase 1:\n\t\t\t\tquery+=\" and m.type = 'hospital' group by m.name\";\n\t\t\t\tbreak;\n\t\t\tcase 2:\n\t\t\t\tquery+=\" and m.type = 'nursing home' group by m.name\";\n\t\t\t\tbreak;\n\t\t}\n\t\tswitch(filter_pos[1]){\n\t\t\tcase 0: break;\n\t\t\tcase 1:\n\t\t\t\tquery+=\" having avg(r.rating)>3.5\";\n\t\t\t\tbreak;\n\t\t\tcase 2:\n\t\t\t\tquery+=\" having avg(r.rating)>4.0\";\n\t\t\t\tbreak;\n\t\t\tcase 3:\n\t\t\t\tquery+=\" having avg(r.rating)>4.5\";\n\t\t\t\tbreak;\n\t\t}\n\t\tswitch(order){\n\t\t\tcase \"Alphabet\":\n\t\t\t\tquery+=\" order by m.name\";\n\t\t\t\tbreak;\n\t\t\tcase \"Type\":\n\t\t\t\tquery+=\" order by m.type\";\n\t\t\t\tbreak;\n\t\t\tcase \"Rating\":\n\t\t\t\tquery+=\" order by avg(r.rating)\";\n\t\t}\n\t\tLog.d(\"MF_mgr Received Search keywords\",name+\", type: \"+filters_type[filter_pos[0]]+\", rating: \"+filters_rating[filter_pos[1]]+\", \"+order);\n\t\tgetFacilityList(query, callback::accept, error::accept);\n\t}\n\tpublic void getFacilityList(String query, Consumer<ArrayList<MedicalFacility>> callback, Consumer<Exception> error) {\n\t\tLog.d(\"MF_mgr Executing query\", query);\n\t\tDB.instance.executeQuery(query, resultSet -> {\n\t\t\tArrayList<MedicalFacility> facility_list = new ArrayList<MedicalFacility>();\n\t\t\ttry {\n\t\t\t\tMySQLRow row;\n\t\t\t\twhile ((row = resultSet.getNextRow()) != null) {\n\t\t\t\t\tMedicalFacility tmp_facil = new MedicalFacility();\n\t\t\t\t\ttmp_facil.setName(row.getString(\"name\"));    //name is nullable\n\t\t\t\t\ttmp_facil.setType(row.getString(\"type\"));\n\t\t\t\t\ttmp_facil.setAddress(row.getString(\"address\"));\n\t\t\t\t\ttmp_facil.setContact(row.getString(\"contact\"));\n\t\t\t\t\t//tmp_facil.setLongitude(row.getFloat(\"longitude\"));\n\t\t\t\t\t//tmp_facil.setLatitude(row.getFloat(\"latitude\"));\n\t\t\t\t\t//tmp_facil.setDescription(row.getString(\"description\"));\n\t\t\t\t\tfacility_list.add(tmp_facil);\n\t\t\t\t\tLog.d(\"MF_Search Result\", tmp_facil.getName());\n\t\t\t\t}\n\t\t\t\tLog.d(\"DB_search\", String.valueOf(facility_list.size()) + \"medical facility records retrieved\");\n\t\t\t} catch (Exception e) {\n\t\t\t\terror.accept(e);\n\t\t\t\treturn;\n\t\t\t}\n\t\t\tcallback.accept(facility_list);\n\t\t}, error);\n\t}\n\tpublic void getFacilityDetails(String facility_name, Consumer<MedicalFacility> callback, Consumer<Exception> error) {\n\t\tString query = (\"select * from medical_facilities where name = '\"+facility_name+\"'\").toUpperCase();\n\t\tLog.d(\"MF_mgr geting details\", query);\n\t\tDB.instance.executeQuery(query, resultSet -> {\n\t\t\tMedicalFacility tmp_facil = new MedicalFacility();\n\t\t\tMySQLRow row = resultSet.getNextRow();\n\t\t\tif(row == null)\n\t\t\t\tLog.d(\"MF_mgr retrieving detail error\",\"0 column retrieved\");\n\t\t\ttry {\n\t\t\t\ttmp_facil.setName(row.getString(\"name\"));    //name is nullable\n\t\t\t\ttmp_facil.setType(row.getString(\"type\"));\n\t\t\t\ttmp_facil.setAddress(row.getString(\"address\"));\n\t\t\t\ttmp_facil.setContact(row.getString(\"contact\"));\n\t\t\t\t//tmp_facil.setLongitude(row.getFloat(\"longitude\"));\n\t\t\t\t//tmp_facil.setLatitude(row.getFloat(\"latitude\"));\n\t\t\t\t//tmp_facil.setDescription(row.getString(\"description\"));\n\t\t\t\tLog.d(\"MF_mgr Retrieved Detail\",tmp_facil.getName());\n\t\t\t} catch (Exception e) {\n\t\t\t\tLog.d(\"MF_mgr retrieving detail error\",e.getMessage());\n\t\t\t\terror.accept(e);\n\t\t\t\treturn;\n\t\t\t}\n\t\t\tcallback.accept(tmp_facil);\n\t\t}, error);\n\t}\n\n\tpublic void addNotifyList(User user, MedicalFacility medicalFacility) {\n\t\t// TODO - implement MedicalFacilityMgr.addNotifyList\n\t\tmedicalFacility.getNotifyList().add(user);\n\t\tthrow new UnsupportedOperationException();\n\t}\n\n\t/**\n\t * Remove user from list of users who book marked the medical facility\n\t * @param user User account\n\t * @param medicalFacility Medical Facility\n\t */\n\tpublic void removeNotifyList(User user, MedicalFacility medicalFacility) {\n\t\t// TODO - implement MedicalFacilityMgr.removeNotifyList\n\t\tmedicalFacility.getNotifyList().remove(user);\n\t\tthrow new UnsupportedOperationException();\n\t}\n\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/medkit2006/control/MedicalFacilityMgr.java b/app/src/main/java/com/example/medkit2006/control/MedicalFacilityMgr.java
+--- a/app/src/main/java/com/example/medkit2006/control/MedicalFacilityMgr.java	(revision c384dbff5588a8ec8d5fa0df80581471b784f932)
++++ b/app/src/main/java/com/example/medkit2006/control/MedicalFacilityMgr.java	(date 1649574594655)
+@@ -9,44 +9,41 @@
+ 
+ import org.jetbrains.annotations.NotNull;
+ 
+-import java.lang.reflect.Array;
+ import java.util.ArrayList;
+ import java.util.function.Consumer;
+ 
+ public class MedicalFacilityMgr {
+-	
+-	/**
+-	 * Variable of list of all medical facility in database
+-	 */
++
+ 	public final String[] filters_type = {"Type Unselected", "hospital", "nursing home"};
+ 	public final String[] filters_rating = {"Rating Unselected", "Rating>3.5", "Rating>4.0", "Rating>4.5"};
++	public String[] all_facility_names;
+ 
+ 	public void getAllFacilityName(@NotNull Consumer<String[]> callback, Consumer<Exception> error){
+ 		String query = "select name from medical_facilities";
+ 		DB.instance.executeQuery(query, resultSet -> {
+-			String[] names = new String[150];
++			ArrayList<String> names = new ArrayList<String>();
+ 			try{
+ 				MySQLRow row;
+-				int i = 0;
+-				while((row = resultSet.getNextRow()) != null && i<150){
+-					names[i] = row.getString("name");
+-					i++;
++				while((row = resultSet.getNextRow()) != null){
++					names.add(row.getString("name"));
+ 				}
+ 			}catch(Exception e){
+ 				error.accept(e);
+ 			}
+-			callback.accept(names);
++			String[] namesArray = new String[names.size()];
++			for (int i = 0; i < names.size(); i++) {
++				namesArray[i] = names.get(i);
++			}
++			callback.accept(namesArray);
+ 		}, error);
+ 	}
+ 
+ 	public void getAllFacilityAbstract(@NotNull Consumer<ArrayList<MedicalFacility>> callback, Consumer<Exception> error){
+-		String query = "select * from medical_facilities";
+-		getFacilityList(query, callback::accept, error::accept);
++		String query = "select * from medical_facilities m";
++		getFacilityAbstract(query, callback::accept, error::accept);
+ 	}
+ 
+-	public void getFacilityList(String name, int[] filter_pos, String order, Consumer<ArrayList<MedicalFacility>> callback, Consumer<Exception> error) {
+-		// TODO - implement MedicalFacilityMgr.getFacilityList
+-		//String query = "select *, avg(r.rating) as aveRating from medical_facilities m, Rating r where m.name like '%".toUpperCase()+name+"%'".toUpperCase();
++	public void getFacilityAbstract(String name, int[] filter_pos, String order, Consumer<ArrayList<MedicalFacility>> callback, Consumer<Exception> error) {
+ 		String query = "select * from medical_facilities m where m.name like '%"+name+"%'";
+ 		switch(filter_pos[0]){
+ 			case 0: break;
+@@ -79,11 +76,12 @@
+ 			case "Rating":
+ 				query+=" order by avg(r.rating)";
+ 		}
+-		Log.d("MF_mgr Received Search keywords",name+", type: "+filters_type[filter_pos[0]]+", rating: "+filters_rating[filter_pos[1]]+", "+order);
+-		getFacilityList(query, callback::accept, error::accept);
++		Log.d("@string/MF_mgr_tag"+"Search keywords",name+", type: "+filters_type[filter_pos[0]]+", rating: "+filters_rating[filter_pos[1]]+", "+order);
++		getFacilityAbstract(query, callback::accept, error::accept);
+ 	}
+-	public void getFacilityList(String query, Consumer<ArrayList<MedicalFacility>> callback, Consumer<Exception> error) {
+-		Log.d("MF_mgr Executing query", query);
++
++	public void getFacilityAbstract(String query, Consumer<ArrayList<MedicalFacility>> callback, Consumer<Exception> error) {
++		Log.d("@string/MF_mgr_tag"+"getFacilityAbstract Executing query", query);
+ 		DB.instance.executeQuery(query, resultSet -> {
+ 			ArrayList<MedicalFacility> facility_list = new ArrayList<MedicalFacility>();
+ 			try {
+@@ -94,13 +92,12 @@
+ 					tmp_facil.setType(row.getString("type"));
+ 					tmp_facil.setAddress(row.getString("address"));
+ 					tmp_facil.setContact(row.getString("contact"));
+-					//tmp_facil.setLongitude(row.getFloat("longitude"));
+-					//tmp_facil.setLatitude(row.getFloat("latitude"));
+-					//tmp_facil.setDescription(row.getString("description"));
++					try{tmp_facil.setAveRating(row.getFloat("aveRating"));}catch(Exception e){
++						tmp_facil.setAveRating(0.0F); }
+ 					facility_list.add(tmp_facil);
+-					Log.d("MF_Search Result", tmp_facil.getName());
++					Log.d("@string/MF_mgr_tag"+"getFacilityAbstract Result", tmp_facil.getName());
+ 				}
+-				Log.d("DB_search", String.valueOf(facility_list.size()) + "medical facility records retrieved");
++				Log.d("@string/MF_mgr_tag"+"getFacilityAbstract returned entries", String.valueOf(facility_list.size()) + "medical facility records retrieved");
+ 			} catch (Exception e) {
+ 				error.accept(e);
+ 				return;
+@@ -110,23 +107,24 @@
+ 	}
+ 	public void getFacilityDetails(String facility_name, Consumer<MedicalFacility> callback, Consumer<Exception> error) {
+ 		String query = ("select * from medical_facilities where name = '"+facility_name+"'").toUpperCase();
+-		Log.d("MF_mgr geting details", query);
++		Log.d("@string/MF_mgr_tag"+"getFacilityDetails executing query", query);
+ 		DB.instance.executeQuery(query, resultSet -> {
+ 			MedicalFacility tmp_facil = new MedicalFacility();
+ 			MySQLRow row = resultSet.getNextRow();
+-			if(row == null)
+-				Log.d("MF_mgr retrieving detail error","0 column retrieved");
+ 			try {
+ 				tmp_facil.setName(row.getString("name"));    //name is nullable
+ 				tmp_facil.setType(row.getString("type"));
+ 				tmp_facil.setAddress(row.getString("address"));
+ 				tmp_facil.setContact(row.getString("contact"));
+-				//tmp_facil.setLongitude(row.getFloat("longitude"));
+-				//tmp_facil.setLatitude(row.getFloat("latitude"));
+-				//tmp_facil.setDescription(row.getString("description"));
+-				Log.d("MF_mgr Retrieved Detail",tmp_facil.getName());
++				try{tmp_facil.setLatitude(row.getFloat("longitude"));} catch(Exception e){
++					tmp_facil.setLongitude(0.0F);}
++				try{tmp_facil.setDescription(row.getString("latitude"));}catch(Exception e){
++					tmp_facil.setLatitude(0.0F);}
++				try{tmp_facil.setDescription(row.getString("description"));}catch(Exception e){
++					tmp_facil.setDescription("This is a great facility!");}
++				Log.d("@string/MF_mgr_tag"+"getFacilityDetail Result",tmp_facil.getName());
+ 			} catch (Exception e) {
+-				Log.d("MF_mgr retrieving detail error",e.getMessage());
++				Log.d("@string/MF_mgr_tag"+"getFacilityDetail Error",e.getMessage());
+ 				error.accept(e);
+ 				return;
+ 			}
+Index: app/src/main/res/values/dimens.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><resources>\n    <!-- Default screen margins, per the Android Design guidelines. -->\n    <dimen name=\"activity_horizontal_margin\">16dp</dimen>\n    <dimen name=\"activity_vertical_margin\">16dp</dimen>\n    <!-- Default screen margins, per the Android Design guidelines. -->\n    <dimen name=\"nav_header_vertical_spacing\">26dp</dimen>\n    <dimen name=\"nav_header_height\">160dp</dimen>\n    <dimen name=\"fab_margin\">16dp</dimen>\n</resources>\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/values/dimens.xml b/app/src/main/res/values/dimens.xml
+--- a/app/src/main/res/values/dimens.xml	(revision c384dbff5588a8ec8d5fa0df80581471b784f932)
++++ b/app/src/main/res/values/dimens.xml	(date 1649520395111)
+@@ -3,7 +3,7 @@
+     <dimen name="activity_horizontal_margin">16dp</dimen>
+     <dimen name="activity_vertical_margin">16dp</dimen>
+     <!-- Default screen margins, per the Android Design guidelines. -->
+-    <dimen name="nav_header_vertical_spacing">26dp</dimen>
++    <dimen name="nav_header_vertical_spacing">56dp</dimen>
+     <dimen name="nav_header_height">160dp</dimen>
+     <dimen name="fab_margin">16dp</dimen>
+ </resources>
+Index: app/src/main/java/com/example/medkit2006/boundary/MyPostUI.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.medkit2006.boundary;\n\nimport android.content.Intent;\nimport android.database.Cursor;\nimport android.database.sqlite.SQLiteDatabase;\nimport android.os.Bundle;\nimport android.view.View;\nimport android.widget.AdapterView;\nimport android.widget.ListView;\n\nimport androidx.appcompat.app.AppCompatActivity;\n\nimport com.example.medkit2006.FeedAdapter;\nimport com.example.medkit2006.R;\nimport com.example.medkit2006.entity.Post;\nimport com.example.medkit2006.data.ForumContract;\nimport com.example.medkit2006.data.ForumDbHelper;\n\nimport java.util.ArrayList;\n\npublic class MyPostUI extends AppCompatActivity {\n\n    @Override\n    protected void onCreate(Bundle savedInstanceState) {\n        super.onCreate(savedInstanceState);\n        setContentView(R.layout.activity_my_post);\n\n        setTitle(\"Your Posts\");\n        ArrayList<Post> words = new ArrayList<Post>();\n        ForumDbHelper helper = new ForumDbHelper(this);\n        SQLiteDatabase db = helper.getReadableDatabase();\n        String projection[] = {\n                ForumContract.ForumEntry.COLUMN_TITLE,\n                ForumContract.ForumEntry.COLUMN_USER,\n                ForumContract.ForumEntry.COLUMN_DATE,\n                ForumContract.ForumEntry.COLUMN_STATUS\n        };\n        String selection = ForumContract.ForumEntry.COLUMN_STATUS + \"=? AND \" + ForumContract.ForumEntry.COLUMN_USER + \"=?\";\n        String[] selectionArgs = {\"1\",getUser()};\n        Cursor cursor = db.query(ForumContract.ForumEntry.TABLE_NAME, projection,selection,selectionArgs,null,null,null);\n        try {\n            int userColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_USER);\n            int dateColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_DATE);\n            int titleColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_TITLE);\n            while(cursor.moveToNext())\n            {\n                String userID = cursor.getString(userColumnIndex);\n                String date = cursor.getString(dateColumnIndex);\n                String title = cursor.getString(titleColumnIndex);\n                words.add(new Post(title,userID,date));\n            }\n        } finally {\n            cursor.close();\n        }\n        FeedAdapter itemsAdapter = new FeedAdapter(this,words);\n        final ListView listView = (ListView) findViewById(R.id.list);\n        listView.setAdapter(itemsAdapter);\n\n        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()\n        {\n            @Override\n            public void onItemClick(AdapterView<?> adapter, View v, int position, long arg3)\n            {\n                Intent i = new Intent(MyPostUI.this, PostDetailUI.class);\n                Post selectedFromList = (Post)(listView.getItemAtPosition(position));\n                i.putExtra(\"date\" , selectedFromList.getDate());\n                startActivity(i);\n            }\n        });\n\n    }\n\n    public String getUser()\n    {\n        Intent i = getIntent();\n        Bundle bd = i.getExtras();\n        String username = \"\";\n        if(bd != null)\n        {\n            String name = (String) bd.get(\"username\");\n            username = name;\n        }\n        return username;\n    }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/medkit2006/boundary/MyPostUI.java b/app/src/main/java/com/example/medkit2006/boundary/MyPostUI.java
+--- a/app/src/main/java/com/example/medkit2006/boundary/MyPostUI.java	(revision c384dbff5588a8ec8d5fa0df80581471b784f932)
++++ b/app/src/main/java/com/example/medkit2006/boundary/MyPostUI.java	(date 1649559449561)
+@@ -1,9 +1,8 @@
+ package com.example.medkit2006.boundary;
+ 
+ import android.content.Intent;
+-import android.database.Cursor;
+-import android.database.sqlite.SQLiteDatabase;
+ import android.os.Bundle;
++import android.util.Log;
+ import android.view.View;
+ import android.widget.AdapterView;
+ import android.widget.ListView;
+@@ -11,12 +10,9 @@
+ import androidx.appcompat.app.AppCompatActivity;
+ 
+ import com.example.medkit2006.FeedAdapter;
++import com.example.medkit2006.MainActivity;
+ import com.example.medkit2006.R;
+ import com.example.medkit2006.entity.Post;
+-import com.example.medkit2006.data.ForumContract;
+-import com.example.medkit2006.data.ForumDbHelper;
+-
+-import java.util.ArrayList;
+ 
+ public class MyPostUI extends AppCompatActivity {
+ 
+@@ -26,35 +22,18 @@
+         setContentView(R.layout.activity_my_post);
+ 
+         setTitle("Your Posts");
+-        ArrayList<Post> words = new ArrayList<Post>();
+-        ForumDbHelper helper = new ForumDbHelper(this);
+-        SQLiteDatabase db = helper.getReadableDatabase();
+-        String projection[] = {
+-                ForumContract.ForumEntry.COLUMN_TITLE,
+-                ForumContract.ForumEntry.COLUMN_USER,
+-                ForumContract.ForumEntry.COLUMN_DATE,
+-                ForumContract.ForumEntry.COLUMN_STATUS
+-        };
+-        String selection = ForumContract.ForumEntry.COLUMN_STATUS + "=? AND " + ForumContract.ForumEntry.COLUMN_USER + "=?";
+-        String[] selectionArgs = {"1",getUser()};
+-        Cursor cursor = db.query(ForumContract.ForumEntry.TABLE_NAME, projection,selection,selectionArgs,null,null,null);
+-        try {
+-            int userColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_USER);
+-            int dateColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_DATE);
+-            int titleColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_TITLE);
+-            while(cursor.moveToNext())
+-            {
+-                String userID = cursor.getString(userColumnIndex);
+-                String date = cursor.getString(dateColumnIndex);
+-                String title = cursor.getString(titleColumnIndex);
+-                words.add(new Post(title,userID,date));
+-            }
+-        } finally {
+-            cursor.close();
+-        }
+-        FeedAdapter itemsAdapter = new FeedAdapter(this,words);
+-        final ListView listView = (ListView) findViewById(R.id.list);
+-        listView.setAdapter(itemsAdapter);
++        final ListView listView = findViewById(R.id.list);
++        MainActivity.forumMgr.getMyPostAbstract(getUser(), postList->{
++            runOnUiThread(new Runnable() {
++                @Override
++                public void run() {
++                    FeedAdapter itemsAdapter = new FeedAdapter(MyPostUI.this, postList);
++                    listView.setAdapter(itemsAdapter);
++                }
++            });
++        }, error->{
++            Log.d("MyPost display error", error.getMessage());
++        });
+ 
+         listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+         {
+@@ -63,23 +42,16 @@
+             {
+                 Intent i = new Intent(MyPostUI.this, PostDetailUI.class);
+                 Post selectedFromList = (Post)(listView.getItemAtPosition(position));
+-                i.putExtra("date" , selectedFromList.getDate());
++                i.putExtra(ForumUI.EXTRA , selectedFromList.getID());
+                 startActivity(i);
+             }
+         });
+-
+     }
+ 
+     public String getUser()
+     {
+         Intent i = getIntent();
+-        Bundle bd = i.getExtras();
+-        String username = "";
+-        if(bd != null)
+-        {
+-            String name = (String) bd.get("username");
+-            username = name;
+-        }
++        String username = i.getStringExtra(ForumUI.USEREXTRA);
+         return username;
+     }
+ }
+Index: app/src/main/java/com/example/medkit2006/boundary/PostEditorUI.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.medkit2006.boundary;\n\nimport android.content.Intent;\nimport android.os.Bundle;\nimport android.util.Log;\nimport android.view.Menu;\nimport android.view.MenuItem;\nimport android.view.View;\nimport android.widget.AdapterView;\nimport android.widget.ArrayAdapter;\nimport android.widget.EditText;\nimport android.widget.RatingBar;\nimport android.widget.Spinner;\nimport android.widget.Toast;\n\nimport androidx.appcompat.app.AppCompatActivity;\nimport androidx.core.app.NavUtils;\n\nimport com.example.medkit2006.MainActivity;\nimport com.example.medkit2006.R;\n\npublic class PostEditorUI extends AppCompatActivity implements AdapterView.OnItemSelectedListener{\n    private String[] medical_facility_names = new String[150];\n    @Override\n    protected void onCreate(Bundle savedInstanceState) {\n        super.onCreate(savedInstanceState);\n        setContentView(R.layout.activity_post_editor);\n\n        Spinner spn = findViewById(R.id.post_facility_selection_spinner);\n        spn.setOnItemSelectedListener(this);\n        MainActivity.facilityMgr.getAllFacilityName(names->{\n            this.medical_facility_names = names;\n            runOnUiThread(new Runnable() {\n                @Override\n                public void run() {\n                    ArrayAdapter ad = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_item, names);\n                    ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);\n                    spn.setAdapter(ad);\n                }\n            });\n        },e->{\n            Log.d(\"Post Spinner Set Failed\",e.toString().trim());\n        });\n    }\n\n    @Override\n    public boolean onCreateOptionsMenu(Menu menu) {\n        getMenuInflater().inflate(R.menu.post_editor, menu);\n        return true;\n    }\n\n    @Override\n    public boolean onOptionsItemSelected(MenuItem item) {\n        // User clicked on a menu option in the app bar overflow menu\n        switch (item.getItemId()) {\n            // Respond to a click on the \"Save\" menu option\n            case R.id.action_save:\n                insertData(1);\n                return true;\n            // Respond to a click on the \"Delete\" menu option\n            case R.id.action_draft:\n                // Do nothing for now\n                insertData(0);\n                return true;\n            // Respond to a click on the \"Up\" arrow button in the app bar\n            case android.R.id.home:\n                // Navigate back to parent activity (CatalogActivity)\n                NavUtils.navigateUpFromSameTask(this);\n                return true;\n        }\n        return super.onOptionsItemSelected(item);\n    }\n\n    public void insertData(int status)\n    {\n        EditText titleView = findViewById(R.id.title);\n        EditText post = findViewById(R.id.post);\n        EditText tags = findViewById(R.id.tags);\n        RatingBar ratingbar = findViewById(R.id.ratingBar);\n        Spinner med_spinner = findViewById(R.id.post_facility_selection_spinner);\n        ;\n\n        MainActivity.forumMgr.addPost(titleView.getText().toString().trim(),//title\n                post.getText().toString().trim(),//content\n                getUser(), //username\n                medical_facility_names[med_spinner.getSelectedItemPosition()],//medical_mecility\n                tags.getText().toString().toLowerCase().trim(),//tags\n                status,//status\n                ratingbar.getNumStars(),//ratings\n                ()->{},//callback\n                e->{\n                    Log.d(\"Add Post Fail\",e.getMessage());\n                    runOnUiThread(new Runnable() {\n                        @Override\n                        public void run() {// Stuff that updates the UI\n                            Toast.makeText(getApplicationContext(), e.toString().trim(), Toast.LENGTH_SHORT).show();\n                        }\n                    });\n                }\n        );\n\n        /*ForumDbHelper helper = new ForumDbHelper(this);\n        SQLiteDatabase db = helper.getWritableDatabase();\n        ContentValues values = new ContentValues();\n\n        values.put(ForumContract.ForumEntry.COLUMN_STATUS, status);\n        values.put(ForumContract.ForumEntry.COLUMN_TITLE, title);\n        values.put(ForumContract.ForumEntry.COLUMN_TAGS, postTag);\n        values.put(ForumContract.ForumEntry.COLUMN_REPORT, 0);\n        values.put(ForumContract.ForumEntry.COLUMN_COMMENTS, \"\");\n        values.put(ForumContract.ForumEntry.COLUMN_DATE, getDate());\n        values.put(ForumContract.ForumEntry.COLUMN_LIKES, 0);\n        values.put(ForumContract.ForumEntry.COLUMN_USER, getUser());\n        values.put(ForumContract.ForumEntry.COLUMN_POST, postContent);\n\n        long insert_id = db.insert(ForumContract.ForumEntry.TABLE_NAME, null, values);\n        db.close();\n\n        if(insert_id != -1)\n        {\n            Toast.makeText(PostEditorUI.this, \"Posted!!\" , Toast.LENGTH_LONG).show();\n        }\n        else\n        {\n            Toast.makeText(PostEditorUI.this, \"Error posting.\"  , Toast.LENGTH_LONG).show();\n        }*/\n    }\n\n/*    public String getDate()\n    {\n        SimpleDateFormat sdf = new SimpleDateFormat(\"yyyy-MM-dd HH:mm:ss\");\n        String strDate = sdf.format(new Date());\n        return strDate;\n    }*/\n\n    public String getUser()\n    {\n        Intent i = getIntent();\n        Bundle bd = i.getExtras();\n        String name = null;\n        if(bd != null) {\n            name = (String) bd.get(\"username\");\n        }\n        return name;\n    }\n    @Override\n    public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {\n        // Auto-generated method stub\n    }\n\n    @Override\n    public void onNothingSelected(AdapterView<?> adapterView) {\n        // Auto-generated method stub\n    }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/medkit2006/boundary/PostEditorUI.java b/app/src/main/java/com/example/medkit2006/boundary/PostEditorUI.java
+--- a/app/src/main/java/com/example/medkit2006/boundary/PostEditorUI.java	(revision c384dbff5588a8ec8d5fa0df80581471b784f932)
++++ b/app/src/main/java/com/example/medkit2006/boundary/PostEditorUI.java	(date 1649575774756)
+@@ -28,7 +28,10 @@
+ 
+         Spinner spn = findViewById(R.id.post_facility_selection_spinner);
+         spn.setOnItemSelectedListener(this);
+-        MainActivity.facilityMgr.getAllFacilityName(names->{
++        ArrayAdapter ad = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_item, MainActivity.facilityMgr.all_facility_names);
++        ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
++        spn.setAdapter(ad);
++        /*MainActivity.facilityMgr.getAllFacilityName(names->{
+             this.medical_facility_names = names;
+             runOnUiThread(new Runnable() {
+                 @Override
+@@ -40,7 +43,7 @@
+             });
+         },e->{
+             Log.d("Post Spinner Set Failed",e.toString().trim());
+-        });
++        });*/
+     }
+ 
+     @Override
+@@ -56,11 +59,13 @@
+             // Respond to a click on the "Save" menu option
+             case R.id.action_save:
+                 insertData(1);
++                finish();
+                 return true;
+             // Respond to a click on the "Delete" menu option
+             case R.id.action_draft:
+                 // Do nothing for now
+                 insertData(0);
++                finish();
+                 return true;
+             // Respond to a click on the "Up" arrow button in the app bar
+             case android.R.id.home:
+@@ -74,73 +79,40 @@
+     public void insertData(int status)
+     {
+         EditText titleView = findViewById(R.id.title);
+-        EditText post = findViewById(R.id.post);
++        EditText content = findViewById(R.id.post);
+         EditText tags = findViewById(R.id.tags);
+         RatingBar ratingbar = findViewById(R.id.ratingBar);
+         Spinner med_spinner = findViewById(R.id.post_facility_selection_spinner);
+-        ;
+ 
+         MainActivity.forumMgr.addPost(titleView.getText().toString().trim(),//title
+-                post.getText().toString().trim(),//content
+-                getUser(), //username
+-                medical_facility_names[med_spinner.getSelectedItemPosition()],//medical_mecility
+-                tags.getText().toString().toLowerCase().trim(),//tags
+-                status,//status
+-                ratingbar.getNumStars(),//ratings
+-                ()->{},//callback
+-                e->{
+-                    Log.d("Add Post Fail",e.getMessage());
+-                    runOnUiThread(new Runnable() {
+-                        @Override
+-                        public void run() {// Stuff that updates the UI
+-                            Toast.makeText(getApplicationContext(), e.toString().trim(), Toast.LENGTH_SHORT).show();
+-                        }
+-                    });
+-                }
++            content.getText().toString().trim(),//content
++            getUser(), //username
++            MainActivity.facilityMgr.all_facility_names[med_spinner.getSelectedItemPosition()],//medical_mecility
++            tags.getText().toString().toLowerCase().trim(),//tags
++            status,//status
++            ratingbar.getNumStars(),//ratings
++            ()->{
++                runOnUiThread(new Runnable() {
++                @Override
++                public void run() {// Stuff that updates the UI
++                    Toast.makeText(getApplicationContext(), "Posted!", Toast.LENGTH_SHORT).show();
++                }}); },//callback
++            e-> {
++                Log.d("Add Post Fail", e.getMessage());
++                runOnUiThread(new Runnable() {
++                    @Override
++                    public void run() {// Stuff that updates the UI
++                        Toast.makeText(getApplicationContext(), e.toString().trim(), Toast.LENGTH_SHORT).show();
++                    }
++                });
++            }
+         );
+-
+-        /*ForumDbHelper helper = new ForumDbHelper(this);
+-        SQLiteDatabase db = helper.getWritableDatabase();
+-        ContentValues values = new ContentValues();
+-
+-        values.put(ForumContract.ForumEntry.COLUMN_STATUS, status);
+-        values.put(ForumContract.ForumEntry.COLUMN_TITLE, title);
+-        values.put(ForumContract.ForumEntry.COLUMN_TAGS, postTag);
+-        values.put(ForumContract.ForumEntry.COLUMN_REPORT, 0);
+-        values.put(ForumContract.ForumEntry.COLUMN_COMMENTS, "");
+-        values.put(ForumContract.ForumEntry.COLUMN_DATE, getDate());
+-        values.put(ForumContract.ForumEntry.COLUMN_LIKES, 0);
+-        values.put(ForumContract.ForumEntry.COLUMN_USER, getUser());
+-        values.put(ForumContract.ForumEntry.COLUMN_POST, postContent);
+-
+-        long insert_id = db.insert(ForumContract.ForumEntry.TABLE_NAME, null, values);
+-        db.close();
+-
+-        if(insert_id != -1)
+-        {
+-            Toast.makeText(PostEditorUI.this, "Posted!!" , Toast.LENGTH_LONG).show();
+-        }
+-        else
+-        {
+-            Toast.makeText(PostEditorUI.this, "Error posting."  , Toast.LENGTH_LONG).show();
+-        }*/
+     }
+-
+-/*    public String getDate()
+-    {
+-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+-        String strDate = sdf.format(new Date());
+-        return strDate;
+-    }*/
+ 
+     public String getUser()
+     {
+         Intent i = getIntent();
+-        Bundle bd = i.getExtras();
+-        String name = null;
+-        if(bd != null) {
+-            name = (String) bd.get("username");
+-        }
++        String name = i.getStringExtra(ForumUI.USEREXTRA);
+         return name;
+     }
+     @Override
+Index: app/src/main/res/layout/facility_detail.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\n    android:layout_width=\"wrap_content\"\n    android:layout_height=\"match_parent\">\n\n    <ScrollView\n        android:layout_width=\"395dp\"\n        android:layout_height=\"match_parent\"\n        android:layout_marginStart=\"8dp\"\n        android:layout_marginTop=\"8dp\"\n        android:layout_marginEnd=\"8dp\"\n        android:layout_marginBottom=\"8dp\"\n        app:layout_constraintBottom_toBottomOf=\"parent\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toTopOf=\"parent\">\n\n        <LinearLayout\n            android:layout_width=\"match_parent\"\n            android:layout_height=\"wrap_content\"\n            android:orientation=\"vertical\">\n\n            <HorizontalScrollView\n                android:id=\"@+id/horizontalScrollView\"\n                android:layout_width=\"388dp\"\n                android:layout_height=\"254dp\"\n                android:layout_marginTop=\"8dp\"\n                android:contentDescription=\"@string/appbar_scrolling_view_behavior\">\n\n                <LinearLayout\n                    android:layout_width=\"wrap_content\"\n                    android:layout_height=\"match_parent\"\n                    android:orientation=\"horizontal\">\n\n                    <ImageView\n                        android:id=\"@+id/medfacil_img1\"\n                        android:layout_width=\"388dp\"\n                        android:layout_height=\"254dp\"\n                        android:layout_weight=\"1\"\n                        android:cropToPadding=\"true\"\n                        android:scaleType=\"fitStart\"\n                        app:srcCompat=\"@drawable/demo_facil\" />\n\n                    <ImageView\n                        android:id=\"@+id/medfacil_img2\"\n                        android:layout_width=\"388dp\"\n                        android:layout_height=\"254dp\"\n                        android:layout_weight=\"1\"\n                        android:scaleType=\"fitStart\"\n                        app:srcCompat=\"@drawable/demo_facil\" />\n\n                </LinearLayout>\n            </HorizontalScrollView>\n\n            <LinearLayout\n                android:layout_width=\"match_parent\"\n                android:layout_height=\"match_parent\"\n                android:layout_weight=\"1\"\n                android:orientation=\"horizontal\">\n\n                <TextView\n                    android:id=\"@+id/medfacil_name\"\n                    android:layout_width=\"wrap_content\"\n                    android:layout_height=\"45dp\"\n                    android:layout_marginStart=\"15dp\"\n                    android:layout_marginTop=\"8dp\"\n                    android:text=\"Medical Facility Name\"\n                    android:textSize=\"24sp\"\n                    android:textStyle=\"bold\" />\n\n                <ImageButton\n                    android:id=\"@+id/bookmark_btn\"\n                    android:layout_width=\"wrap_content\"\n                    android:layout_height=\"48dp\"\n                    app:srcCompat=\"@android:drawable/btn_star_big_off\" />\n            </LinearLayout>\n\n            <TextView\n                android:id=\"@+id/medfacil_descr\"\n                android:layout_width=\"382dp\"\n                android:layout_height=\"122dp\"\n                android:layout_marginStart=\"15dp\"\n                android:layout_marginTop=\"5dp\"\n                android:layout_marginEnd=\"15dp\"\n                android:text=\"It is the only private medical provider in Singapore that owns and operates a fully integrated healthcare organisation comprising a tertiary hospital, a network of family medicine and dental clinics, insurance services, Japanese and Traditional Chinese Medicine clinics, and a consumer healthcare division.\"\n                android:textAlignment=\"viewStart\" />\n\n            <fragment xmlns:android=\"http://schemas.android.com/apk/res/android\"\n                xmlns:map=\"http://schemas.android.com/apk/res-auto\"\n                android:id=\"@+id/map\"\n                android:name=\"com.google.android.gms.maps.SupportMapFragment\"\n                android:layout_width=\"match_parent\"\n                android:layout_height=\"264dp\"\n                android:layout_marginStart=\"15dp\"\n                android:layout_marginTop=\"8dp\"\n                android:layout_marginEnd=\"15dp\"\n                app:cameraTilt=\"30\"\n                app:uiRotateGestures=\"true\"\n                app:uiZoomControls=\"true\" />\n\n        </LinearLayout>\n    </ScrollView>\n\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/facility_detail.xml b/app/src/main/res/layout/facility_detail.xml
+--- a/app/src/main/res/layout/facility_detail.xml	(revision c384dbff5588a8ec8d5fa0df80581471b784f932)
++++ b/app/src/main/res/layout/facility_detail.xml	(date 1649522938217)
+@@ -61,8 +61,8 @@
+ 
+                 <TextView
+                     android:id="@+id/medfacil_name"
+-                    android:layout_width="wrap_content"
+-                    android:layout_height="45dp"
++                    android:layout_width="300dp"
++                    android:layout_height="wrap_content"
+                     android:layout_marginStart="15dp"
+                     android:layout_marginTop="8dp"
+                     android:text="Medical Facility Name"
+@@ -78,8 +78,8 @@
+ 
+             <TextView
+                 android:id="@+id/medfacil_descr"
+-                android:layout_width="382dp"
+-                android:layout_height="122dp"
++                android:layout_width="380dp"
++                android:layout_height="wrap_content"
+                 android:layout_marginStart="15dp"
+                 android:layout_marginTop="5dp"
+                 android:layout_marginEnd="15dp"
+@@ -97,7 +97,8 @@
+                 android:layout_marginEnd="15dp"
+                 app:cameraTilt="30"
+                 app:uiRotateGestures="true"
+-                app:uiZoomControls="true" />
++                app:uiZoomControls="true"
++                />
+ 
+         </LinearLayout>
+     </ScrollView>
+Index: app/src/main/java/com/example/medkit2006/boundary/SearchUI.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.medkit2006.boundary;\n\nimport static com.example.medkit2006.MainActivity.facilityMgr;\n\nimport android.content.Context;\nimport android.content.Intent;\nimport android.os.Bundle;\nimport android.os.Looper;\nimport android.util.Log;\nimport android.view.View;\nimport android.widget.AdapterView;\nimport android.widget.ArrayAdapter;\nimport android.widget.EditText;\nimport android.widget.RadioButton;\nimport android.widget.RadioGroup;\nimport android.widget.Spinner;\nimport android.widget.Toast;\n\nimport androidx.annotation.Nullable;\nimport androidx.appcompat.app.AppCompatActivity;\nimport androidx.recyclerview.widget.LinearLayoutManager;\nimport androidx.recyclerview.widget.RecyclerView;\n\nimport com.android.volley.AuthFailureError;\nimport com.android.volley.Request;\nimport com.android.volley.RequestQueue;\nimport com.android.volley.Response;\nimport com.android.volley.VolleyError;\nimport com.android.volley.toolbox.JsonArrayRequest;\nimport com.android.volley.toolbox.Volley;\nimport com.example.medkit2006.MedicalFacilityAdapter;\nimport com.example.medkit2006.R;\nimport com.example.medkit2006.control.MedicalFacilityMgr;\nimport com.example.medkit2006.data.DB;\nimport com.example.medkit2006.data.ForumContract;\nimport com.example.medkit2006.entity.MedicalFacility;\n\nimport org.json.JSONArray;\nimport org.json.JSONException;\nimport org.json.JSONObject;\n\nimport java.util.ArrayList;\nimport java.util.HashMap;\nimport java.util.Map;\n\npublic class SearchUI extends AppCompatActivity implements AdapterView.OnItemSelectedListener{\n    public static final String EXTRA_MESSAGE = \"@string/MF_name\";\n    public static final String QUERY = \"@string/MF_search\";\n\n    RecyclerView recyclerView;\n    MedicalFacilityAdapter adapter;\n\n    @Override\n    protected void onCreate(Bundle savedInstanceState) {\n        super.onCreate(savedInstanceState);\n        setContentView(R.layout.activity_search);\n\n        //Setting spinners\n        Spinner type_spin = findViewById(R.id.type_filter_spinner);\n        Spinner rating_spin = findViewById(R.id.rating_filter_spinner);\n\n        type_spin.setOnItemSelectedListener(this);\n        rating_spin.setOnItemSelectedListener(this);\n\n        ArrayAdapter type_ad = new ArrayAdapter(this, android.R.layout.simple_spinner_item, facilityMgr.filters_type);\n        type_ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);\n        type_spin.setAdapter(type_ad);\n        ArrayAdapter rating_ad = new ArrayAdapter(this, android.R.layout.simple_spinner_item, facilityMgr.filters_rating);\n        rating_ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);\n        rating_spin.setAdapter(rating_ad);\n\n        recyclerView = findViewById(R.id.search_result_rv);\n        displayAllFacility();\n    }\n\n    public void displayAllFacility(){\n        facilityMgr.getAllFacilityAbstract(medicalFacilityList -> {\n            Log.d(\"Received Medical Facility List\", String.valueOf(medicalFacilityList.size()));\n            runOnUiThread(new Runnable() {\n                @Override\n                public void run() {// Stuff that updates the UI\n                    recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));\n                    adapter = new MedicalFacilityAdapter(getApplicationContext(), medicalFacilityList);\n                    recyclerView.setAdapter(adapter);\n                }\n            });\n        }, e -> {\n            Log.d(\"Received Medical Facility List Unsuccessful\", e.toString().trim());\n            runOnUiThread(new Runnable() {\n                @Override\n                public void run() {// Stuff that updates the UI\n                    Toast.makeText(getApplicationContext(), e.toString().trim(), Toast.LENGTH_SHORT).show();\n                }\n            });\n        });\n    }\n\n    @Override\n    public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {\n        // Auto-generated method stub\n    }\n\n    @Override\n    public void onNothingSelected(AdapterView<?> adapterView) {\n        // Auto-generated method stub\n    }\n    public void toSearchResult(View view){\n        //Get user input text\n        EditText edx = findViewById(R.id.search_src1);\n        String name = edx.getText().toString();\n        //Get filters\n        int filter_pos[] = new int[2];\n        Spinner spn = findViewById(R.id.type_filter_spinner);\n        filter_pos[0] = spn.getSelectedItemPosition();\n        spn = findViewById(R.id.rating_filter_spinner);\n        filter_pos[1] = spn.getSelectedItemPosition();\n        //Get user selection of order by\n        RadioGroup rgr = findViewById(R.id.sort_radioGroup);\n        String order ;\n        try {\n            RadioButton rbtn = findViewById(rgr.getCheckedRadioButtonId());\n            order = rbtn.getText().toString();\n        }catch (Exception e){\n            order = \"\";\n        }\n        facilityMgr.getFacilityList(name, filter_pos, order, medicalFacilityList -> {\n            Log.d(\"Received Medical Facility List\", String.valueOf(medicalFacilityList.size()));\n            runOnUiThread(new Runnable() {\n                @Override\n                public void run() {// Stuff that updates the UI\n                    recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));\n                    adapter = new MedicalFacilityAdapter(getApplicationContext(), medicalFacilityList);\n                    recyclerView.setAdapter(adapter);\n                }\n            });\n        }, e -> {\n            Log.d(\"Received Medical Facility List Unsuccessful\", e.toString().trim());\n            runOnUiThread(new Runnable() {\n                @Override\n                public void run() {// Stuff that updates the UI\n                    Toast.makeText(getApplicationContext(), e.toString().trim(), Toast.LENGTH_SHORT).show();\n                }\n            });\n        });\n        //Gather all info and formulate a query.\n        //Intent intent = new Intent(SearchUI.this, SearchResultUI.class);\n        //startActivity(intent);\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/medkit2006/boundary/SearchUI.java b/app/src/main/java/com/example/medkit2006/boundary/SearchUI.java
+--- a/app/src/main/java/com/example/medkit2006/boundary/SearchUI.java	(revision c384dbff5588a8ec8d5fa0df80581471b784f932)
++++ b/app/src/main/java/com/example/medkit2006/boundary/SearchUI.java	(date 1649526328337)
+@@ -2,10 +2,7 @@
+ 
+ import static com.example.medkit2006.MainActivity.facilityMgr;
+ 
+-import android.content.Context;
+-import android.content.Intent;
+ import android.os.Bundle;
+-import android.os.Looper;
+ import android.util.Log;
+ import android.view.View;
+ import android.widget.AdapterView;
+@@ -16,32 +13,12 @@
+ import android.widget.Spinner;
+ import android.widget.Toast;
+ 
+-import androidx.annotation.Nullable;
+ import androidx.appcompat.app.AppCompatActivity;
+ import androidx.recyclerview.widget.LinearLayoutManager;
+ import androidx.recyclerview.widget.RecyclerView;
+ 
+-import com.android.volley.AuthFailureError;
+-import com.android.volley.Request;
+-import com.android.volley.RequestQueue;
+-import com.android.volley.Response;
+-import com.android.volley.VolleyError;
+-import com.android.volley.toolbox.JsonArrayRequest;
+-import com.android.volley.toolbox.Volley;
+ import com.example.medkit2006.MedicalFacilityAdapter;
+ import com.example.medkit2006.R;
+-import com.example.medkit2006.control.MedicalFacilityMgr;
+-import com.example.medkit2006.data.DB;
+-import com.example.medkit2006.data.ForumContract;
+-import com.example.medkit2006.entity.MedicalFacility;
+-
+-import org.json.JSONArray;
+-import org.json.JSONException;
+-import org.json.JSONObject;
+-
+-import java.util.ArrayList;
+-import java.util.HashMap;
+-import java.util.Map;
+ 
+ public class SearchUI extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+     public static final String EXTRA_MESSAGE = "@string/MF_name";
+@@ -123,7 +100,7 @@
+         }catch (Exception e){
+             order = "";
+         }
+-        facilityMgr.getFacilityList(name, filter_pos, order, medicalFacilityList -> {
++        facilityMgr.getFacilityAbstract(name, filter_pos, order, medicalFacilityList -> {
+             Log.d("Received Medical Facility List", String.valueOf(medicalFacilityList.size()));
+             runOnUiThread(new Runnable() {
+                 @Override
+@@ -142,8 +119,5 @@
+                 }
+             });
+         });
+-        //Gather all info and formulate a query.
+-        //Intent intent = new Intent(SearchUI.this, SearchResultUI.class);
+-        //startActivity(intent);
+     }
+ }
+\ No newline at end of file
+Index: app/src/main/res/menu/feed_action.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<menu xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\n    xmlns:tools=\"http://schemas.android.com/tools\"\n    tools:context=\".boundary.ForumUI\">\n    <item\n        android:id=\"@+id/action_new_post\"\n        android:title=\"New Post\"\n        android:icon=\"@drawable/write\"\n        app:showAsAction=\"always\" />\n\n</menu>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/menu/feed_action.xml b/app/src/main/res/menu/feed_action.xml
+--- a/app/src/main/res/menu/feed_action.xml	(revision c384dbff5588a8ec8d5fa0df80581471b784f932)
++++ b/app/src/main/res/menu/feed_action.xml	(date 1649522451628)
+@@ -4,6 +4,11 @@
+     xmlns:tools="http://schemas.android.com/tools"
+     tools:context=".boundary.ForumUI">
+     <item
++        android:id="@+id/action_go_main"
++        android:title="Go to Main Menu"
++        android:icon="@drawable/arrow"
++        app:showAsAction="always" />
++    <item
+         android:id="@+id/action_new_post"
+         android:title="New Post"
+         android:icon="@drawable/write"
+Index: app/src/main/res/values/strings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><resources>\n    <string name=\"app_name\">Medkit2006</string>\n    <!-- TODO: Remove or change this placeholder text -->\n    <string name=\"hello_blank_fragment\">Hello blank fragment</string>\n    <string name=\"MF_name\">Medical Facility Name</string>\n    <string name=\"MF_image\">Medical Facility Image</string>\n    <string name=\"MF_type\">Type</string>\n    <string name=\"MF_rating\">Rating</string>\n    <string name=\"MF_address\">Address</string>\n    <string name=\"MF_contact\">Contact</string>\n    <string name=\"MF_services\">Service</string>\n    <string name=\"near_by_search_btn\">Search Nearby</string>\n    <string name=\"search_hist_txt\">Search History</string>\n    <string name=\"search_hint\">Enter search here</string>\n    <string name=\"search_ord_hint\">Sort by </string>\n    <string name=\"search_opt1\">Alphabet</string>\n    <string name=\"search_opt2\">Type</string>\n    <string name=\"search_opt3\">Rating</string>\n    <string name=\"no_result_warning\">Search NO result!</string>\n    <string name=\"open\">Open</string>\n    <string name=\"close\">Close</string>\n    <string name=\"action_settings\">Setting</string>\n    <string name=\"type_a_message_here\">Type a message here</string>\n    <string name=\"username\">Username</string>\n    <string name=\"error_in_sending_message\">Error in sending message.</string>\n    <string name=\"btn_accounts\">Account</string>\n    <string name=\"btn_settings\">Settings</string>\n    <string name=\"btn_chat\">Chat</string>\n    <string name=\"btn_forum\">Forum</string>\n    <string name=\"btn_bookmark\">Bookmark</string>\n    <string name=\"btn_login\">Login</string>\n    <string-array name=\"gender_array\">\n        <item />\n        <item>M</item>\n        <item>F</item>\n        <item>O</item>\n    </string-array>\n    <string-array name=\"blood_type_array\">\n        <item />\n        <item>A+</item>\n        <item>A-</item>\n        <item>B+</item>\n        <item>B-</item>\n        <item>O+</item>\n        <item>O-</item>\n        <item>AB+</item>\n        <item>AB-</item>\n    </string-array>\n\n</resources>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/values/strings.xml b/app/src/main/res/values/strings.xml
+--- a/app/src/main/res/values/strings.xml	(revision c384dbff5588a8ec8d5fa0df80581471b784f932)
++++ b/app/src/main/res/values/strings.xml	(date 1649526056266)
+@@ -29,6 +29,7 @@
+     <string name="btn_forum">Forum</string>
+     <string name="btn_bookmark">Bookmark</string>
+     <string name="btn_login">Login</string>
++    <string name="MF_mgr_tag">MF_Mgr Queries</string>
+     <string-array name="gender_array">
+         <item />
+         <item>M</item>
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"DesignSurface\">\n    <option name=\"filePathToZoomLevelMap\">\n      <map>\n        <entry key=\"../../../../../../../layout/custom_preview.xml\" value=\"0.14629629629629629\" />\n        <entry key=\"../../CZ2006-MedKit/Medkit2006/app/src/main/res/layout/activity_result_search.xml\" value=\"0.1\" />\n        <entry key=\"../../CZ2006-MedKit/Medkit2006/app/src/main/res/layout/activity_search.xml\" value=\"0.2914627075195313\" />\n        <entry key=\"../../CZ2006-MedKit/Medkit2006/app/src/main/res/layout/medical_facility_layout.xml\" value=\"0.31911334933480956\" />\n        <entry key=\"../../CZ2006-MedKit/Medkit2006/app/src/main/res/layout/search.xml\" value=\"0.1\" />\n        <entry key=\"../../CZ2006-MedKit/Medkit2006/app/src/main/res/layout/success.xml\" value=\"0.1\" />\n        <entry key=\"../../CZ2006-MedKit/Medkit2006/app/src/main/res/layout/textview.xml\" value=\"0.1\" />\n        <entry key=\"..\\:/Users/julie/AndroidStudioProjects/Medkit2006/app/src/main/res/drawable-anydpi/ic_rating_stars.xml\" value=\"0.1925\" />\n        <entry key=\"..\\:/Users/julie/AndroidStudioProjects/Medkit2006/app/src/main/res/drawable-v24/ic_launcher_foreground.xml\" value=\"0.1485\" />\n        <entry key=\"..\\:/Users/julie/AndroidStudioProjects/Medkit2006/app/src/main/res/drawable/ic_launcher_background.xml\" value=\"0.1485\" />\n        <entry key=\"..\\:/Users/julie/AndroidStudioProjects/Medkit2006/app/src/main/res/drawable/rounded_corner_view.xml\" value=\"0.1485\" />\n        <entry key=\"..\\:/Users/julie/AndroidStudioProjects/Medkit2006/app/src/main/res/layout/account.xml\" value=\"0.23854166666666668\" />\n        <entry key=\"..\\:/Users/julie/AndroidStudioProjects/Medkit2006/app/src/main/res/layout/activity_main.xml\" value=\"0.2\" />\n        <entry key=\"..\\:/Users/julie/AndroidStudioProjects/Medkit2006/app/src/main/res/layout/activity_result_search.xml\" value=\"0.25416666666666665\" />\n        <entry key=\"..\\:/Users/julie/AndroidStudioProjects/Medkit2006/app/src/main/res/layout/bookmark.xml\" value=\"0.23854166666666668\" />\n        <entry key=\"..\\:/Users/julie/AndroidStudioProjects/Medkit2006/app/src/main/res/layout/chat.xml\" value=\"0.23854166666666668\" />\n        <entry key=\"..\\:/Users/julie/AndroidStudioProjects/Medkit2006/app/src/main/res/layout/forum.xml\" value=\"0.23854166666666668\" />\n        <entry key=\"..\\:/Users/julie/AndroidStudioProjects/Medkit2006/app/src/main/res/layout/login.xml\" value=\"0.25416666666666665\" />\n        <entry key=\"..\\:/Users/julie/AndroidStudioProjects/Medkit2006/app/src/main/res/layout/medical_facility_layout.xml\" value=\"0.24282982791587\" />\n        <entry key=\"..\\:/Users/julie/AndroidStudioProjects/Medkit2006/app/src/main/res/layout/menu_main.xml\" value=\"0.25416666666666665\" />\n        <entry key=\"..\\:/Users/julie/AndroidStudioProjects/Medkit2006/app/src/main/res/layout/registration.xml\" value=\"0.25416666666666665\" />\n        <entry key=\"..\\:/Users/julie/AndroidStudioProjects/Medkit2006/app/src/main/res/layout/search.xml\" value=\"0.2\" />\n        <entry key=\"..\\:/Users/julie/AndroidStudioProjects/Medkit2006/app/src/main/res/layout/success.xml\" value=\"0.25416666666666665\" />\n        <entry key=\"..\\:/Users/julie/AndroidStudioProjects/Medkit2006/app/src/main/res/xml/network_security_config.xml\" value=\"0.1\" />\n        <entry key=\"..\\:/Users/julie/AndroidStudioProjects/Medkit2006/app/src/main/res/xml/test.xml\" value=\"0.25416666666666665\" />\n        <entry key=\"..\\:/Users/julie/Documents/GitHub/cz2006-MedKit/Medkit2006/app/src/main/res/layout/account.xml\" value=\"0.25416666666666665\" />\n        <entry key=\"..\\:/Users/julie/Documents/GitHub/cz2006-MedKit/Medkit2006/app/src/main/res/layout/accountsettings.xml\" value=\"0.25416666666666665\" />\n        <entry key=\"..\\:/Users/julie/Documents/GitHub/cz2006-MedKit/Medkit2006/app/src/main/res/layout/activity_main.xml\" value=\"0.25416666666666665\" />\n        <entry key=\"..\\:/Users/julie/Documents/GitHub/cz2006-MedKit/Medkit2006/app/src/main/res/layout/activity_result_search.xml\" value=\"0.25416666666666665\" />\n        <entry key=\"..\\:/Users/julie/Documents/GitHub/cz2006-MedKit/Medkit2006/app/src/main/res/layout/activity_search.xml\" value=\"0.25416666666666665\" />\n        <entry key=\"..\\:/Users/julie/Documents/GitHub/cz2006-MedKit/Medkit2006/app/src/main/res/layout/bookmark.xml\" value=\"0.25416666666666665\" />\n        <entry key=\"..\\:/Users/julie/Documents/GitHub/cz2006-MedKit/Medkit2006/app/src/main/res/layout/chat.xml\" value=\"0.25416666666666665\" />\n        <entry key=\"..\\:/Users/julie/Documents/GitHub/cz2006-MedKit/Medkit2006/app/src/main/res/layout/facil_detail.xml\" value=\"0.25416666666666665\" />\n        <entry key=\"..\\:/Users/julie/Documents/GitHub/cz2006-MedKit/Medkit2006/app/src/main/res/layout/forum.xml\" value=\"0.25416666666666665\" />\n        <entry key=\"..\\:/Users/julie/Documents/GitHub/cz2006-MedKit/Medkit2006/app/src/main/res/layout/login.xml\" value=\"0.25416666666666665\" />\n        <entry key=\"..\\:/Users/julie/Documents/GitHub/cz2006-MedKit/Medkit2006/app/src/main/res/layout/medical_facility_layout.xml\" value=\"0.25416666666666665\" />\n        <entry key=\"..\\:/Users/julie/Documents/GitHub/cz2006-MedKit/Medkit2006/app/src/main/res/layout/menu_main.xml\" value=\"0.25416666666666665\" />\n        <entry key=\"..\\:/Users/julie/Documents/GitHub/cz2006-MedKit/Medkit2006/app/src/main/res/layout/registration.xml\" value=\"0.25416666666666665\" />\n        <entry key=\"app/src/main/res/layout/account.xml\" value=\"0.1\" />\n        <entry key=\"app/src/main/res/layout/accountsettings.xml\" value=\"0.1\" />\n        <entry key=\"app/src/main/res/layout/activity_drafts.xml\" value=\"0.24329071044921877\" />\n        <entry key=\"app/src/main/res/layout/activity_feed.xml\" value=\"0.1\" />\n        <entry key=\"app/src/main/res/layout/activity_forum.xml\" value=\"0.1\" />\n        <entry key=\"app/src/main/res/layout/activity_main.xml\" value=\"0.14583333333333334\" />\n        <entry key=\"app/src/main/res/layout/activity_my_post.xml\" value=\"0.12273550724637682\" />\n        <entry key=\"app/src/main/res/layout/activity_post_detail.xml\" value=\"0.1\" />\n        <entry key=\"app/src/main/res/layout/activity_post_drafts.xml\" value=\"0.1\" />\n        <entry key=\"app/src/main/res/layout/activity_post_editor.xml\" value=\"0.1\" />\n        <entry key=\"app/src/main/res/layout/activity_post_to_draft.xml\" value=\"0.1\" />\n        <entry key=\"app/src/main/res/layout/activity_search.xml\" value=\"0.1\" />\n        <entry key=\"app/src/main/res/layout/bookmark.xml\" value=\"0.1\" />\n        <entry key=\"app/src/main/res/layout/chat.xml\" value=\"0.1\" />\n        <entry key=\"app/src/main/res/layout/facil_detail.xml\" value=\"0.1\" />\n        <entry key=\"app/src/main/res/layout/facility_detail.xml\" value=\"0.1\" />\n        <entry key=\"app/src/main/res/layout/feed_tile.xml\" value=\"0.12273550724637682\" />\n        <entry key=\"app/src/main/res/layout/login.xml\" value=\"0.1\" />\n        <entry key=\"app/src/main/res/layout/menu_main.xml\" value=\"0.14583333333333334\" />\n        <entry key=\"app/src/main/res/layout/nav_header.xml\" value=\"0.1\" />\n        <entry key=\"app/src/main/res/layout/registration.xml\" value=\"0.1\" />\n        <entry key=\"app/src/main/res/layout/search.xml\" value=\"0.1\" />\n        <entry key=\"app/src/main/res/layout/success.xml\" value=\"0.14583333333333334\" />\n        <entry key=\"app/src/main/res/menu/activity_profile_drawer.xml\" value=\"0.1\" />\n        <entry key=\"app/src/main/res/menu/draft_post_editor.xml\" value=\"0.1\" />\n        <entry key=\"app/src/main/res/menu/drawer_menu.xml\" value=\"0.1\" />\n        <entry key=\"app/src/main/res/menu/feed_action.xml\" value=\"0.1\" />\n        <entry key=\"app/src/main/res/menu/post_editor.xml\" value=\"0.1\" />\n        <entry key=\"app/src/main/res/menu/profile.xml\" value=\"0.1\" />\n      </map>\n    </option>\n  </component>\n  <component name=\"ExternalStorageConfigurationManager\" enabled=\"true\" />\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_11\" default=\"true\" project-jdk-name=\"Android Studio default JDK\" project-jdk-type=\"JavaSDK\">\n    <output url=\"file://$PROJECT_DIR$/build/classes\" />\n  </component>\n  <component name=\"ProjectType\">\n    <option name=\"id\" value=\"Android\" />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	(revision c384dbff5588a8ec8d5fa0df80581471b784f932)
++++ b/.idea/misc.xml	(date 1649557590726)
+@@ -57,7 +57,8 @@
+         <entry key="app/src/main/res/layout/chat.xml" value="0.1" />
+         <entry key="app/src/main/res/layout/facil_detail.xml" value="0.1" />
+         <entry key="app/src/main/res/layout/facility_detail.xml" value="0.1" />
+-        <entry key="app/src/main/res/layout/feed_tile.xml" value="0.12273550724637682" />
++        <entry key="app/src/main/res/layout/feed_tile.xml" value="0.1" />
++        <entry key="app/src/main/res/layout/forum.xml" value="0.1" />
+         <entry key="app/src/main/res/layout/login.xml" value="0.1" />
+         <entry key="app/src/main/res/layout/menu_main.xml" value="0.14583333333333334" />
+         <entry key="app/src/main/res/layout/nav_header.xml" value="0.1" />
