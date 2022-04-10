@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +26,9 @@ import com.example.medkit2006.data.DB;
 import com.example.medkit2006.data.ForumContract;
 import com.example.medkit2006.data.ForumDbHelper;
 import com.example.medkit2006.entity.Post;
+import com.example.medkit2006.entity.User;
+
+import java.util.Locale;
 
 public class PostDetailUI extends AppCompatActivity {
     private int post_id;
@@ -33,6 +37,7 @@ public class PostDetailUI extends AppCompatActivity {
     private int likeNum = 0;
     private int reportNum = 0;
     private String comments = null;
+    private String post_user;
     public void setLikeFlag() { likeFlag = 1; }
     public int getLikeFlag() { return likeFlag; }
     public void setReportFlag() { reportFlag = 1; }
@@ -52,7 +57,7 @@ public class PostDetailUI extends AppCompatActivity {
         TextView content = findViewById(R.id.post);
         final TextView numLikes = findViewById(R.id.numLikes);
         if(post_id == -1)
-            Toast.makeText(this, "Can't find post!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Can't find post!", Toast.LENGTH_LONG).show();
         else {
             MainActivity.forumMgr.getPostDetail(post_id, searchPost -> {
                 runOnUiThread(new Runnable() {
@@ -63,6 +68,7 @@ public class PostDetailUI extends AppCompatActivity {
                         else {
                             setTitle(searchPost.getTitle());
                             user.append(searchPost.getUsername());
+                            post_user = searchPost.getUsername();
                             title.setText(searchPost.getTitle());
                             date.setText(searchPost.getDate());
                             tags.append(searchPost.getTags());
@@ -71,10 +77,12 @@ public class PostDetailUI extends AppCompatActivity {
                             reportNum = searchPost.getReportNum();
                             numLikes.append("" + likeNum);
                             comments = searchPost.getComments();
-                            String items[] = comments.split("\n");
-                            ArrayAdapter<String> itemsAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, items);
-                            ListView listView = findViewById(R.id.commList);
-                            listView.setAdapter(itemsAdapter);
+                            if(comments != null) {
+                                String items[] = comments.split("\n");
+                                ArrayAdapter<String> itemsAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, items);
+                                ListView listView = findViewById(R.id.commList);
+                                listView.setAdapter(itemsAdapter);
+                            }
                         }
                     }
                 });
@@ -85,6 +93,7 @@ public class PostDetailUI extends AppCompatActivity {
 
         final Button like = findViewById(R.id.like);
         final Button report = findViewById(R.id.report);
+        final ImageButton message = findViewById(R.id.message);
         Button comIt = findViewById(R.id.comIt);
         final EditText comment = findViewById(R.id.comment);
 
@@ -96,7 +105,7 @@ public class PostDetailUI extends AppCompatActivity {
                     newNumLikes.setText("Likes: " + (likeNum + 1));
                     setLikeFlag();
                     //update the like into database
-                    DB.instance.execute(("update post set likes = " + (likeNum + 1) + " where _ID = "+post_id).toUpperCase(), ()->{}, error->{Log.d("Update Likes Fail", error.getMessage());});
+                    DB.instance.execute(("update post set likes = ".toUpperCase() + (likeNum + 1) + " WHERE _ID = "+post_id), ()->{}, error->{Log.d("Update Likes Fail", error.getMessage());});
                 }
             }
         });
@@ -108,7 +117,7 @@ public class PostDetailUI extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Already Reported", Toast.LENGTH_LONG);
                 else
                 {
-                    DB.instance.execute(("update post set reports = " + (reportNum + 1) + " where _ID = "+post_id).toUpperCase(),
+                    DB.instance.execute(("update post set report = " + (reportNum + 1) + " where _ID = "+post_id).toUpperCase(),
                             ()->{
                         runOnUiThread(new Runnable() {
                             @Override
@@ -125,6 +134,26 @@ public class PostDetailUI extends AppCompatActivity {
             }
         });
 
+        message.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                //check if the account is logged in
+                User cur_user = MainActivity.accountMgr.getLoggedInUser();
+                if(cur_user == null){
+                    Toast.makeText(PostDetailUI.this, "Please log in first!", Toast.LENGTH_LONG);
+                    Intent toLogin = new Intent(PostDetailUI.this, LoginUI.class);
+                    startActivity(toLogin);
+                }
+                else{
+                    MainActivity.chatMgr.startPrivateMessage(cur_user.getUsername(), post_user, ()->{}, error->{Log.d("Message Unable to Start", error.getMessage());} );
+                    Intent intent = new Intent(PostDetailUI.this, ChatUsersUI.class);
+                    startActivity(intent);
+                    //intent.putExtra("chatId", chat.getKey());
+                    //intent.putExtra("chatName", holder.username.getText().toString());
+                }
+            }
+        });
+
         comIt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -134,7 +163,7 @@ public class PostDetailUI extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(getApplicationContext(), "Commented!", Toast.LENGTH_SHORT);
+                            Toast.makeText(PostDetailUI.this, "Commented!", Toast.LENGTH_LONG);
                         }
                     });
                 }, error->{Log.d("Update Comments Fail", error.getMessage());});

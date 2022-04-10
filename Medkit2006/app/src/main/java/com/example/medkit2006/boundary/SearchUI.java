@@ -28,6 +28,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.medkit2006.MainActivity;
 import com.example.medkit2006.MedicalFacilityAdapter;
 import com.example.medkit2006.R;
 import com.example.medkit2006.control.MedicalFacilityMgr;
@@ -123,7 +124,7 @@ public class SearchUI extends AppCompatActivity implements AdapterView.OnItemSel
         }catch (Exception e){
             order = "";
         }
-        facilityMgr.getFacilityList(name, filter_pos, order, medicalFacilityList -> {
+        MainActivity.facilityMgr.getFacilityAbstract(name, filter_pos, order, medicalFacilityList -> {
             Log.d("Received Medical Facility List", String.valueOf(medicalFacilityList.size()));
             runOnUiThread(new Runnable() {
                 @Override

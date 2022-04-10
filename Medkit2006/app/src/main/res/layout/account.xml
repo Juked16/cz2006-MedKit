@@ -32,14 +32,24 @@
         android:text="" />
 
     <Button
+        android:id="@+id/accountToMainBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="200dp"
+        android:text="MainMenu"
+        android:visibility="invisible" />
+
+    <Button
         android:id="@+id/accountToSettingsBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="300dp"
-        android:visibility="invisible"
-        android:text="@string/btn_settings" />
+        android:text="@string/btn_settings"
+        android:visibility="invisible" />
 
     <Button
         android:id="@+id/accountLoginBtn"

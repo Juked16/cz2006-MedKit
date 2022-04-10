@@ -28,6 +28,7 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".boundary.MessageActivity"
+            android:parentActivityName=".boundary.ChatUsersUI"
             android:exported="false" />
 
         <meta-data
@@ -62,7 +63,6 @@
         <activity android:name=".boundary.PostDraftUI" android:label="Post Drafts" android:parentActivityName=".boundary.ForumUI"/>
         <activity android:name=".boundary.PostEditorUI" android:label="Edit New Post" android:parentActivityName=".boundary.ForumUI"/>
         <activity android:name=".boundary.PostToDraftUI" android:label="Post To Draft" android:parentActivityName=".boundary.ForumUI"/>
-
 
     </application>
 

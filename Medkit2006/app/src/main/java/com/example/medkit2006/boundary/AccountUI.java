@@ -34,6 +34,11 @@ public class AccountUI extends AppCompatActivity {
                 startActivity(intent);
             });
             ((Button) findViewById(R.id.accountLoginBtn)).setText("Logout");
+            findViewById(R.id.accountToMainBtn).setVisibility(View.VISIBLE);
+            findViewById(R.id.accountToMainBtn).setOnClickListener(btn -> {
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+            });
         }
     }
 

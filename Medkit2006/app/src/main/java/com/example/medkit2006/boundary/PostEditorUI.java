@@ -83,7 +83,15 @@ public class PostEditorUI extends AppCompatActivity implements AdapterView.OnIte
         EditText tags = findViewById(R.id.tags);
         RatingBar ratingbar = findViewById(R.id.ratingBar);
         Spinner med_spinner = findViewById(R.id.post_facility_selection_spinner);
-
+        if(titleView.getText() == null || titleView.getText().toString() == ""){
+            Toast.makeText(PostEditorUI.this, "Title cannot be empty!", Toast.LENGTH_LONG);
+        }
+        else if(content.getText() == null || content.getText().toString() == ""){
+            Toast.makeText(PostEditorUI.this, "Content cannot be empty!", Toast.LENGTH_LONG);
+        }
+        else if(ratingbar.getNumStars() == 0){
+            Toast.makeText(PostEditorUI.this, "Rating is 0, are you sure to continue?", Toast.LENGTH_LONG);
+        }
         MainActivity.forumMgr.addPost(titleView.getText().toString().trim(),//title
             content.getText().toString().trim(),//content
             getUser(), //username

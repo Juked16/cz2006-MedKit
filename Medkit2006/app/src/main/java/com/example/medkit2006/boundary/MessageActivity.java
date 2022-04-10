@@ -44,12 +44,12 @@ public class MessageActivity extends AppCompatActivity {
         linearLayoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        chatName = findViewById(R.id.chatName);
         btn_send = findViewById(R.id.btn_send);
         text_send = findViewById(R.id.text_send);
 
         intent = getIntent();
         String chatName = intent.getStringExtra("chatName");
+        setTitle(chatName);
         chatId = intent.getIntExtra("chatId", -1);
         tmp_user = MainActivity.accountMgr.getLoggedInUser();
 
@@ -63,8 +63,6 @@ public class MessageActivity extends AppCompatActivity {
             }
             text_send.setText("");
         });
-
-        this.chatName.setText(chatName);
     }
 
     @Override

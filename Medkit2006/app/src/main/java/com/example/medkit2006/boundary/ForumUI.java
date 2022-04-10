@@ -39,7 +39,7 @@ public class ForumUI extends AppCompatActivity {
         setContentView(R.layout.activity_forum);
 
         MainActivity.facilityMgr.getAllFacilityName(names->{
-            facilityMgr.all_facility_names = names;
+            MainActivity.facilityMgr.all_facility_names = names;
         }, error->{Log.d("ForumUI get facility names error", error.getMessage());});
 
         mDrawerlayout = (DrawerLayout) findViewById(R.id.drawer_layout);
