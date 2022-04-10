@@ -26,20 +26,20 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#FFF"
+        android:textColor="#000"
         android:id="@+id/user"
         android:text="By "/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#FFF"
+        android:textColor="#000"
         android:id="@+id/date"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#FFF"
+        android:textColor="#000"
         android:text="Tags: "
         android:id="@+id/tags"/>
 
@@ -63,15 +63,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="10dp"
-        android:textSize="15dp"
-        android:background="#1A000000"
+        android:textSize="20dp"
+        android:background="#b07c1a"
         android:textColor="#FFF"
         android:id="@+id/post"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#FFF"
+        android:textColor="#800000"
         android:id="@+id/numLikes"
         android:text="\nLikes: "/>
 
@@ -101,7 +101,7 @@
             android:layout_width="0dp"
             android:layout_weight="4"
             android:layout_height="wrap_content"
-            android:textColor="#FFF"
+            android:textColor="#000"
             android:hint="Comment"
             android:id="@+id/comment"/>
 
@@ -118,16 +118,15 @@
         android:layout_height="wrap_content"
         android:text="\nPREVIOUS COMMENTS\n"/>
 
-    <ListView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <ListView xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/commList"
         android:paddingTop="15dp"
         android:paddingBottom="15dp"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:textColor="#FFF"
+        android:textColor="#000"
         android:layout_height="wrap_content"
-        tools:context="com.example.student.forum.feed"/>
+        />
 
     <TextView
         android:layout_width="wrap_content"

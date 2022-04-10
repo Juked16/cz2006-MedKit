@@ -5,58 +5,68 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.RatingBar;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NavUtils;
 
+import com.example.medkit2006.MainActivity;
 import com.example.medkit2006.R;
 import com.example.medkit2006.data.ForumContract;
 import com.example.medkit2006.data.ForumDbHelper;
+import com.example.medkit2006.entity.Post;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class PostToDraftUI extends AppCompatActivity {
+public class PostToDraftUI extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+
+    private int post_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_to_draft);
 
-        EditText title = (EditText) findViewById(R.id.title);
-        EditText post = (EditText) findViewById(R.id.post);
-        EditText tags = (EditText) findViewById(R.id.tags);
+        Intent i = getIntent();
+        post_id = i.getIntExtra(ForumUI.EXTRA, -1);
+        EditText title = findViewById(R.id.title);
+        EditText content = findViewById(R.id.post);
+        EditText tags = findViewById(R.id.tags);
+        RatingBar ratingBar = findViewById(R.id.ratingBar);
 
-        ForumDbHelper helper = new ForumDbHelper(this);
-        SQLiteDatabase db = helper.getReadableDatabase();
-        String projection[] = {
-                ForumContract.ForumEntry.COLUMN_TITLE,
-                ForumContract.ForumEntry.COLUMN_TAGS,
-                ForumContract.ForumEntry.COLUMN_POST
-        };
+        Spinner mSpinner = findViewById(R.id.post_facility_selection_spinner);
+        mSpinner.setOnItemSelectedListener(this);
+        ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_item, MainActivity.facilityMgr.all_facility_names);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSpinner.setAdapter(adapter);
 
-        String selection = ForumContract.ForumEntry.COLUMN_DATE + "=?";
-        String[] selectionArgs = {getDate()};
-        Cursor cursor = db.query(ForumContract.ForumEntry.TABLE_NAME, projection,selection,selectionArgs,null,null,null);
-        try {
-            int titleColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_TITLE);
-            int tagsColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_TAGS);
-            int postColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_POST);
-            while(cursor.moveToNext())
-            {
-                String postTitle = cursor.getString(titleColumnIndex);
-                String postTags = cursor.getString(tagsColumnIndex);
-                String mainPost = cursor.getString(postColumnIndex);
-                title.setText(postTitle);
-                post.setText(mainPost);
-                tags.setText(postTags);
-            }
-        } finally {
-            cursor.close();
+        if(post_id == -1)
+            Toast.makeText(this, "Can't find post!", Toast.LENGTH_SHORT).show();
+        else{
+        MainActivity.forumMgr.getPostDetail(post_id, post->{
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    title.setText(post.getTitle());
+                    content.setText(post.getContent());
+                    tags.setText(post.getTags());
+                    int spinnerPosition = adapter.getPosition(post.getFacility());
+                    mSpinner.setSelection(spinnerPosition);
+                }
+            });
+        }, error->{
+            Log.d("PostToDraftUI",error.getMessage());
+        });
         }
     }
 
@@ -82,7 +92,7 @@ public class PostToDraftUI extends AppCompatActivity {
                 updateData(0);
                 return true;
             case R.id.action_discard:
-                deletePost();
+                MainActivity.forumMgr.deletePost(post_id);
                 finish();
             // Respond to a click on the "Up" arrow button in the app bar
             case android.R.id.home:
@@ -95,57 +105,32 @@ public class PostToDraftUI extends AppCompatActivity {
 
     public void updateData(int status)
     {
-        EditText title = (EditText) findViewById(R.id.title);
-        EditText post = (EditText) findViewById(R.id.post);
-        EditText tags = (EditText) findViewById(R.id.tags);
+        EditText title = findViewById(R.id.title);
+        EditText content = findViewById(R.id.post);
+        EditText tags = findViewById(R.id.tags);
+        RatingBar ratingbar = findViewById(R.id.ratingBar);
+        Spinner med_spinner = findViewById(R.id.post_facility_selection_spinner);
 
-        ForumDbHelper helper = new ForumDbHelper(PostToDraftUI.this);
-        SQLiteDatabase db = helper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-
-        values.put(ForumContract.ForumEntry.COLUMN_POST, post.getText().toString().trim());
-        values.put(ForumContract.ForumEntry.COLUMN_TAGS, tags.getText().toString().trim());
-        values.put(ForumContract.ForumEntry.COLUMN_TITLE, tags.getText().toString().trim());
-        values.put(ForumContract.ForumEntry.COLUMN_REPORT,0);
-        values.put(ForumContract.ForumEntry.COLUMN_COMMENTS,"");
-        values.put(ForumContract.ForumEntry.COLUMN_USER,getUser());
-        values.put(ForumContract.ForumEntry.COLUMN_DATE, getNewDate());
-        values.put(ForumContract.ForumEntry.COLUMN_LIKES,0);
-        values.put(ForumContract.ForumEntry.COLUMN_STATUS,status);
-        long updated = db.update(ForumContract.ForumEntry.TABLE_NAME, values, ForumContract.ForumEntry.COLUMN_DATE + "=? AND " + ForumContract.ForumEntry.COLUMN_USER + "=?", new String[]{getDate(),getUser()});
-
-        if(updated != 0)
-        {
-            Toast.makeText(PostToDraftUI.this,"Successfully posted", Toast.LENGTH_LONG).show();
-        }
-        else
-        {
-            Toast.makeText(PostToDraftUI.this,"Error posting, please check and try again", Toast.LENGTH_LONG).show();
-        }
-    }
-
-    public String getDate()
-    {
-        Intent i = getIntent();
-        Bundle bd = i.getExtras();
-        String date = "";
-        if(bd != null)
-        {
-            String fdate = (String) bd.get("date");
-            date = fdate;
-        }
-        return date;
-    }
-
-    public String getUser()
-    {
-        Intent i = getIntent();
-        Bundle bd = i.getExtras();
-        String name = null;
-        if(bd != null) {
-            name = (String) bd.get("username");
-        }
-        return name;
+        MainActivity.forumMgr.updatePost(post_id, //post_id
+                title.getText().toString().trim(),//title
+            content.getText().toString().trim(),//content
+            getNewDate(), //newDate
+            getUsername(),//username
+            MainActivity.facilityMgr.all_facility_names[med_spinner.getSelectedItemPosition()],//medical_mecility
+            tags.getText().toString().toLowerCase().trim(),//tags
+            status,//status
+            ratingbar.getNumStars(),//ratings
+            ()->{},//callback
+            e->{
+                Log.d("Add Post Fail",e.getMessage());
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {// Stuff that updates the UI
+                        Toast.makeText(getApplicationContext(), e.toString().trim(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        );
     }
 
     public String getNewDate()
@@ -155,12 +140,20 @@ public class PostToDraftUI extends AppCompatActivity {
         return strDate;
     }
 
-    public void deletePost()
-    {
-        ForumDbHelper helper = new ForumDbHelper(PostToDraftUI.this);
-        SQLiteDatabase db = helper.getWritableDatabase();
-        String whereClause = ForumContract.ForumEntry.COLUMN_DATE + "=?";
-        String[] whereArgs = new String[] {getDate()};
-        db.delete(ForumContract.ForumEntry.TABLE_NAME, whereClause, whereArgs);
+    public String getUsername(){
+        Intent i = getIntent();
+        String name = i.getStringExtra(ForumUI.USEREXTRA);
+        return name;
+    }
+
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 }

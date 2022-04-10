@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -11,6 +12,7 @@ import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.medkit2006.FeedAdapter;
+import com.example.medkit2006.MainActivity;
 import com.example.medkit2006.R;
 import com.example.medkit2006.entity.Post;
 import com.example.medkit2006.data.ForumContract;
@@ -25,35 +27,18 @@ public class PostDraftUI extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_drafts);
         setTitle("Your Drafts");
-        ArrayList<Post> words = new ArrayList<Post>();
-        ForumDbHelper helper = new ForumDbHelper(this);
-        SQLiteDatabase db = helper.getReadableDatabase();
-        String projection[] = {
-                ForumContract.ForumEntry.COLUMN_TITLE,
-                ForumContract.ForumEntry.COLUMN_USER,
-                ForumContract.ForumEntry.COLUMN_DATE,
-                ForumContract.ForumEntry.COLUMN_STATUS
-        };
-        String selection = ForumContract.ForumEntry.COLUMN_STATUS + "=? AND " + ForumContract.ForumEntry.COLUMN_USER + "=?";
-        String[] selectionArgs = {"0",getUser()};
-        Cursor cursor = db.query(ForumContract.ForumEntry.TABLE_NAME, projection,selection,selectionArgs,null,null,null);
-        try {
-            int userColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_USER);
-            int dateColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_DATE);
-            int titleColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_TITLE);
-            while(cursor.moveToNext())
-            {
-                String userID = cursor.getString(userColumnIndex);
-                String date = cursor.getString(dateColumnIndex);
-                String title = cursor.getString(titleColumnIndex);
-                words.add(new Post(title,userID,date));
-            }
-        } finally {
-            cursor.close();
-        }
-        FeedAdapter itemsAdapter = new FeedAdapter(this,words);
         final ListView listView = (ListView) findViewById(R.id.list);
-        listView.setAdapter(itemsAdapter);
+        MainActivity.forumMgr.getMyDraftAbstract(getUser(), postList->{
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    FeedAdapter itemsAdapter = new FeedAdapter(PostDraftUI.this,postList);
+                    listView.setAdapter(itemsAdapter);
+                }
+            });
+        }, error->{
+            Log.d("Post Draft OnCreate error", error.getMessage());
+        });
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
@@ -62,8 +47,8 @@ public class PostDraftUI extends AppCompatActivity {
             {
                 Intent i = new Intent(PostDraftUI.this, PostToDraftUI.class);
                 Post selectedFromList = (Post)(listView.getItemAtPosition(position));
-                i.putExtra("date" , selectedFromList.getDate());
-                i.putExtra("username", getUser());
+                i.putExtra(ForumUI.EXTRA, selectedFromList.getID());
+                i.putExtra(ForumUI.USEREXTRA, getUser());
                 startActivity(i);
             }
         });
@@ -72,13 +57,7 @@ public class PostDraftUI extends AppCompatActivity {
     public String getUser()
     {
         Intent i = getIntent();
-        Bundle bd = i.getExtras();
-        String username = "";
-        if(bd != null)
-        {
-            String name = (String) bd.get("username");
-            username = name;
-        }
+        String username = i.getStringExtra(ForumUI.USEREXTRA);
         return username;
     }
 }

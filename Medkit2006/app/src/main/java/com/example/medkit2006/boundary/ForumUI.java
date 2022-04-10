@@ -27,6 +27,8 @@ import com.google.android.material.navigation.NavigationView;
 
 public class ForumUI extends AppCompatActivity {
 
+    public static String EXTRA = "post_id";
+    public static String USEREXTRA = "username";
     private DrawerLayout mDrawerlayout;
     private ActionBarDrawerToggle mToggle;
     private NavigationView navigation;
@@ -35,6 +37,10 @@ public class ForumUI extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forum);
+
+        MainActivity.facilityMgr.getAllFacilityName(names->{
+            facilityMgr.all_facility_names = names;
+        }, error->{Log.d("ForumUI get facility names error", error.getMessage());});
 
         mDrawerlayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mToggle = new ActionBarDrawerToggle(this,mDrawerlayout, open,R.string.close);
@@ -45,7 +51,7 @@ public class ForumUI extends AppCompatActivity {
         setTitle("Welcome " + getUser());
         final ListView listView = findViewById(R.id.list);
         //search database below
-        MainActivity.forumMgr.getAllPost(postList -> {
+        MainActivity.forumMgr.getAllPostAbstract(postList -> {
             Log.d("Received Post List", String.valueOf(postList.size()));
             runOnUiThread(new Runnable() {
                 @Override
@@ -54,9 +60,8 @@ public class ForumUI extends AppCompatActivity {
                     listView.setAdapter(itemsAdapter);
                 }
             });
-        },
-                e -> {
-                    Log.d("Received Medical Facility List Unsuccessful", e.toString().trim());
+        }, e -> {
+                    Log.d("Received Post List Unsuccessful", e.toString().trim());
                     runOnUiThread(new Runnable() {
                 @Override
                 public void run() {// Stuff that updates the UI
@@ -72,7 +77,7 @@ public class ForumUI extends AppCompatActivity {
             {
                 Intent i = new Intent(ForumUI.this, PostDetailUI.class);
                 Post selectedFromList = (Post)(listView.getItemAtPosition(position));
-                i.putExtra("date" , selectedFromList.getDate());
+                i.putExtra(ForumUI.EXTRA, selectedFromList.getID());
                 startActivity(i);
             }
         });
@@ -87,7 +92,7 @@ public class ForumUI extends AppCompatActivity {
             }
         });
 
-        navigation = (NavigationView) findViewById(R.id.nav_view);
+        navigation = findViewById(R.id.nav_view);
         navigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
@@ -96,22 +101,22 @@ public class ForumUI extends AppCompatActivity {
                 switch (id) {
                     case R.id.drafts:
                         i = new Intent(ForumUI.this, MainActivity.accountMgr.isLoggedIn() ? PostDraftUI.class : LoginUI.class);
-                        i.putExtra("username", getUser());
+                        i.putExtra(USEREXTRA, getUser());
                         startActivity(i);
                         break;
                     case R.id.myPost:
                         i = new Intent(ForumUI.this, MainActivity.accountMgr.isLoggedIn() ? MyPostUI.class : LoginUI.class);
-                        i.putExtra("username", getUser());
+                        i.putExtra(USEREXTRA, getUser());
                         startActivity(i);
                 }
                 return false;
             }
         });
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         View hView =  navigationView.getHeaderView(0);
         TextView name;
-        name = (TextView)hView.findViewById(R.id.userName);
+        name = hView.findViewById(R.id.userName);
         name.setText(getUser());
     }
 
@@ -140,13 +145,22 @@ public class ForumUI extends AppCompatActivity {
             goEdit();
             return true;
         }
+        if(item.getItemId() == R.id.action_go_main) {
+            goBack();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void goBack() {
+        Intent i = new Intent(ForumUI.this, MainActivity.class);
+        startActivity(i);
     }
 
     public void goEdit()
     {
         Intent i = new Intent(ForumUI.this, MainActivity.accountMgr.isLoggedIn() ? PostEditorUI.class : LoginUI.class);
-        i.putExtra("username", getUser());
+        i.putExtra(ForumUI.USEREXTRA, getUser());
         startActivity(i);
     }
 

@@ -9,10 +9,9 @@ public class MedicalFacility {
 	private float latitude;
 	private float longitude;
 	private String description;
-	private ArrayList<Rating> ratings;
+	private float aveRating;
 	private ArrayList<Service> services;
 	private ArrayList<User> notifyList;
-
 
 	/**
 	 * Empty Constructor for medical facility
@@ -80,46 +79,16 @@ public class MedicalFacility {
 	 * Get list of all ratings of the medical facility 
 	 * @return list of all ratings
 	 */
-	public ArrayList<Rating> getRatings() {
-		return  this.ratings;
-	}
-
-	/**
-	 * Add a new rating to list of all ratings
-	 * @param rating Medical facility rating
-	 */
-	public void addRating(Rating rating) {
-		// TODO - implement MedicalFacility.addRating
-		ratings.add(rating); //add a new rating to the array list
-		
-		throw new UnsupportedOperationException();
-	}
-	public float getAverageRating() {
-		// TODO - implement MedicalFacility.getAverageRating
-		int size = ratings.size(); //sum of all ratings
-		float sum=0;
-		for(Rating i: ratings) {
-			sum += i.getRating();
-		}
-		return sum/size;
-		
-	}
+	public void setAveRating(float rating) { this.aveRating = rating; }
+	public float getAveRating() { return this.aveRating; }
 	public void addServices(Service service) {services.add(service); }
 	public ArrayList<Service> getServices() {
 		return this.services;
 	}
-
-	public void setType(String type){
-		this.type = type;
-	}
+	public void setType(String type){ this.type = type; }
 	public String getType(){return this.type;}
-
-	public void addNotifyUser(User user){
-		notifyList.add(user);
-	}
-	public ArrayList<User> getNotifyList() {
-		return this.notifyList;
-	}
+	public void addNotifyUser(User user){ notifyList.add(user); }
+	public ArrayList<User> getNotifyList() { return this.notifyList; }
 	public void setLatitude(float lat){this.latitude = lat; }
 	public float getLatitude(){return this.latitude; }
 	public void setLongitude(float longitude){this.longitude = longitude; }

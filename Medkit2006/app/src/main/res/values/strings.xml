@@ -30,6 +30,7 @@
     <string name="btn_bookmark">Bookmark</string>
     <string name="btn_login">Login</string>
     <string name="send_message">Send message</string>
+    <string name="MF_mgr_tag">MF_Mgr Queries</string>
     <string-array name="gender_array">
         <item />
         <item>M</item>

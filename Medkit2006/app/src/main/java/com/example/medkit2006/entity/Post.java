@@ -5,19 +5,74 @@ package com.example.medkit2006.entity;
  */
 
 public class Post {
-    private final String title;
-    private final String username;
-    private final String date;
+
+    private int _id;
+    private String title;
+    private String content;
+    private String comments;
+    private String date;
+    private String username;
+    private String facility;
+    private String tags;
+    private int likeNum;
+    private int reportNum;
 
     //Used to initialize database tile
-    public Post(String fquestion, String fusername, String fdate)
+    public Post(){}
+    public Post(int id, String fquestion, String fusername, String fdate, String ffacility)
     {
         title = fquestion;
         username = fusername;
         date = fdate;
+        _id = id;
+        facility = ffacility;
+    }
+    public Post(int id, String ftitle, String fcontent, String fcomments, String fdate, String fusername, String ffacility, String ftags, int numLikes, int numReports)
+    {
+        _id = id;
+        title = ftitle;
+        content = fcontent;
+        comments = fcomments;
+        date = fdate;
+        username = fusername;
+        facility = ffacility;
+        tags = ftags;
+        likeNum = numLikes;
+        reportNum = numReports;
     }
 
-    public String getQuestion()
+
+
+    public void setDate(String a) { date = a; }
+
+    public String getDate() { return date; }
+
+    public void setLikeNum(int a) { likeNum = a; }
+
+    public String getContent() { return content; }
+
+    public int getLikeNum() { return likeNum; }
+
+    public void setReportNum(int a) { reportNum = a; }
+
+    public int getReportNum()
+    {
+        return reportNum;
+    }
+
+    public void setComments(String a)
+    {
+        comments = a;
+    }
+
+    public String getFacility() { return facility; }
+
+    public String getComments()
+    {
+        return comments;
+    }
+
+    public String getTitle()
     {
         return title;
     }
@@ -27,8 +82,10 @@ public class Post {
         return username;
     }
 
-    public String getDate()
+    public int getID()
     {
-        return date;
+        return _id;
     }
+
+    public String getTags() { return tags; }
 }

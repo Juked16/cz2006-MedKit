@@ -13,39 +13,37 @@ import java.util.ArrayList;
 import java.util.function.Consumer;
 
 public class MedicalFacilityMgr {
-	
-	/**
-	 * Variable of list of all medical facility in database
-	 */
+
 	public final String[] filters_type = {"Type Unselected", "hospital", "nursing home"};
 	public final String[] filters_rating = {"Rating Unselected", "Rating>3.5", "Rating>4.0", "Rating>4.5"};
+	public String[] all_facility_names;
 
 	public void getAllFacilityName(@NotNull Consumer<String[]> callback, Consumer<Exception> error){
 		String query = "select name from medical_facilities";
 		DB.instance.executeQuery(query, resultSet -> {
-			String[] names = new String[150];
+			ArrayList<String> names = new ArrayList<String>();
 			try{
 				MySQLRow row;
-				int i = 0;
-				while((row = resultSet.getNextRow()) != null && i<150){
-					names[i] = row.getString("name");
-					i++;
+				while((row = resultSet.getNextRow()) != null){
+					names.add(row.getString("name"));
 				}
 			}catch(Exception e){
 				error.accept(e);
 			}
-			callback.accept(names);
+			String[] namesArray = new String[names.size()];
+			for (int i = 0; i < names.size(); i++) {
+				namesArray[i] = names.get(i);
+			}
+			callback.accept(namesArray);
 		}, error);
 	}
 
 	public void getAllFacilityAbstract(@NotNull Consumer<ArrayList<MedicalFacility>> callback, Consumer<Exception> error){
-		String query = "select * from medical_facilities";
-		getFacilityList(query, callback::accept, error::accept);
+		String query = "select * from medical_facilities m";
+		getFacilityAbstract(query, callback::accept, error::accept);
 	}
 
-	public void getFacilityList(String name, int[] filter_pos, String order, Consumer<ArrayList<MedicalFacility>> callback, Consumer<Exception> error) {
-		// TODO - implement MedicalFacilityMgr.getFacilityList
-		//String query = "select *, avg(r.rating) as aveRating from medical_facilities m, Rating r where m.name like '%".toUpperCase()+name+"%'".toUpperCase();
+	public void getFacilityAbstract(String name, int[] filter_pos, String order, Consumer<ArrayList<MedicalFacility>> callback, Consumer<Exception> error) {
 		String query = "select * from medical_facilities m where m.name like '%"+name+"%'";
 		switch(filter_pos[0]){
 			case 0: break;
@@ -78,11 +76,12 @@ public class MedicalFacilityMgr {
 			case "Rating":
 				query+=" order by avg(r.rating)";
 		}
-		Log.d("MF_mgr Received Search keywords",name+", type: "+filters_type[filter_pos[0]]+", rating: "+filters_rating[filter_pos[1]]+", "+order);
-		getFacilityList(query, callback::accept, error::accept);
+		Log.d("@string/MF_mgr_tag"+"Search keywords",name+", type: "+filters_type[filter_pos[0]]+", rating: "+filters_rating[filter_pos[1]]+", "+order);
+		getFacilityAbstract(query, callback::accept, error::accept);
 	}
-	public void getFacilityList(String query, Consumer<ArrayList<MedicalFacility>> callback, Consumer<Exception> error) {
-		Log.d("MF_mgr Executing query", query);
+
+	public void getFacilityAbstract(String query, Consumer<ArrayList<MedicalFacility>> callback, Consumer<Exception> error) {
+		Log.d("@string/MF_mgr_tag"+"getFacilityAbstract Executing query", query);
 		DB.instance.executeQuery(query, resultSet -> {
 			ArrayList<MedicalFacility> facility_list = new ArrayList<MedicalFacility>();
 			try {
@@ -93,13 +92,12 @@ public class MedicalFacilityMgr {
 					tmp_facil.setType(row.getString("type"));
 					tmp_facil.setAddress(row.getString("address"));
 					tmp_facil.setContact(row.getString("contact"));
-					//tmp_facil.setLongitude(row.getFloat("longitude"));
-					//tmp_facil.setLatitude(row.getFloat("latitude"));
-					//tmp_facil.setDescription(row.getString("description"));
+					try{tmp_facil.setAveRating(row.getFloat("aveRating"));}catch(Exception e){
+						tmp_facil.setAveRating(0.0F); }
 					facility_list.add(tmp_facil);
-					Log.d("MF_Search Result", tmp_facil.getName());
+					Log.d("@string/MF_mgr_tag"+"getFacilityAbstract Result", tmp_facil.getName());
 				}
-				Log.d("DB_search", String.valueOf(facility_list.size()) + "medical facility records retrieved");
+				Log.d("@string/MF_mgr_tag"+"getFacilityAbstract returned entries", String.valueOf(facility_list.size()) + "medical facility records retrieved");
 			} catch (Exception e) {
 				error.accept(e);
 				return;
@@ -109,23 +107,24 @@ public class MedicalFacilityMgr {
 	}
 	public void getFacilityDetails(String facility_name, Consumer<MedicalFacility> callback, Consumer<Exception> error) {
 		String query = ("select * from medical_facilities where name = '"+facility_name+"'").toUpperCase();
-		Log.d("MF_mgr geting details", query);
+		Log.d("@string/MF_mgr_tag"+"getFacilityDetails executing query", query);
 		DB.instance.executeQuery(query, resultSet -> {
 			MedicalFacility tmp_facil = new MedicalFacility();
 			MySQLRow row = resultSet.getNextRow();
-			if(row == null)
-				Log.d("MF_mgr retrieving detail error","0 column retrieved");
 			try {
 				tmp_facil.setName(row.getString("name"));    //name is nullable
 				tmp_facil.setType(row.getString("type"));
 				tmp_facil.setAddress(row.getString("address"));
 				tmp_facil.setContact(row.getString("contact"));
-				//tmp_facil.setLongitude(row.getFloat("longitude"));
-				//tmp_facil.setLatitude(row.getFloat("latitude"));
-				//tmp_facil.setDescription(row.getString("description"));
-				Log.d("MF_mgr Retrieved Detail",tmp_facil.getName());
+				try{tmp_facil.setLatitude(row.getFloat("longitude"));} catch(Exception e){
+					tmp_facil.setLongitude(0.0F);}
+				try{tmp_facil.setDescription(row.getString("latitude"));}catch(Exception e){
+					tmp_facil.setLatitude(0.0F);}
+				try{tmp_facil.setDescription(row.getString("description"));}catch(Exception e){
+					tmp_facil.setDescription("This is a great facility!");}
+				Log.d("@string/MF_mgr_tag"+"getFacilityDetail Result",tmp_facil.getName());
 			} catch (Exception e) {
-				Log.d("MF_mgr retrieving detail error",e.getMessage());
+				Log.d("@string/MF_mgr_tag"+"getFacilityDetail Error",e.getMessage());
 				error.accept(e);
 				return;
 			}

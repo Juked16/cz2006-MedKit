@@ -11,6 +11,12 @@
         android:padding="5dp"
         android:textSize="13dp"
         android:id="@+id/question"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:textSize="13dp"
+        android:id="@+id/post_facility"/>
 
     <LinearLayout
         android:layout_width="match_parent"

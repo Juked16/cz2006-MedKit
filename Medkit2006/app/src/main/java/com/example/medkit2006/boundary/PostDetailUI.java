@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -12,182 +13,90 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.BoardiesITSolutions.AndroidMySQLConnector.Exceptions.SQLColumnNotFoundException;
+import com.BoardiesITSolutions.AndroidMySQLConnector.MySQLRow;
+import com.example.medkit2006.MainActivity;
 import com.example.medkit2006.R;
+import com.example.medkit2006.data.DB;
 import com.example.medkit2006.data.ForumContract;
 import com.example.medkit2006.data.ForumDbHelper;
+import com.example.medkit2006.entity.Post;
 
 public class PostDetailUI extends AppCompatActivity {
-
-    private int likeRef;
-    private int reportRef;
-    private String comments;
-    private String theDate;
+    private int post_id;
     private int likeFlag = 0;
     private int reportFlag = 0;
-
-    public void setDate(String a)
-    {
-        theDate = a;
-    }
-
-    public String getDate()
-    {
-        return theDate;
-    }
-
-    public void setLikeFlag()
-    {
-        likeFlag = 1;
-    }
-
-    public int getLikeFlag()
-    {
-        return likeFlag;
-    }
-
-    public void setReportFlag()
-    {
-        reportFlag = 1;
-    }
-
-    public int getReportFlag()
-    {
-        return reportFlag;
-    }
-
-    public void setLikeRef(int a)
-    {
-        likeRef = a;
-    }
-
-    public int getLikeRef()
-    {
-        return likeRef;
-    }
-
-    public void setReportRef(int a)
-    {
-        reportRef = a;
-    }
-
-    public int getReportRef()
-    {
-        return reportRef;
-    }
-
-    public void setComments(String a)
-    {
-        comments = a;
-    }
-
-    public String getComments()
-    {
-        return comments;
-    }
+    private int likeNum = 0;
+    private int reportNum = 0;
+    private String comments = null;
+    public void setLikeFlag() { likeFlag = 1; }
+    public int getLikeFlag() { return likeFlag; }
+    public void setReportFlag() { reportFlag = 1; }
+    public int getReportFlag() { return reportFlag; }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_detail);
         Intent i = getIntent();
-        Bundle bd = i.getExtras();
-        String date = "";
-        if(bd != null)
-        {
-            String fdate = (String) bd.get("date");
-            date = fdate;
+        post_id = i.getIntExtra(ForumUI.EXTRA, -1);
+
+        TextView title = findViewById(R.id.title);
+        TextView user = findViewById(R.id.user);
+        TextView date = findViewById(R.id.date);
+        TextView tags = findViewById(R.id.tags);
+        TextView content = findViewById(R.id.post);
+        final TextView numLikes = findViewById(R.id.numLikes);
+        if(post_id == -1)
+            Toast.makeText(this, "Can't find post!", Toast.LENGTH_SHORT).show();
+        else {
+            MainActivity.forumMgr.getPostDetail(post_id, searchPost -> {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (searchPost.getReportNum() >= 5)
+                            setTitle("Reported Post");
+                        else {
+                            setTitle(searchPost.getTitle());
+                            user.append(searchPost.getUsername());
+                            title.setText(searchPost.getTitle());
+                            date.setText(searchPost.getDate());
+                            tags.append(searchPost.getTags());
+                            content.setText(searchPost.getContent());
+                            likeNum = searchPost.getLikeNum();
+                            reportNum = searchPost.getReportNum();
+                            numLikes.append("" + likeNum);
+                            comments = searchPost.getComments();
+                            String items[] = comments.split("\n");
+                            ArrayAdapter<String> itemsAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, items);
+                            ListView listView = findViewById(R.id.commList);
+                            listView.setAdapter(itemsAdapter);
+                        }
+                    }
+                });
+            }, error -> {
+                Log.d("Detail Getting Failed", error.getMessage());
+            });
         }
 
-        TextView title = (TextView) findViewById(R.id.title);
-        TextView user = (TextView) findViewById(R.id.user);
-        TextView datef = (TextView) findViewById(R.id.date);
-        TextView tags = (TextView) findViewById(R.id.tags);
-        TextView post = (TextView) findViewById(R.id.post);
-        final TextView numLikes = (TextView) findViewById(R.id.numLikes);
+        final Button like = findViewById(R.id.like);
+        final Button report = findViewById(R.id.report);
+        Button comIt = findViewById(R.id.comIt);
+        final EditText comment = findViewById(R.id.comment);
 
-        ForumDbHelper helper = new ForumDbHelper(this);
-        SQLiteDatabase db = helper.getReadableDatabase();
-        String projection[] = {
-                ForumContract.ForumEntry.COLUMN_TITLE,
-                ForumContract.ForumEntry.COLUMN_USER,
-                ForumContract.ForumEntry.COLUMN_DATE,
-                ForumContract.ForumEntry.COLUMN_REPORT,
-                ForumContract.ForumEntry.COLUMN_COMMENTS,
-                ForumContract.ForumEntry.COLUMN_LIKES,
-                ForumContract.ForumEntry.COLUMN_TAGS,
-                ForumContract.ForumEntry.COLUMN_POST
-        };
-
-        String selection = ForumContract.ForumEntry.COLUMN_DATE + "=?";
-        String[] selectionArgs = {date};
-        Cursor cursor = db.query(ForumContract.ForumEntry.TABLE_NAME, projection,selection,selectionArgs,null,null,null);
-        try {
-            int userColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_USER);
-            int dateColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_DATE);
-            int titleColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_TITLE);
-            int reportColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_REPORT);
-            int commentColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_COMMENTS);
-            int likesColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_LIKES);
-            int tagsColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_TAGS);
-            int postColumnIndex = cursor.getColumnIndex(ForumContract.ForumEntry.COLUMN_POST);
-            while(cursor.moveToNext())
-            {
-                String userID = cursor.getString(userColumnIndex);
-                String postDate = cursor.getString(dateColumnIndex);
-                setDate(postDate);
-                String postTitle = cursor.getString(titleColumnIndex);
-                int reportPost = cursor.getInt(reportColumnIndex);
-                setReportRef(reportPost);
-                String commentPost = cursor.getString(commentColumnIndex);
-                setComments(commentPost);
-                int postLikes = cursor.getInt(likesColumnIndex);
-                setLikeRef(postLikes);
-                String postTags = cursor.getString(tagsColumnIndex);
-                String mainPost = cursor.getString(postColumnIndex);
-                if(reportPost == 5)
-                {
-                    setTitle("Reported Post");
-                }
-                else
-                {
-                    setTitle(postTitle);
-                    user.append(userID);
-                    title.setText(postTitle);
-                    datef.setText(postDate);
-                    tags.append(postTags);
-                    post.setText(mainPost);
-                    numLikes.append("" + postLikes);
-                    String items[] = commentPost.split("\n");
-                    ArrayAdapter<String> itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items);
-                    ListView listView = (ListView) findViewById(R.id.commList);
-                    listView.setAdapter(itemsAdapter);
-                }
-            }
-        } finally {
-            cursor.close();
-        }
-
-        final Button like = (Button) findViewById(R.id.like);
-        final Button report = (Button) findViewById(R.id.report);
-        Button comIt = (Button) findViewById(R.id.comIt);
-        final EditText comment = (EditText) findViewById(R.id.comment);
-        final SQLiteDatabase wdb = helper.getWritableDatabase();
-        final ContentValues values = new ContentValues();
-        final int likeFlag = 0;
         like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(getLikeFlag() == 0) {
-                    values.put(ForumContract.ForumEntry.COLUMN_LIKES, getLikeRef() + 1);
-                    String selection = ForumContract.ForumEntry.COLUMN_DATE + "=?";
-                    String selectionArgs[] = {getDate()};
-                    wdb.update(ForumContract.ForumEntry.TABLE_NAME,values,selection,selectionArgs);
                     TextView newNumLikes = (TextView) findViewById(R.id.numLikes);
-                    newNumLikes.setText("Likes: " + Integer.toString(getLikeRef() + 1));
+                    newNumLikes.setText("Likes: " + (likeNum + 1));
                     setLikeFlag();
+                    //update the like into database
+                    DB.instance.execute(("update post set likes = " + (likeNum + 1) + " where _ID = "+post_id).toUpperCase(), ()->{}, error->{Log.d("Update Likes Fail", error.getMessage());});
                 }
             }
         });
@@ -195,12 +104,19 @@ public class PostDetailUI extends AppCompatActivity {
         report.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(getReportFlag() == 0)
+                if(getReportFlag() != 0)
+                    Toast.makeText(getApplicationContext(), "Already Reported", Toast.LENGTH_LONG);
+                else
                 {
-                    values.put(ForumContract.ForumEntry.COLUMN_REPORT, getReportRef() + 1);
-                    String selection = ForumContract.ForumEntry.COLUMN_DATE + "=?";
-                    String selectionArgs[] = {getDate()};
-                    wdb.update(ForumContract.ForumEntry.TABLE_NAME,values,selection,selectionArgs);
+                    DB.instance.execute(("update post set reports = " + (reportNum + 1) + " where _ID = "+post_id).toUpperCase(),
+                            ()->{
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(),"Reported!", Toast.LENGTH_LONG);
+                            }
+                        });
+                            }, error->{Log.d("Update Reports Fail", error.getMessage());});
                     setReportFlag();
                     Intent intent = getIntent();
                     finish();
@@ -212,10 +128,16 @@ public class PostDetailUI extends AppCompatActivity {
         comIt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                values.put(ForumContract.ForumEntry.COLUMN_COMMENTS, getComments() + comment.getText().toString().trim() + '\n');
-                String selection = ForumContract.ForumEntry.COLUMN_DATE + "=?";
-                String selectionArgs[] = {getDate()};
-                wdb.update(ForumContract.ForumEntry.TABLE_NAME,values,selection,selectionArgs);
+                String newComments = comments + comment.getText().toString().trim() + '\n';
+                DB.instance.execute(("update post set COMMENTS = '" + newComments + "' where _ID = "+post_id),
+                        ()->{
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(), "Commented!", Toast.LENGTH_SHORT);
+                        }
+                    });
+                }, error->{Log.d("Update Comments Fail", error.getMessage());});
                 Intent intent = getIntent();
                 finish();
                 startActivity(intent);

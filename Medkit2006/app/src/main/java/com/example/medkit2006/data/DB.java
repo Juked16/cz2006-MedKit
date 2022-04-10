@@ -55,6 +55,7 @@ public class DB {
         FOREIGN KEY (medical_facility) REFERENCES medical_facilities(name)
     );
     CREATE TABLE post(
+        _id INT AUTOINCREMENT PRIMARY KEY,
         title VARCHAR(150) NOT NULL,
         content VARCHAR(1000) NOT NULL,
         comments VARCHAR(300),

@@ -33,17 +33,18 @@ public class FeedAdapter extends ArrayAdapter<Post>{
                     R.layout.feed_tile, parent, false);
         }
         Post current = getItem(position);
-        TextView question = (TextView) listItemView.findViewById(R.id.question);
-        question.setText(current.getQuestion());
+        TextView question = listItemView.findViewById(R.id.question);
+        question.setText(current.getTitle());
 
-        TextView username = (TextView) listItemView.findViewById(R.id.userId);
+        TextView facility = listItemView.findViewById(R.id.post_facility);
+        question.setText(current.getFacility());
+
+        TextView username = listItemView.findViewById(R.id.userId);
         username.setText(current.getUsername());
 
-        TextView date = (TextView) listItemView.findViewById(R.id.date);
+        TextView date = listItemView.findViewById(R.id.date);
         date.setText(current.getDate());
 
-        // Return the whole list item layout (containing 2 TextViews and an ImageView)
-        // so that it can be shown in the ListView
         return listItemView;
     }
 
