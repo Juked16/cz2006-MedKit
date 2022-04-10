@@ -5,8 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.BoardiesITSolutions.AndroidMySQLConnector.Exceptions.SQLColumnNotFoundException;
 import com.BoardiesITSolutions.AndroidMySQLConnector.MySQLRow;
+import com.example.medkit2006.MainActivity;
 import com.example.medkit2006.data.DB;
+import com.example.medkit2006.entity.Bookmark;
 import com.example.medkit2006.entity.Message;
+import com.example.medkit2006.entity.User;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -134,4 +137,9 @@ public class ChatMgr extends AppCompatActivity {
 
     //TODO: add member
     //TODO: remove member
+
+    public void removeChat(@NotNull int chatId, Runnable callback, Consumer<Exception> error) {
+        User user = MainActivity.accountMgr.getLoggedInUser();
+        DB.instance.execute("delete from chat where id = " + chatId , callback, error);
+    }
 }
