@@ -1,5 +1,8 @@
 package com.example.medkit2006.control;
 
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.BoardiesITSolutions.AndroidMySQLConnector.Exceptions.SQLColumnNotFoundException;
 import com.BoardiesITSolutions.AndroidMySQLConnector.MySQLRow;
 import com.example.medkit2006.data.DB;
@@ -13,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.function.Consumer;
 
-public class ChatMgr {
+public class ChatMgr extends AppCompatActivity {
 
     public static int chatId;
 
@@ -39,9 +42,23 @@ public class ChatMgr {
      * @param error    Called when error
      */
     public void startPrivateMessage(String sender, String receiver, Runnable callback, Consumer<Exception> error) {
-        int id = ++chatId;
-        DB.instance.execute("insert into chat values (" + id + ",'" + sender + "')", null, Throwable::printStackTrace);
-        DB.instance.execute("insert into chat values (" + id + ",'" + receiver + "')", callback, error);
+        DB.instance.executeQuery("select c1.id from chat c1 inner join chat c2 on c1.id=c2.id where c1.username = '"
+                +sender + "' and c2.username ='" + receiver+"'", resultSet -> {
+            MySQLRow row= resultSet.getNextRow();
+            if (row == null) {
+                try {
+                    int id = ++chatId;
+                    DB.instance.execute("insert into chat values (" + id + ",'" + sender + "')", null, Throwable::printStackTrace);
+                    DB.instance.execute("insert into chat values (" + id + ",'" + receiver + "')", callback, error);
+                } catch (Exception e) {
+                    error.accept(e);
+                    return;
+                }
+            }
+            else Toast.makeText(getApplicationContext(),"Chat with " + receiver + " already Exist",Toast.LENGTH_LONG).show();
+
+        }, error);
+
     }
 
     public void sendMessage(int chatId, String sender, String content, Runnable callback, Consumer<Exception> error){
