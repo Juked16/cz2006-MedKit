@@ -40,7 +40,7 @@ public class DB {
         contact VARCHAR(45) NOT NULL,
         latitude DECIMAL(11,7) NOT NULL,
         longitude DECIMAL(12,7) NOT NULL,
-        description VARCHAR(1000) DEFAULT ""
+        description VARCHAR(1000) DEFAULT "" NOT NULL
     );
     CREATE TABLE mf_photo(
         medical_facility VARCHAR(45) NOT NULL,
@@ -104,36 +104,35 @@ public class DB {
     */
 
     public Connection conn;
-    public String lastMsg;
     public static DB instance = null;
 
-    public DB() {
-        connect();
+    public DB(Runnable onConnected, Consumer<Exception> onError) {
+        connect(onConnected, onError);
         instance = this;
     }
 
-    public void connect() {
+    public void connect(Runnable onConnected, Consumer<Exception> onError) {
         Log.i("DB", "Connecting");
-        lastMsg = "connecting";
-        conn = new Connection("94.74.80.1", "test", "Blue!$!$!$", 3306, "medkit", new DefaultResultInterface(e -> lastMsg = e.getMessage()));
+        conn = new Connection("94.74.80.1", "test", "Blue!$!$!$", 3306, "medkit", new DefaultResultInterface(onConnected, onError));
     }
 
     /**
-     *
      * @param statement Sql statement without result
-     * @param whenDone Called when done without error
+     * @param whenDone  Called when done without error
      */
     public void execute(@NotNull String statement, Runnable whenDone) {
         execute(statement, whenDone, null);
     }
 
     /**
-     *
      * @param statement Sql statement without result
-     * @param whenDone Called when done without error
-     * @param onError Called when error
+     * @param whenDone  Called when done without error
+     * @param onError   Called when error
      */
     public void execute(@NotNull String statement, Runnable whenDone, Consumer<Exception> onError) {
+        if (!conn.getPlainSocket().isConnected())
+            if (onError != null)
+                onError.accept(new RuntimeException("No connection"));
         conn.createStatement().execute(statement, new DefaultResultInterface(onError) {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
@@ -142,7 +141,6 @@ public class DB {
                     if (whenDone != null)
                         whenDone.run();
                 } catch (Exception e) {
-                    lastMsg = e.getMessage();
                     Log.wtf("DB", e);
                 }
             }
@@ -150,8 +148,7 @@ public class DB {
     }
 
     /**
-     *
-     * @param query Select statement
+     * @param query    Select statement
      * @param whenDone Called when done without error
      */
     public void executeQuery(@NotNull String query, @NotNull Consumer<ResultSet> whenDone) {
@@ -159,12 +156,14 @@ public class DB {
     }
 
     /**
-     *
-     * @param query Select statement
+     * @param query    Select statement
      * @param whenDone Called when done with no error
-     * @param onError Called when error
+     * @param onError  Called when error
      */
     public void executeQuery(@NotNull String query, @NotNull Consumer<ResultSet> whenDone, Consumer<Exception> onError) {
+        if (!conn.getPlainSocket().isConnected())
+            if (onError != null)
+                onError.accept(new RuntimeException("No connection"));
         conn.createStatement().executeQuery(query, new DefaultResultInterface(onError) {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
@@ -172,34 +171,39 @@ public class DB {
                 try {
                     whenDone.accept(resultSet);
                 } catch (Exception e) {
-                    lastMsg = e.getMessage();
                     Log.wtf("DB", e);
                 }
             }
         });
     }
 
-    class DefaultResultInterface implements IConnectionInterface, IResultInterface {
+    static class DefaultResultInterface implements IConnectionInterface, IResultInterface {
 
+        private Runnable onConnected = null;
         private final Consumer<Exception> onError;
+
+        public DefaultResultInterface(Runnable onConnected, Consumer<Exception> onError) {
+            this.onConnected = onConnected;
+            this.onError = onError;
+        }
 
         public DefaultResultInterface(Consumer<Exception> onError) {
             this.onError = onError;
         }
 
         public void actionCompleted() {
-            lastMsg = "Connect OK";
+            if (onConnected != null)
+                onConnected.run();
             Log.i("DB", "Connect OK");
         }
 
         @Override
         public void executionComplete(ResultSet resultSet) {
-            lastMsg = "Result OK";
+
         }
 
         @Override
         public void handleInvalidSQLPacketException(InvalidSQLPacketException ex) {
-            lastMsg = ex.getMessage();
             if (onError != null)
                 onError.accept(ex);
             Log.wtf("DB", ex);
@@ -207,7 +211,6 @@ public class DB {
 
         @Override
         public void handleMySQLException(MySQLException ex) {
-            lastMsg = ex.getMessage();
             if (onError != null)
                 onError.accept(ex);
             Log.wtf("DB", ex);
@@ -215,7 +218,6 @@ public class DB {
 
         @Override
         public void handleIOException(IOException ex) {
-            lastMsg = ex.getMessage();
             if (onError != null)
                 onError.accept(ex);
             Log.wtf("DB", ex);
@@ -223,7 +225,6 @@ public class DB {
 
         @Override
         public void handleMySQLConnException(MySQLConnException ex) {
-            lastMsg = ex.getMessage();
             if (onError != null)
                 onError.accept(ex);
             Log.wtf("DB", ex);
@@ -231,7 +232,6 @@ public class DB {
 
         @Override
         public void handleException(Exception exception) {
-            lastMsg = exception.getMessage();
             if (onError != null)
                 onError.accept(exception);
             Log.wtf("DB", exception);
