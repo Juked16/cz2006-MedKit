@@ -14,7 +14,7 @@ import java.util.function.Consumer;
 
 public class MedicalFacilityMgr {
 
-	public final String[] filters_type = {"Type Unselected", "hospital", "nursing home"};
+	public final String[] filters_type = {"Type Unselected", "hospital", "nursing home","dental"};
 	public final String[] filters_rating = {"Rating Unselected", "Rating>3.5", "Rating>4.0", "Rating>4.5"};
 	public String[] all_facility_names;
 
@@ -44,26 +44,37 @@ public class MedicalFacilityMgr {
 	}
 
 	public void getFacilityAbstract(String name, int[] filter_pos, String order, Consumer<ArrayList<MedicalFacility>> callback, Consumer<Exception> error) {
-		String query = "select * from medical_facilities m where m.name like '%"+name+"%'";
+		String query = "select m.*, avg(R1.rating) as rate from medical_facilities m join rating R1 on m.name = R1.medical_facility where m.name like '%"+name+"%'";
+		boolean ratingFlag = false;
 		switch(filter_pos[0]){
 			case 0: break;
 			case 1:
 				query+=" and m.type = 'hospital' group by m.name";
+				ratingFlag = true;
 				break;
 			case 2:
 				query+=" and m.type = 'nursing home' group by m.name";
+				ratingFlag = true;
 				break;
+			case 3:
+				query+=" and m.type = 'dental' group by m.name";
+				ratingFlag = true;
+				break;
+
 		}
 		switch(filter_pos[1]){
 			case 0: break;
 			case 1:
-				query+=" having avg(r.rating)>3.5";
+				query+=" GROUP BY R1.medical_facility having m.name in (SELECT medical_facility FROM rating r GROUP BY medical_facility having avg(rating)>3.5)";
+				ratingFlag = true;
 				break;
 			case 2:
-				query+=" having avg(r.rating)>4.0";
+				ratingFlag = true;
+				query+=" GROUP BY R1.medical_facility having m.name in (select medical_facility from rating r group by medical_facility having avg(rating)>4.0)";
 				break;
 			case 3:
-				query+=" having avg(r.rating)>4.5";
+				ratingFlag = true;
+				query+=" GROUP BY R1.medical_facility having m.name in (select medical_facility from rating r group by medical_facility having avg(rating)>4.5)";
 				break;
 		}
 		switch(order){
@@ -74,7 +85,9 @@ public class MedicalFacilityMgr {
 				query+=" order by m.type";
 				break;
 			case "Rating":
-				query+=" order by avg(r.rating)";
+				if (ratingFlag) query+=" order by rate DESC";
+				else query+=" GROUP BY R1.medical_facility order by rate DESC";
+
 		}
 		Log.d("@string/MF_mgr_tag"+"Search keywords",name+", type: "+filters_type[filter_pos[0]]+", rating: "+filters_rating[filter_pos[1]]+", "+order);
 		getFacilityAbstract(query, callback::accept, error::accept);
