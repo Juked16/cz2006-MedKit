@@ -37,7 +37,7 @@ public class FeedAdapter extends ArrayAdapter<Post>{
         question.setText(current.getTitle());
 
         TextView facility = listItemView.findViewById(R.id.post_facility);
-        question.setText(current.getFacility());
+        facility.setText(current.getFacility());
 
         TextView username = listItemView.findViewById(R.id.userId);
         username.setText(current.getUsername());

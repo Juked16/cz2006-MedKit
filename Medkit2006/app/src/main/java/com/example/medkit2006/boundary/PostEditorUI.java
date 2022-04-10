@@ -20,7 +20,7 @@ import com.example.medkit2006.MainActivity;
 import com.example.medkit2006.R;
 
 public class PostEditorUI extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
-    private String[] medical_facility_names = new String[150];
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,19 +31,6 @@ public class PostEditorUI extends AppCompatActivity implements AdapterView.OnIte
         ArrayAdapter ad = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_item, MainActivity.facilityMgr.all_facility_names);
         ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spn.setAdapter(ad);
-        /*MainActivity.facilityMgr.getAllFacilityName(names->{
-            this.medical_facility_names = names;
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    ArrayAdapter ad = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_item, names);
-                    ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    spn.setAdapter(ad);
-                }
-            });
-        },e->{
-            Log.d("Post Spinner Set Failed",e.toString().trim());
-        });*/
     }
 
     @Override
@@ -83,38 +70,42 @@ public class PostEditorUI extends AppCompatActivity implements AdapterView.OnIte
         EditText tags = findViewById(R.id.tags);
         RatingBar ratingbar = findViewById(R.id.ratingBar);
         Spinner med_spinner = findViewById(R.id.post_facility_selection_spinner);
-        if(titleView.getText() == null || titleView.getText().toString() == ""){
-            Toast.makeText(PostEditorUI.this, "Title cannot be empty!", Toast.LENGTH_LONG);
+        if(titleView.getText().toString().length()<3){
+            Toast.makeText(PostEditorUI.this, "Title must have at least 3 characters!", Toast.LENGTH_LONG);
         }
-        else if(content.getText() == null || content.getText().toString() == ""){
-            Toast.makeText(PostEditorUI.this, "Content cannot be empty!", Toast.LENGTH_LONG);
+        else if(content.getText().toString().length() < 10 ){
+            Toast.makeText(PostEditorUI.this, "Content must have at least 10 characters!", Toast.LENGTH_LONG);
         }
-        else if(ratingbar.getNumStars() == 0){
-            Toast.makeText(PostEditorUI.this, "Rating is 0, are you sure to continue?", Toast.LENGTH_LONG);
-        }
-        MainActivity.forumMgr.addPost(titleView.getText().toString().trim(),//title
-            content.getText().toString().trim(),//content
-            getUser(), //username
-            MainActivity.facilityMgr.all_facility_names[med_spinner.getSelectedItemPosition()],//medical_mecility
-            tags.getText().toString().toLowerCase().trim(),//tags
-            status,//status
-            ratingbar.getNumStars(),//ratings
-            ()->{
-                runOnUiThread(new Runnable() {
-                @Override
-                public void run() {// Stuff that updates the UI
-                    Toast.makeText(getApplicationContext(), "Posted!", Toast.LENGTH_SHORT).show();
-                }}); },//callback
-            e-> {
-                Log.d("Add Post Fail", e.getMessage());
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {// Stuff that updates the UI
-                        Toast.makeText(getApplicationContext(), e.toString().trim(), Toast.LENGTH_SHORT).show();
+        else {
+            MainActivity.forumMgr.addPost(titleView.getText().toString().trim(),//title
+                    content.getText().toString().trim(),//content
+                    getUser(), //username
+                    MainActivity.facilityMgr.all_facility_names[med_spinner.getSelectedItemPosition()],//medical_mecility
+                    tags.getText().toString().toLowerCase().trim(),//tags
+                    status,//status
+                    ratingbar.getNumStars(),//ratings
+                    () -> {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {// Stuff that updates the UI
+                                if(status == 1)
+                                    Toast.makeText(getApplicationContext(), "Posted!", Toast.LENGTH_SHORT).show();
+                                else
+                                    Toast.makeText(getApplicationContext(), "Saved to draft!", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    },//callback
+                    e -> {
+                        Log.d("Add Post Fail", e.getMessage());
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {// Stuff that updates the UI
+                                Toast.makeText(getApplicationContext(), e.toString().trim(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
-                });
-            }
-        );
+            );
+        }
     }
 
     public String getUser()

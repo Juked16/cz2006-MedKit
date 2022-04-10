@@ -100,6 +100,8 @@ public class PostDetailUI extends AppCompatActivity {
         like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(getLikeFlag() != 0)
+                    Toast.makeText(PostDetailUI.this, "Already Liked!", Toast.LENGTH_LONG).show();
                 if(getLikeFlag() == 0) {
                     TextView newNumLikes = (TextView) findViewById(R.id.numLikes);
                     newNumLikes.setText("Likes: " + (likeNum + 1));
@@ -114,7 +116,7 @@ public class PostDetailUI extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(getReportFlag() != 0)
-                    Toast.makeText(getApplicationContext(), "Already Reported", Toast.LENGTH_LONG);
+                    Toast.makeText(PostDetailUI.this, "Already Reported!", Toast.LENGTH_LONG).show();
                 else
                 {
                     DB.instance.execute(("update post set report = " + (reportNum + 1) + " where _ID = "+post_id).toUpperCase(),
@@ -122,7 +124,7 @@ public class PostDetailUI extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(getApplicationContext(),"Reported!", Toast.LENGTH_LONG);
+                                Toast.makeText(PostDetailUI.this,"Reported!", Toast.LENGTH_LONG).show();
                             }
                         });
                             }, error->{Log.d("Update Reports Fail", error.getMessage());});
@@ -140,7 +142,7 @@ public class PostDetailUI extends AppCompatActivity {
                 //check if the account is logged in
                 User cur_user = MainActivity.accountMgr.getLoggedInUser();
                 if(cur_user == null){
-                    Toast.makeText(PostDetailUI.this, "Please log in first!", Toast.LENGTH_LONG);
+                    Toast.makeText(PostDetailUI.this, "Please log in first!", Toast.LENGTH_LONG).show();
                     Intent toLogin = new Intent(PostDetailUI.this, LoginUI.class);
                     startActivity(toLogin);
                 }
@@ -163,7 +165,7 @@ public class PostDetailUI extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(PostDetailUI.this, "Commented!", Toast.LENGTH_LONG);
+                            Toast.makeText(PostDetailUI.this, "Commented!", Toast.LENGTH_LONG).show();
                         }
                     });
                 }, error->{Log.d("Update Comments Fail", error.getMessage());});

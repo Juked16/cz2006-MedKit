@@ -81,7 +81,7 @@ public class ForumMgr {
 		 DB.instance.execute("insert into post (title, post, comments, username, medical_facility, likes, tags, status, report) values (\""
 				 + title + "\",\""
 				 + content + "\",\""
-				 + "" + "\",\""
+				 + " " + "\",\""
 				 + username + "\",\""
 				 + medical_facility + "\",\""
 				 + 0 + "\",\""
