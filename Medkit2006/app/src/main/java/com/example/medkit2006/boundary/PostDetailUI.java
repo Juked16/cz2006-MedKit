@@ -17,10 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.medkit2006.MainActivity;
 import com.example.medkit2006.R;
 import com.example.medkit2006.data.DB;
-import com.example.medkit2006.entity.Message;
 import com.example.medkit2006.entity.User;
-
-import java.util.Locale;
 
 public class PostDetailUI extends AppCompatActivity {
     private int post_id;
@@ -153,7 +150,7 @@ public class PostDetailUI extends AppCompatActivity {
                         Log.d("Message Unable to Start", error.getMessage());
                     });
                     MainActivity.chatMgr.getPrivateMessage(user.getUsername(), post_user, chat_id->{
-                        Intent intent = new Intent(PostDetailUI.this, MessageActivity.class);
+                        Intent intent = new Intent(PostDetailUI.this, ChatMessageUI.class);
                         intent.putExtra("chatId", chat_id);
                         intent.putExtra("chatName", post_user);
                         startActivity(intent);
