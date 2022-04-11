@@ -49,10 +49,9 @@ public class ChatMgr{
                     DB.instance.execute("insert into chat values (" + id + ",'" + receiver + "')", callback, error);
                 } catch (Exception e) {
                     error.accept(e);
-                    return;
                 }
-            }
-            error.accept(new Exception("Chat with " + receiver + " already Exist"));
+            } else
+                error.accept(new Exception("Chat with " + receiver + " already exist"));
 
         }, error);
 
