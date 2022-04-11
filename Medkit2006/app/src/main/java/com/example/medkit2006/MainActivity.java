@@ -4,11 +4,13 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,6 +21,9 @@ import com.example.medkit2006.boundary.AccountUI;
 import com.example.medkit2006.boundary.BookmarkUI;
 import com.example.medkit2006.boundary.ChatUsersUI;
 import com.example.medkit2006.boundary.ForumUI;
+import com.example.medkit2006.boundary.LoginUI;
+import com.example.medkit2006.boundary.MyPostUI;
+import com.example.medkit2006.boundary.PostDraftUI;
 import com.example.medkit2006.boundary.SearchUI;
 import com.example.medkit2006.control.AccountMgr;
 import com.example.medkit2006.control.BookmarkMgr;
@@ -26,6 +31,9 @@ import com.example.medkit2006.control.ChatMgr;
 import com.example.medkit2006.control.ForumMgr;
 import com.example.medkit2006.control.MedicalFacilityMgr;
 import com.example.medkit2006.data.DB;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
+import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 
@@ -35,14 +43,38 @@ public class MainActivity extends AppCompatActivity {
     public static ForumMgr forumMgr = new ForumMgr();
     public static BookmarkMgr bookmarkMgr = new BookmarkMgr();
     public static ChatMgr chatMgr = new ChatMgr();
-
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu_main);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setView(new ProgressBar(this));
+
+        BottomNavigationView btmNav = findViewById(R.id.navigation);
+        btmNav.getMenu().clear();
+        btmNav.inflateMenu(R.menu.bottom_navigation);
+        btmNav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Intent i;
+                switch (item.getItemId()) {
+                    case R.id.nav_search:
+                        i = new Intent(getApplicationContext(), SearchUI.class);
+                        startActivity(i);
+                        break;
+                    case R.id.nav_forum:
+                        i = new Intent(getApplicationContext(), ForumUI.class);
+                        startActivity(i);
+                        break;
+                    case R.id.nav_account:
+                        i = new Intent(getApplicationContext(), AccountUI.class);
+                        startActivity(i);
+                        break;
+                }
+                return false;
+            }
+        });
+
         //builder.setCancelable(false); //TODO: uncomment before submitting
         builder.setTitle("Connecting");
         AlertDialog dialog = builder.show();
@@ -57,6 +89,8 @@ public class MainActivity extends AppCompatActivity {
         );
         DB.instance.conn.returnCallbackToMainThread(true, this);
     }
+
+
 
     @Override
     protected void onResume() {

@@ -90,13 +90,14 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <!--<ImageView
+        <ImageView
+            android:id="@+id/like_img"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="8dp"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            app:srcCompat="@drawable/like" />
-            -->
+            app:srcCompat="@drawable/like_off" />
+
 
         <Button
             android:layout_width="wrap_content"

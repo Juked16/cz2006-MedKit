@@ -70,9 +70,9 @@ public class FacilityDetailUI extends AppCompatActivity implements OnMapReadyCal
         if (MainActivity.accountMgr.isLoggedIn())
             MainActivity.bookmarkMgr.get(message, bookmark -> {
                 if (bookmark == null)
-                    bookmarkBtn.setImageResource(R.drawable.star_big_off);
+                    bookmarkBtn.setImageResource(R.drawable.favourite);
                 else
-                    bookmarkBtn.setImageResource(R.drawable.star_big_on);
+                    bookmarkBtn.setImageResource(R.drawable.favourite_on);
             }, e -> {
                 e.printStackTrace();
                 Toast.makeText(this, "Failed to retrieve bookmark", Toast.LENGTH_SHORT).show();

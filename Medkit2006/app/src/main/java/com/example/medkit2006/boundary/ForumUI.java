@@ -14,6 +14,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -23,6 +24,8 @@ import com.example.medkit2006.MainActivity;
 import com.example.medkit2006.R;
 import com.example.medkit2006.entity.Post;
 import com.example.medkit2006.entity.User;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 
 public class ForumUI extends AppCompatActivity {
@@ -41,6 +44,31 @@ public class ForumUI extends AppCompatActivity {
         MainActivity.facilityMgr.getAllFacilityName(names->{
             MainActivity.facilityMgr.all_facility_names = names;
         }, error->{Log.d("ForumUI get facility names error", error.getMessage());});
+
+        BottomNavigationView btmNav = findViewById(R.id.navigation);
+        btmNav.getMenu().clear();
+        btmNav.inflateMenu(R.menu.bottom_navigation);
+        btmNav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Intent i;
+                switch (item.getItemId()) {
+                    case R.id.nav_search:
+                        i = new Intent(getApplicationContext(), SearchUI.class);
+                        startActivity(i);
+                        break;
+                    case R.id.nav_forum:
+                        i = new Intent(getApplicationContext(), ForumUI.class);
+                        startActivity(i);
+                        break;
+                    case R.id.nav_account:
+                        i = new Intent(getApplicationContext(), AccountUI.class);
+                        startActivity(i);
+                        break;
+                }
+                return false;
+            }
+        });
 
         mDrawerlayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mToggle = new ActionBarDrawerToggle(this,mDrawerlayout, open,R.string.close);

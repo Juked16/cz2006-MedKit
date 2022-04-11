@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,7 +65,7 @@ public class PostDetailUI extends AppCompatActivity {
                             content.setText(searchPost.getContent());
                             likeNum = searchPost.getLikeNum();
                             reportNum = searchPost.getReportNum();
-                            like.append("" + likeNum);
+                            like.setText("Like " + likeNum);
                             comments = searchPost.getComments();
                             if(comments != null) {
                                 String items[] = comments.split("\n");
@@ -96,8 +97,10 @@ public class PostDetailUI extends AppCompatActivity {
                 else if(getLikeFlag() != 0)
                     Toast.makeText(PostDetailUI.this, "Already Liked!", Toast.LENGTH_LONG).show();
                 else {
+                    ImageView like_img = findViewById(R.id.like_img);
+                    like_img.setImageResource(R.drawable.like_on);
                     Button newNumLikes = findViewById(R.id.like);
-                    newNumLikes.append(String.valueOf(likeNum+1));
+                    newNumLikes.setText("Like " + (likeNum+1));
                     setLikeFlag();
                     //update the like into database
                     DB.instance.execute(("update post set likes = ".toUpperCase() + (likeNum + 1) + " WHERE _ID = "+post_id), ()->{}, error->{Log.d("Update Likes Fail", error.getMessage());});

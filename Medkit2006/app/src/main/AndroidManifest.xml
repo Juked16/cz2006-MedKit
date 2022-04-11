@@ -47,7 +47,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".boundary.AccountUI" android:label="Account"/>
+        <activity android:name=".boundary.AccountUI" android:label="Account" android:parentActivityName=".MainActivity"/>
         <activity android:name=".boundary.BookmarkUI" android:label="BookMark" android:parentActivityName=".MainActivity"/>
         <activity android:name=".boundary.LoginUI" android:label="Login" android:parentActivityName=".MainActivity"/>
         <activity android:name=".boundary.RegistrationUI" android:label="Registration" android:parentActivityName=".boundary.LoginUI"/>
