@@ -8,17 +8,27 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NavUtils;
 
 import com.example.medkit2006.MainActivity;
 import com.example.medkit2006.R;
 import com.example.medkit2006.entity.User;
 
 public class AccountUI extends AppCompatActivity {
+
+    private View.OnClickListener homeClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            NavUtils.navigateUpFromSameTask(AccountUI.this);
+        }
+    };
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.account);
     }
+
 
     @Override
     protected void onResume() {

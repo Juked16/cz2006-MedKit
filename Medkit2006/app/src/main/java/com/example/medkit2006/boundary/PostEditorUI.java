@@ -45,14 +45,14 @@ public class PostEditorUI extends AppCompatActivity implements AdapterView.OnIte
         switch (item.getItemId()) {
             // Respond to a click on the "Save" menu option
             case R.id.action_save:
-                insertData(1);
-                finish();
+                if(insertData(1) == 0)
+                    finish();
                 return true;
             // Respond to a click on the "Delete" menu option
             case R.id.action_draft:
                 // Do nothing for now
-                insertData(0);
-                finish();
+                if(insertData(0) == 0)
+                    finish();
                 return true;
             // Respond to a click on the "Up" arrow button in the app bar
             case android.R.id.home:
@@ -63,7 +63,7 @@ public class PostEditorUI extends AppCompatActivity implements AdapterView.OnIte
         return super.onOptionsItemSelected(item);
     }
 
-    public void insertData(int status)
+    public int insertData(int status)
     {
         EditText titleView = findViewById(R.id.title);
         EditText content = findViewById(R.id.post);
@@ -71,16 +71,18 @@ public class PostEditorUI extends AppCompatActivity implements AdapterView.OnIte
         RatingBar ratingbar = findViewById(R.id.ratingBar);
         Spinner med_spinner = findViewById(R.id.post_facility_selection_spinner);
         if(titleView.getText().toString().length()<3){
-            Toast.makeText(PostEditorUI.this, "Title must have at least 3 characters!", Toast.LENGTH_LONG);
+            Toast.makeText(PostEditorUI.this, "Title must have at least 3 characters!", Toast.LENGTH_LONG).show();
+            return -1;
         }
-        else if(content.getText().toString().length() < 10 ){
-            Toast.makeText(PostEditorUI.this, "Content must have at least 10 characters!", Toast.LENGTH_LONG);
+        else if(content.getText().toString().length() < 10 ) {
+            Toast.makeText(PostEditorUI.this, "Content must have at least 10 characters!", Toast.LENGTH_LONG).show();
+            return -1;
         }
         else {
             MainActivity.forumMgr.addPost(titleView.getText().toString().trim(),//title
                     content.getText().toString().trim(),//content
                     getUser(), //username
-                    MainActivity.facilityMgr.all_facility_names[med_spinner.getSelectedItemPosition()],//medical_mecility
+                    MainActivity.facilityMgr.all_facility_names[med_spinner.getSelectedItemPosition()],//medical_facility
                     tags.getText().toString().toLowerCase().trim(),//tags
                     status,//status
                     ratingbar.getNumStars(),//ratings
@@ -106,6 +108,7 @@ public class PostEditorUI extends AppCompatActivity implements AdapterView.OnIte
                     }
             );
         }
+        return 0;
     }
 
     public String getUser()

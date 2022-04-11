@@ -5,12 +5,17 @@ import static com.example.medkit2006.MainActivity.facilityMgr;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NavUtils;
 
 import com.example.medkit2006.MainActivity;
 import com.example.medkit2006.R;
@@ -25,6 +30,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class FacilityDetailUI extends AppCompatActivity implements OnMapReadyCallback {
     private GoogleMap map;
     SupportMapFragment mapFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,7 +96,6 @@ public class FacilityDetailUI extends AppCompatActivity implements OnMapReadyCal
                 Toast.makeText(this, "Please login first", Toast.LENGTH_SHORT).show();
         });
         Log.d("Received MF Name", message);
-        // Capture the layout's TextView and set the string as its text
     }
 
     @Override
@@ -106,10 +111,4 @@ public class FacilityDetailUI extends AppCompatActivity implements OnMapReadyCal
         // Display traffic
         googleMap.setTrafficEnabled(true);
     }
-
-    public void goBack(View v){
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-    }
-
 }

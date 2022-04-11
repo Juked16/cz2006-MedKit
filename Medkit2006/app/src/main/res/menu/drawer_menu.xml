@@ -9,4 +9,8 @@
         android:id="@+id/myPost"
         android:title="My Posts"/>
 
+    <item
+    android:id="@+id/goMain"
+    android:title="Go to Main Menu"/>
+
 </menu>

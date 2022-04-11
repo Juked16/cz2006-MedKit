@@ -14,7 +14,7 @@ import java.util.function.Consumer;
 public class ForumMgr {
 	public void getPostAbstract(String query, Consumer<ArrayList<Post>> callback, Consumer<Exception> error){
 		DB.instance.executeQuery(query, resultSet -> {
-			ArrayList<Post> post_list = new ArrayList<Post>();
+			ArrayList<Post> post_list = new ArrayList<>();
 			try {
 				MySQLRow row;
 				while ((row = resultSet.getNextRow()) != null) {
@@ -26,7 +26,7 @@ public class ForumMgr {
 					post_list.add(tmp_post);
 					Log.d("MF_Search Result", tmp_post.getTitle());
 				}
-				Log.d("DB_search", String.valueOf(post_list.size()) + "medical facility records retrieved");
+				Log.d("DB_search", post_list.size() + "medical facility records retrieved");
 			} catch (Exception e) {
 				error.accept(e);
 				return;
@@ -36,15 +36,15 @@ public class ForumMgr {
 	}
 	public void getAllPostAbstract(Consumer<ArrayList<Post>> callback, Consumer<Exception> error) {
 		String query = "select * from POST order by _id".toUpperCase();
-		getPostAbstract(query, callback::accept, error::accept);
+		getPostAbstract(query, callback, error);
 	}
 	public void getMyPostAbstract(String username, Consumer<ArrayList<Post>> callback, Consumer<Exception> error){
 		String query = "select * from POST where USERNAME = '" + username +"' and STATUS = 1 order by _id";
-		getPostAbstract(query, callback::accept, error::accept);
+		getPostAbstract(query, callback, error);
 	}
 	public void getMyDraftAbstract(String username, Consumer<ArrayList<Post>> callback, Consumer<Exception> error){
 		String query = "select * from POST where USERNAME = '" + username +"' and STATUS = 0 order by _id";
-		getPostAbstract(query, callback::accept, error::accept);
+		getPostAbstract(query, callback, error);
 
 	}
 	public void getPostDetail(int post_id, Consumer<Post> callback, Consumer<Exception> error) {

@@ -3,11 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".boundary.ForumUI">
-    <item
-        android:id="@+id/action_go_main"
-        android:title="Go to Main Menu"
-        android:icon="@drawable/arrow"
-        app:showAsAction="always" />
+
     <item
         android:id="@+id/action_new_post"
         android:title="New Post"

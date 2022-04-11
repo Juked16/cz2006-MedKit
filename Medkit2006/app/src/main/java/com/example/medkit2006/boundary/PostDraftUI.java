@@ -1,8 +1,6 @@
 package com.example.medkit2006.boundary;
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,10 +13,6 @@ import com.example.medkit2006.FeedAdapter;
 import com.example.medkit2006.MainActivity;
 import com.example.medkit2006.R;
 import com.example.medkit2006.entity.Post;
-import com.example.medkit2006.data.ForumContract;
-import com.example.medkit2006.data.ForumDbHelper;
-
-import java.util.ArrayList;
 
 public class PostDraftUI extends AppCompatActivity {
 

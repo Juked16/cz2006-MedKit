@@ -108,6 +108,10 @@ public class ForumUI extends AppCompatActivity {
                         i = new Intent(ForumUI.this, MainActivity.accountMgr.isLoggedIn() ? MyPostUI.class : LoginUI.class);
                         i.putExtra(USEREXTRA, getUser());
                         startActivity(i);
+                    case R.id.goMain:
+                        i = new Intent(ForumUI.this, MainActivity.class);
+                        i.putExtra(USEREXTRA, getUser());
+                        startActivity(i);
                 }
                 return false;
             }
@@ -131,7 +135,7 @@ public class ForumUI extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.feed_action, menu);
+        getMenuInflater().inflate(R.menu.forum_menu, menu);
         return true;
     }
 
@@ -145,10 +149,6 @@ public class ForumUI extends AppCompatActivity {
             goEdit();
             return true;
         }
-        if(item.getItemId() == R.id.action_go_main) {
-            goBack();
-            return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -159,8 +159,15 @@ public class ForumUI extends AppCompatActivity {
 
     public void goEdit()
     {
-        Intent i = new Intent(ForumUI.this, MainActivity.accountMgr.isLoggedIn() ? PostEditorUI.class : LoginUI.class);
-        i.putExtra(ForumUI.USEREXTRA, getUser());
+        Intent i;
+        if(!MainActivity.accountMgr.isLoggedIn()) {
+            Toast.makeText(ForumUI.this, "Please Login First!", Toast.LENGTH_LONG).show();
+            i = new Intent(ForumUI.this, LoginUI.class);
+        }
+        else {
+            i = new Intent(ForumUI.this, PostEditorUI.class);
+            i.putExtra(ForumUI.USEREXTRA, getUser());
+        }
         startActivity(i);
     }
 

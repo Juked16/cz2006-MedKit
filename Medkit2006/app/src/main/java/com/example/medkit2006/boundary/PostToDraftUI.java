@@ -1,9 +1,6 @@
 package com.example.medkit2006.boundary;
 
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -21,9 +18,6 @@ import androidx.core.app.NavUtils;
 
 import com.example.medkit2006.MainActivity;
 import com.example.medkit2006.R;
-import com.example.medkit2006.data.ForumContract;
-import com.example.medkit2006.data.ForumDbHelper;
-import com.example.medkit2006.entity.Post;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -84,7 +78,8 @@ public class PostToDraftUI extends AppCompatActivity implements AdapterView.OnIt
         switch (item.getItemId()) {
             // Respond to a click on the "Save" menu option
             case R.id.action_save:
-                updateData(1);
+                if(updateData(1) == 0)
+                    finish();
                 return true;
             // Respond to a click on the "Delete" menu option
             case R.id.action_draft:
@@ -103,34 +98,54 @@ public class PostToDraftUI extends AppCompatActivity implements AdapterView.OnIt
         return super.onOptionsItemSelected(item);
     }
 
-    public void updateData(int status)
+    public int updateData(int status)
     {
         EditText title = findViewById(R.id.title);
         EditText content = findViewById(R.id.post);
         EditText tags = findViewById(R.id.tags);
         RatingBar ratingbar = findViewById(R.id.ratingBar);
         Spinner med_spinner = findViewById(R.id.post_facility_selection_spinner);
-
-        MainActivity.forumMgr.updatePost(post_id, //post_id
-                title.getText().toString().trim(),//title
-            content.getText().toString().trim(),//content
-            getNewDate(), //newDate
-            getUsername(),//username
-            MainActivity.facilityMgr.all_facility_names[med_spinner.getSelectedItemPosition()],//medical_mecility
-            tags.getText().toString().toLowerCase().trim(),//tags
-            status,//status
-            ratingbar.getNumStars(),//ratings
-            ()->{},//callback
-            e->{
-                Log.d("Add Post Fail",e.getMessage());
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {// Stuff that updates the UI
-                        Toast.makeText(getApplicationContext(), e.toString().trim(), Toast.LENGTH_SHORT).show();
+        if(title.getText().length() <= 3){
+            Toast.makeText(PostToDraftUI.this, "Title must have at least 3 characters!", Toast.LENGTH_LONG).show();
+            return -1;
+        }
+        else if(content.getText().toString().length() < 10 ) {
+            Toast.makeText(PostToDraftUI.this, "Content must have at least 10 characters!", Toast.LENGTH_LONG).show();
+            return -1;
+        }
+        else {
+            MainActivity.forumMgr.updatePost(post_id, //post_id
+                    title.getText().toString().trim(),//title
+                    content.getText().toString().trim(),//content
+                    getNewDate(), //newDate
+                    getUsername(),//username
+                    MainActivity.facilityMgr.all_facility_names[med_spinner.getSelectedItemPosition()],//medical_mecility
+                    tags.getText().toString().toLowerCase().trim(),//tags
+                    status,//status
+                    ratingbar.getNumStars(),//ratings
+                    () -> {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {// Stuff that updates the UI
+                                if (status == 1)
+                                    Toast.makeText(getApplicationContext(), "Posted!", Toast.LENGTH_SHORT).show();
+                                else
+                                    Toast.makeText(getApplicationContext(), "Saved to draft!", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    },//callback
+                    e -> {
+                        Log.d("Add Post Fail", e.getMessage());
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {// Stuff that updates the UI
+                                Toast.makeText(getApplicationContext(), e.toString().trim(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
-                });
-            }
-        );
+            );
+            return 0;
+        }
     }
 
     public String getNewDate()
