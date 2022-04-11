@@ -39,55 +39,48 @@ public class MedicalFacilityMgr {
 	}
 
 	public void getAllFacilityAbstract(@NotNull Consumer<ArrayList<MedicalFacility>> callback, Consumer<Exception> error){
-		String query = "select * from medical_facilities m";
+		String query = "select *, avg(fill_na_rate) as rate from(select m.*, coalesce(r.rating, 0) as fill_na_rate from medical_facilities m left join rating r on m.name = r.medical_facility)t group by t.name";
 		getFacilityAbstract(query, callback::accept, error::accept);
 	}
 
 	public void getFacilityAbstract(String name, int[] filter_pos, String order, Consumer<ArrayList<MedicalFacility>> callback, Consumer<Exception> error) {
-		String query = "select m.*, avg(R1.rating) as rate from medical_facilities m join rating R1 on m.name = R1.medical_facility where m.name like '%"+name+"%'";
-		boolean ratingFlag = false;
+		String join_tab = "(select *, avg(fill_na_rate) as rate from(select m.*, coalesce(r.rating, 0) as fill_na_rate from medical_facilities m left join rating r on m.name = r.medical_facility)t1 group by t1.name)t";
+		String query = "select * from "+ join_tab +" where t.name like '%"+name.toUpperCase()+"%'";
 		switch(filter_pos[0]){
 			case 0: break;
 			case 1:
-				query+=" and m.type = 'hospital' group by m.name";
-				ratingFlag = true;
+				query+=" and t.type = 'hospital'";
 				break;
 			case 2:
-				query+=" and m.type = 'nursing home' group by m.name";
-				ratingFlag = true;
+				query+=" and t.type = 'nursing home'";
 				break;
 			case 3:
-				query+=" and m.type = 'dental' group by m.name";
-				ratingFlag = true;
+				query+=" and t.type = 'dental'";
 				break;
 
 		}
 		switch(filter_pos[1]){
 			case 0: break;
 			case 1:
-				query+=" GROUP BY R1.medical_facility having m.name in (SELECT medical_facility FROM rating r GROUP BY medical_facility having avg(rating)>3.5)";
-				ratingFlag = true;
+				query+=" and t.rate>3.5";
 				break;
 			case 2:
-				ratingFlag = true;
-				query+=" GROUP BY R1.medical_facility having m.name in (select medical_facility from rating r group by medical_facility having avg(rating)>4.0)";
+				query+=" and t.rate>4.0";
 				break;
 			case 3:
-				ratingFlag = true;
-				query+=" GROUP BY R1.medical_facility having m.name in (select medical_facility from rating r group by medical_facility having avg(rating)>4.5)";
+				query+=" and t.rate>4.5";
 				break;
 		}
 		switch(order){
 			case "Alphabet":
-				query+=" order by m.name";
+				query+=" order by t.name";
 				break;
 			case "Type":
-				query+=" order by m.type";
+				query+=" order by t.type";
 				break;
 			case "Rating":
-				if (ratingFlag) query+=" order by rate DESC";
-				else query+=" GROUP BY R1.medical_facility order by rate DESC";
-
+				query+=" order by t.rate DESC";
+				break;
 		}
 		Log.d("@string/MF_mgr_tag"+"Search keywords",name+", type: "+filters_type[filter_pos[0]]+", rating: "+filters_rating[filter_pos[1]]+", "+order);
 		getFacilityAbstract(query, callback::accept, error::accept);
@@ -105,7 +98,7 @@ public class MedicalFacilityMgr {
 					tmp_facil.setType(row.getString("type"));
 					tmp_facil.setAddress(row.getString("address"));
 					tmp_facil.setContact(row.getString("contact"));
-					try{tmp_facil.setAveRating(row.getFloat("aveRating"));}catch(Exception e){
+					try{tmp_facil.setAveRating(row.getFloat("rate"));}catch(Exception e){
 						tmp_facil.setAveRating(0.0F); }
 					facility_list.add(tmp_facil);
 					Log.d("@string/MF_mgr_tag"+"getFacilityAbstract Result", tmp_facil.getName());

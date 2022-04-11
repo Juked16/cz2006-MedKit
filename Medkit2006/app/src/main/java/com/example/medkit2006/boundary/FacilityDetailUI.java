@@ -64,6 +64,8 @@ public class FacilityDetailUI extends AppCompatActivity implements OnMapReadyCal
                 e -> { Log.d("Received Medical Facility List Unsuccessful", e.toString().trim());
         });
 
+
+
         ImageButton bookmarkBtn = findViewById(R.id.bookmark_btn);
         if (MainActivity.accountMgr.isLoggedIn())
             MainActivity.bookmarkMgr.get(message, bookmark -> {
@@ -92,8 +94,11 @@ public class FacilityDetailUI extends AppCompatActivity implements OnMapReadyCal
                     e.printStackTrace();
                     Toast.makeText(this, "Failed to retrieve bookmark", Toast.LENGTH_SHORT).show();
                 });
-            } else
+            } else {
                 Toast.makeText(this, "Please login first", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(FacilityDetailUI.this, LoginUI.class);
+                startActivity(i);
+            }
         });
         Log.d("Received MF Name", message);
     }

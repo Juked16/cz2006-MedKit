@@ -139,7 +139,7 @@ public class SearchUI extends AppCompatActivity implements AdapterView.OnItemSel
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {// Stuff that updates the UI
-                    Toast.makeText(getApplicationContext(), e.toString().trim(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"No Search Result!", Toast.LENGTH_SHORT).show();
                 }
             });
         });

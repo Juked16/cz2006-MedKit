@@ -46,9 +46,9 @@ public class MedicalFacilityAdapter extends RecyclerView.Adapter<MedicalFacility
         Log.d("position, facility",String.valueOf(position)+", "+medicalFacility.getName());
         holder.txtMFName.setText(medicalFacility.getName());
         holder.txtMFType.setText(medicalFacility.getType());
-        //holder.txtMFAddress.setText(medicalFacility.getAddress());
+        holder.txtMFAddress.setText(medicalFacility.getAddress());
         holder.txtMFContact.setText(medicalFacility.getContact());
-        //holder.txtMFRating.setText(String.valueOf(medicalFacility.getAverageRating()));
+        holder.txtMFRating.setText(String.valueOf(medicalFacility.getAveRating()));
         CardView cv = (CardView) holder.itemView.findViewById(R.id.cardView);
         cv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,8 +73,9 @@ public class MedicalFacilityAdapter extends RecyclerView.Adapter<MedicalFacility
             super(itemView);
             txtMFName = itemView.findViewById(R.id.cardViewMFName);
             txtMFType = itemView.findViewById(R.id.cardViewMFType);
-            //txtMFAddress = itemView.findViewById(R.id.cardview);
+            txtMFAddress = itemView.findViewById(R.id.cardViewMFAdress);
             txtMFContact = itemView.findViewById(R.id.cardViewMFContact);
+            txtMFRating = itemView.findViewById(R.id.cardViewRating);
 
         }
     }
