@@ -20,6 +20,7 @@ import com.example.medkit2006.boundary.AccountUI;
 import com.example.medkit2006.boundary.BookmarkUI;
 import com.example.medkit2006.boundary.ChatUsersUI;
 import com.example.medkit2006.boundary.ForumUI;
+import com.example.medkit2006.boundary.LoginUI;
 import com.example.medkit2006.boundary.SearchUI;
 import com.example.medkit2006.control.AccountMgr;
 import com.example.medkit2006.control.BookmarkMgr;
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(i);
                         break;
                     case R.id.nav_account:
-                        i = new Intent(getApplicationContext(), AccountUI.class);
+                        i = new Intent(getApplicationContext(), MainActivity.accountMgr.isLoggedIn()? AccountUI.class: LoginUI.class);
                         startActivity(i);
                         break;
                 }

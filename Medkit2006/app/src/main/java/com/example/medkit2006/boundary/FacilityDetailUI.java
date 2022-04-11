@@ -5,17 +5,11 @@ import static com.example.medkit2006.MainActivity.facilityMgr;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NavUtils;
 
 import com.example.medkit2006.MainActivity;
 import com.example.medkit2006.R;
@@ -34,7 +28,7 @@ public class FacilityDetailUI extends AppCompatActivity implements OnMapReadyCal
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.facility_detail);
+        setContentView(R.layout.activity_facility_detail);
         //Instantiation of map object, get a handle to the fragment and register the callback.
         try{
             mapFragment = (SupportMapFragment) getSupportFragmentManager()

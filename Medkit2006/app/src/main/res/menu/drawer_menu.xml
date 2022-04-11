@@ -10,7 +10,11 @@
         android:title="My Posts"/>
 
     <item
-    android:id="@+id/goMain"
-    android:title="Go to Main Menu"/>
+        android:id="@+id/goChat"
+        android:title="Chat"/>
+
+    <item
+    android:id="@+id/goAccount"
+    android:title="Account"/>
 
 </menu>

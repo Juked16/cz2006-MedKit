@@ -60,6 +60,32 @@ public class SearchUI extends AppCompatActivity implements AdapterView.OnItemSel
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
+        BottomNavigationView btmNav = findViewById(R.id.navigation);
+        btmNav.getMenu().clear();
+        btmNav.inflateMenu(R.menu.bottom_navigation);
+        btmNav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Intent i;
+                switch (item.getItemId()) {
+                    case R.id.nav_search:
+                        i = new Intent(getApplicationContext(), SearchUI.class);
+                        startActivity(i);
+                        break;
+                    case R.id.nav_forum:
+                        i = new Intent(getApplicationContext(), ForumUI.class);
+                        startActivity(i);
+                        break;
+                    case R.id.nav_account:
+                        i = new Intent(getApplicationContext(), MainActivity.accountMgr.isLoggedIn()? AccountUI.class: LoginUI.class);
+                        startActivity(i);
+                        break;
+                }
+                return false;
+            }
+        });
+
+
         //Setting spinners
         Spinner type_spin = findViewById(R.id.type_filter_spinner);
         Spinner rating_spin = findViewById(R.id.rating_filter_spinner);

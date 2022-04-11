@@ -14,6 +14,7 @@ import androidx.core.app.NavUtils;
 
 import com.example.medkit2006.MainActivity;
 import com.example.medkit2006.R;
+import com.example.medkit2006.entity.Bookmark;
 import com.example.medkit2006.entity.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -30,9 +31,10 @@ public class AccountUI extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.account);
-        BottomNavigationView btmNav = new BottomNavigationView(this);
-        btmNav = findViewById(R.id.navigation);
+        setContentView(R.layout.activity_account);
+
+        BottomNavigationView btmNav = findViewById(R.id.navigation);
+        btmNav.getMenu().clear();
         btmNav.inflateMenu(R.menu.bottom_navigation);
         btmNav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -48,14 +50,13 @@ public class AccountUI extends AppCompatActivity {
                         startActivity(i);
                         break;
                     case R.id.nav_account:
-                        i = new Intent(getApplicationContext(), AccountUI.class);
+                        i = new Intent(getApplicationContext(), MainActivity.accountMgr.isLoggedIn()? AccountUI.class: LoginUI.class);
                         startActivity(i);
                         break;
                 }
                 return false;
             }
         });
-
     }
 
 
@@ -72,16 +73,25 @@ public class AccountUI extends AppCompatActivity {
                 Intent intent = new Intent(this, AccountSettingsUI.class);
                 startActivity(intent);
             });
+
             findViewById(R.id.accountChangePwBtn).setVisibility(View.VISIBLE);
             findViewById(R.id.accountChangePwBtn).setOnClickListener(btn -> {
                 Intent intent = new Intent(this, ForgetPwUI.class);
                 intent.putExtra("ChangePassword", true);
                 startActivity(intent);
             });
+
             ((Button) findViewById(R.id.accountLoginBtn)).setText("Logout");
-            findViewById(R.id.accountToMainBtn).setVisibility(View.VISIBLE);
-            findViewById(R.id.accountToMainBtn).setOnClickListener(btn -> {
-                Intent intent = new Intent(this, MainActivity.class);
+
+            findViewById(R.id.accountToChatBtn).setVisibility(View.VISIBLE);
+            findViewById(R.id.accountToChatBtn).setOnClickListener(btn -> {
+                Intent intent = new Intent(this, ChatUsersUI.class);
+                startActivity(intent);
+            });
+
+            findViewById(R.id.accountToBookmarkBtn).setVisibility(View.VISIBLE);
+            findViewById(R.id.accountToBookmarkBtn).setOnClickListener(btn -> {
+                Intent intent = new Intent(this, BookmarkUI.class);
                 startActivity(intent);
             });
         }

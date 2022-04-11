@@ -62,7 +62,7 @@ public class ForumUI extends AppCompatActivity {
                         startActivity(i);
                         break;
                     case R.id.nav_account:
-                        i = new Intent(getApplicationContext(), AccountUI.class);
+                        i = new Intent(getApplicationContext(), MainActivity.accountMgr.isLoggedIn()? AccountUI.class: LoginUI.class);
                         startActivity(i);
                         break;
                 }
@@ -135,10 +135,17 @@ public class ForumUI extends AppCompatActivity {
                         i = new Intent(ForumUI.this, MainActivity.accountMgr.isLoggedIn() ? MyPostUI.class : LoginUI.class);
                         i.putExtra(USEREXTRA, getUser());
                         startActivity(i);
-                    case R.id.goMain:
-                        i = new Intent(ForumUI.this, MainActivity.class);
+                        break;
+                    case R.id.goChat:
+                        i = new Intent(ForumUI.this, MainActivity.accountMgr.isLoggedIn() ? ChatUsersUI.class : LoginUI.class);
                         i.putExtra(USEREXTRA, getUser());
                         startActivity(i);
+                        break;
+                    case R.id.goAccount:
+                        i = new Intent(ForumUI.this, MainActivity.accountMgr.isLoggedIn() ? AccountUI.class : LoginUI.class);
+                        i.putExtra(USEREXTRA, getUser());
+                        startActivity(i);
+                        break;
                 }
                 return false;
             }

@@ -3,14 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/loginHeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="87dp"
-        android:text="Login"
-        android:textSize="50sp" />
+
 
     <EditText
         android:id="@+id/loginUsername"
@@ -18,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="245dp"
+        android:layout_marginTop="200dp"
         android:ems="10"
         android:hint="Username"
         android:textStyle="italic" />
@@ -36,29 +29,32 @@
 
     <Button
         android:id="@+id/loginForgotPwBtn"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/loginStatus"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
+        android:backgroundTint="#8e7cc3"
         android:text="Forgot Password" />
 
     <Button
         android:id="@+id/loginLoginBtn"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/loginForgotPwBtn"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
+        android:backgroundTint="#8e7cc3"
         android:text="Login" />
 
     <Button
         android:id="@+id/loginToRegisterBtn"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/loginLoginBtn"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
+        android:backgroundTint="#8e7cc3"
         android:onClick="toRegister"
         android:text="Register" />
 

@@ -6,15 +6,26 @@
     android:layout_height="match_parent"
     tools:context=".boundary.SearchUI">
 
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/navigation"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_gravity="start"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/bottom_navigation"
+        tools:layout_editor_absoluteX="0dp" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_result_rv"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="15dp"
+        app:layout_constraintBottom_toTopOf="@id/navigation"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sort_radioGroup"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginTop="15dp"/>
+        app:layout_constraintTop_toBottomOf="@+id/filters_header"
+        app:layout_constraintVertical_bias="0.0" />
 
     <EditText
         android:id="@+id/search_src1"
@@ -34,11 +45,10 @@
         android:id="@+id/sortby_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:layout_marginStart="12dp"
         android:text="@string/search_ord_hint"
-        android:textSize="20sp"
-        android:textStyle="bold"
+        android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search_src1" />
 
@@ -46,12 +56,12 @@
         android:id="@+id/filters_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="12dp"
         android:text="Filters"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/type_filter_spinner"
-        app:layout_constraintTop_toBottomOf="@+id/search_src1" />
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sortby_header" />
 
     <RadioGroup
         android:id="@+id/sort_radioGroup"
@@ -59,52 +69,58 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginStart="12dp"
-        app:layout_constraintTop_toBottomOf="@+id/sortby_header"
-        app:layout_constraintStart_toStartOf="parent"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/search_src1"
+        app:layout_constraintStart_toEndOf="@+id/sortby_header"
         tools:layout_editor_absoluteX="11dp">
 
         <RadioButton
             android:id="@+id/alphabet_sort_btn"
             android:layout_width="match_parent"
             android:layout_height="30dp"
+            android:textSize="15sp"
             android:text="@string/search_opt1" />
 
         <RadioButton
             android:id="@+id/distance_sort_btn"
             android:layout_width="match_parent"
             android:layout_height="30dp"
+            android:textSize="15sp"
             android:text="@string/search_opt2" />
 
         <RadioButton
             android:id="@+id/rating_sort_btn"
             android:layout_width="match_parent"
+            android:textSize="15sp"
             android:layout_height="30dp"
             android:text="@string/search_opt3" />
     </RadioGroup>
 
     <Spinner
         android:id="@+id/type_filter_spinner"
-        android:layout_width="276dp"
+        android:layout_width="160dp"
         android:layout_height="38dp"
-        android:layout_marginTop="10dp"
         android:layout_marginEnd="12dp"
+        android:backgroundTint="@color/grey"
         android:spinnerMode="dropdown"
+        android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/sort_radioGroup"
-        app:layout_constraintTop_toBottomOf="@id/filters_header" />
+        app:layout_constraintStart_toEndOf="@+id/rating_filter_spinner"
+        app:layout_constraintTop_toBottomOf="@id/sort_radioGroup" />
 
     <Spinner
         android:id="@+id/rating_filter_spinner"
-        android:layout_width="276dp"
+        android:layout_width="160dp"
         android:layout_height="38dp"
         android:layout_marginBottom="15dp"
+        android:textSize="15sp"
         android:layout_marginEnd="12dp"
+        android:backgroundTint="@color/grey"
         android:spinnerMode="dropdown"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/sort_radioGroup"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/sort_radioGroup"
-        app:layout_constraintBottom_toTopOf="@id/search_result_rv" />
+        app:layout_constraintTop_toBottomOf="@id/sort_radioGroup" />
 
     <ImageButton
         android:id="@+id/toMfList2"

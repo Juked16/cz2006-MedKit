@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView xmlns:app="http://schema.android.com/apk/res/res-auto"
+        android:id="@+id/navigation"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="start"
+        app:menu="@menu/bottom_navigation" />
+
+    <TextView
+        android:id="@+id/accountName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="50dp"
+        android:text="" />
+
+    <TextView
+        android:id="@+id/accountEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="50dp"
+        android:layout_below="@+id/accountName"
+        android:layout_marginTop="20dp"
+        android:text="" />
+
+    <Button
+        android:id="@+id/accountToSettingsBtn"
+        android:layout_below="@+id/accountEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="50dp"
+        android:layout_marginStart="50dp"
+        android:backgroundTint="#8e7cc3"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="20dp"
+        android:text="Settings"
+        android:visibility="invisible" />
+
+    <Button
+        android:id="@+id/accountChangePwBtn"
+        android:layout_below="@+id/accountToSettingsBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="50dp"
+        android:layout_marginStart="50dp"
+        android:backgroundTint="#8e7cc3"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="20dp"
+        android:text="Change Password"
+        android:visibility="invisible" />
+
+    <Button
+        android:id="@+id/accountToChatBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/accountChangePwBtn"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="50dp"
+        android:backgroundTint="#8e7cc3"
+        android:text="Chat"
+        android:visibility="invisible" />
+
+    <Button
+        android:id="@+id/accountToBookmarkBtn"
+        android:layout_below="@+id/accountToChatBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="50dp"
+        android:layout_marginStart="50dp"
+        android:backgroundTint="#8e7cc3"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="20dp"
+        android:text="Bookmark"
+        android:visibility="invisible" />
+
+
+    <Button
+        android:id="@+id/accountLoginBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/accountToBookmarkBtn"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="50dp"
+        android:backgroundTint="#8e7cc3"
+        android:text="Login"
+        android:visibility="visible" />
+
+
+</RelativeLayout>
