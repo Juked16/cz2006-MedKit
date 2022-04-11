@@ -3,6 +3,7 @@ package com.example.medkit2006.boundary;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -45,7 +46,10 @@ public class ChatUsersUI extends AppCompatActivity {
         }
         updateChats();
         findViewById(R.id.chatTestBtn).setVisibility(View.VISIBLE);
-        findViewById(R.id.chatTestBtn).setOnClickListener(btn -> MainActivity.chatMgr.startPrivateMessage(tmp_user.getUsername(), "test2", this::updateChats, Throwable::printStackTrace));//TODO: remove
+        findViewById(R.id.chatTestBtn).setOnClickListener(btn -> MainActivity.chatMgr.startPrivateMessage(tmp_user.getUsername(), "test2", this::updateChats, e -> {
+            e.printStackTrace();
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }));//TODO: remove
     }
 
     /**
