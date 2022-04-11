@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.medkit2006.MainActivity;
 import com.example.medkit2006.R;
 import com.example.medkit2006.data.DB;
+import com.example.medkit2006.entity.Message;
 import com.example.medkit2006.entity.User;
 
 import java.util.Locale;
@@ -151,10 +152,15 @@ public class PostDetailUI extends AppCompatActivity {
                     }, error -> {
                         Log.d("Message Unable to Start", error.getMessage());
                     });
-                    Intent intent = new Intent(PostDetailUI.this, ChatUsersUI.class);
-                    startActivity(intent);
-                    //intent.putExtra("chatId", chat.getKey());
-                    //intent.putExtra("chatName", holder.username.getText().toString());
+                    MainActivity.chatMgr.getPrivateMessage(user.getUsername(), post_user, chat_id->{
+                        Intent intent = new Intent(PostDetailUI.this, MessageActivity.class);
+                        intent.putExtra("chatId", chat_id);
+                        intent.putExtra("chatName", post_user);
+                        startActivity(intent);
+                        }, error->{Log.d("Message Unable to Start", error.getMessage());
+                    });
+                    //Intent intent = new Intent(PostDetailUI.this, ChatUsersUI.class);
+                    //startActivity(intent);
                 }
             }
         });

@@ -32,7 +32,7 @@ public class ForumUI extends AppCompatActivity {
     private DrawerLayout mDrawerlayout;
     private ActionBarDrawerToggle mToggle;
     private NavigationView navigation;
-
+    private ListView listView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,9 +47,8 @@ public class ForumUI extends AppCompatActivity {
         mDrawerlayout.addDrawerListener(mToggle);
         mToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        listView = findViewById(R.id.list);
         setTitle("Welcome " + getUser());
-        final ListView listView = findViewById(R.id.list);
         //search database below
         MainActivity.forumMgr.getAllPostAbstract(postList -> {
             Log.d("Received Post List", String.valueOf(postList.size()));
@@ -131,6 +130,25 @@ public class ForumUI extends AppCompatActivity {
         if (loggedIn == null){
             Toast.makeText(this, "You haven't log in!",Toast.LENGTH_SHORT);
         }
+        //refresh page
+        MainActivity.forumMgr.getAllPostAbstract(postList -> {
+            Log.d("Received Post List", String.valueOf(postList.size()));
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {// Stuff that updates the UI
+                    FeedAdapter itemsAdapter = new FeedAdapter(ForumUI.this, postList);
+                    listView.setAdapter(itemsAdapter);
+                }
+            });
+        }, e -> {
+            Log.d("Received Post List Unsuccessful", e.toString().trim());
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {// Stuff that updates the UI
+                    Toast.makeText(getApplicationContext(), e.toString().trim(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
     }
 
     @Override

@@ -73,6 +73,7 @@
         <entry key="app/src/main/res/menu/draft_post_editor.xml" value="0.1" />
         <entry key="app/src/main/res/menu/drawer_menu.xml" value="0.1" />
         <entry key="app/src/main/res/menu/feed_action.xml" value="0.1" />
+        <entry key="app/src/main/res/menu/forum_menu.xml" value="0.21666666666666667" />
         <entry key="app/src/main/res/menu/post_editor.xml" value="0.1" />
         <entry key="app/src/main/res/menu/profile.xml" value="0.1" />
         <entry key="app/src/main/res/menu/tool_bar.xml" value="0.1" />

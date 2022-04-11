@@ -57,6 +57,20 @@ public class ChatMgr{
 
     }
 
+    public void getPrivateMessage(String sender, String receiver, Consumer<Integer> callback, Consumer<Exception> error) {
+        DB.instance.executeQuery("select c1.id from chat c1 inner join chat c2 on c1.id=c2.id where c1.username = '"
+                + sender + "' and c2.username ='" + receiver + "'", resultSet -> {
+            MySQLRow row= resultSet.getNextRow();
+                if(row != null){
+                    try{ callback.accept(row.getInt("id")); }catch(Exception e) { error.accept(e); }
+                }
+                else
+                    error.accept(new Exception("Chat with " + receiver + " non existed"));
+        }, error);
+    }
+
+
+
     public void sendMessage(int chatId, String sender, String content, Runnable callback, Consumer<Exception> error){
         DB.instance.execute("insert into text (username, content, timestamp, chatId) values('" + sender + "','" + content + "','" + Instant.now().toString() + "'," + chatId + ")", callback, error);
     }
