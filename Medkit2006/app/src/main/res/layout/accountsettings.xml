@@ -21,10 +21,21 @@
         android:layout_below="@+id/accountSettingsHeader"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:ems="10"
-        android:inputType="none"
         android:autofillHints=""
-        android:hint="Username" />
+        android:ems="10"
+        android:hint="Username"
+        android:inputType="none" />
+
+    <TextView
+        android:id="@+id/accountSettingsLabelUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/accountSettingsUsername"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="Username"
+        android:textSize="15sp" />
 
     <EditText
         android:id="@+id/accountSettingsEmail"
@@ -38,6 +49,17 @@
         android:inputType="none"
         android:autofillHints=""
         tools:ignore="TextFields" />
+
+    <TextView
+        android:id="@+id/accountSettingsLabelEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/accountSettingsEmail"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="Email"
+        android:textSize="15sp" />
 
     <CheckBox
         android:id="@+id/accountSettingsVerified"
@@ -60,6 +82,17 @@
         android:hint="First Name"
         android:inputType="textPersonName" />
 
+    <TextView
+        android:id="@+id/accountSettingsLabelFirstName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/accountSettingsFirstName"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="First Name"
+        android:textSize="15sp" />
+
     <EditText
         android:id="@+id/accountSettingsLastName"
         android:layout_width="wrap_content"
@@ -71,6 +104,17 @@
         android:autofillHints=""
         android:inputType="textPersonName"
         android:hint="Last Name" />
+
+    <TextView
+        android:id="@+id/accountSettingsLabelLastName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/accountSettingsLastName"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="Last Name"
+        android:textSize="15sp" />
 
     <Spinner
         android:id="@+id/accountSettingsGender"
@@ -99,8 +143,19 @@
         android:layout_marginTop="20dp"
         android:autofillHints=""
         android:ems="10"
-        android:inputType="date"
-        android:hint="Date of Birth" />
+        android:hint="Date of Birth"
+        android:inputType="date" />
+
+    <TextView
+        android:id="@+id/accountSettingsLabelDOB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/accountSettingsDOB"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="Date of birth"
+        android:textSize="15sp" />
 
     <TextView
         android:id="@+id/accountSettingsStatus"
@@ -151,16 +206,5 @@
         android:visibility="invisible"
         android:layout_toEndOf="@+id/accountSettingsEmail"
         android:text="Verify" />
-
-    <Button
-        android:id="@+id/accountSettingsChangePwBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/accountSettingsStatus"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="80dp"
-        android:text="Change Password"
-        android:textAllCaps="false" />
 
 </RelativeLayout>

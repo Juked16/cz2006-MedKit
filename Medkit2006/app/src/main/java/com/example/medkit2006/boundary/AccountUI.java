@@ -72,6 +72,12 @@ public class AccountUI extends AppCompatActivity {
                 Intent intent = new Intent(this, AccountSettingsUI.class);
                 startActivity(intent);
             });
+            findViewById(R.id.accountChangePwBtn).setVisibility(View.VISIBLE);
+            findViewById(R.id.accountChangePwBtn).setOnClickListener(btn -> {
+                Intent intent = new Intent(this, ForgetPwUI.class);
+                intent.putExtra("ChangePassword", true);
+                startActivity(intent);
+            });
             ((Button) findViewById(R.id.accountLoginBtn)).setText("Logout");
             findViewById(R.id.accountToMainBtn).setVisibility(View.VISIBLE);
             findViewById(R.id.accountToMainBtn).setOnClickListener(btn -> {

@@ -3,7 +3,6 @@ package com.example.medkit2006;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -21,9 +20,6 @@ import com.example.medkit2006.boundary.AccountUI;
 import com.example.medkit2006.boundary.BookmarkUI;
 import com.example.medkit2006.boundary.ChatUsersUI;
 import com.example.medkit2006.boundary.ForumUI;
-import com.example.medkit2006.boundary.LoginUI;
-import com.example.medkit2006.boundary.MyPostUI;
-import com.example.medkit2006.boundary.PostDraftUI;
 import com.example.medkit2006.boundary.SearchUI;
 import com.example.medkit2006.control.AccountMgr;
 import com.example.medkit2006.control.BookmarkMgr;
@@ -33,7 +29,6 @@ import com.example.medkit2006.control.MedicalFacilityMgr;
 import com.example.medkit2006.data.DB;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
-import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 
@@ -79,10 +74,7 @@ public class MainActivity extends AppCompatActivity {
         builder.setTitle("Connecting");
         AlertDialog dialog = builder.show();
         new DB(
-                () -> {
-                    dialog.dismiss();
-                    chatMgr.init();
-                },
+                dialog::dismiss,
                 e -> runOnUiThread(() -> {
                     dialog.setTitle("Connection failed");
                 })

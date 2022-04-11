@@ -15,21 +15,6 @@ import java.util.function.Consumer;
 
 public class ChatMgr{
 
-    public static int chatId;
-
-    public void init() {
-        DB.instance.executeQuery("select max(id) as id from chat", resultSet -> {
-            MySQLRow row = resultSet.getNextRow();
-            if (row != null) {
-                try {
-                    chatId = row.getInt("id");
-                } catch (SQLColumnNotFoundException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
     /**
      * Start a chat with someone
      *
@@ -43,18 +28,22 @@ public class ChatMgr{
                 +sender + "' and c2.username ='" + receiver+"'", resultSet -> {
             MySQLRow row= resultSet.getNextRow();
             if (row == null) {
-                try {
-                    int id = ++chatId;
-                    DB.instance.execute("insert into chat values (" + id + ",'" + sender + "')", null, Throwable::printStackTrace);
-                    DB.instance.execute("insert into chat values (" + id + ",'" + receiver + "')", callback, error);
-                } catch (Exception e) {
-                    error.accept(e);
-                }
+                DB.instance.executeQuery("select max(id) as id from chat", idResultSet -> {
+                    int chatId = 1;
+                    MySQLRow idRow = resultSet.getNextRow();
+                    if (idRow != null) {
+                        try {
+                            chatId = idRow.getInt("id") + 1;
+                        } catch (SQLColumnNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    DB.instance.execute("insert into chat values (" + chatId + ",'" + sender + "')", null, error);
+                    DB.instance.execute("insert into chat values (" + chatId + ",'" + receiver + "')", callback, error);
+                });
             } else
                 error.accept(new Exception("Chat with " + receiver + " already exist"));
-
         }, error);
-
     }
 
     public void getPrivateMessage(String sender, String receiver, Consumer<Integer> callback, Consumer<Exception> error) {
@@ -68,8 +57,6 @@ public class ChatMgr{
                     error.accept(new Exception("Chat with " + receiver + " non existed"));
         }, error);
     }
-
-
 
     public void sendMessage(int chatId, String sender, String content, Runnable callback, Consumer<Exception> error){
         DB.instance.execute("insert into text (username, content, timestamp, chatId) values('" + sender + "','" + content + "','" + Instant.now().toString() + "'," + chatId + ")", callback, error);

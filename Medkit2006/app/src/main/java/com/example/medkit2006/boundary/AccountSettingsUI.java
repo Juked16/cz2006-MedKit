@@ -1,5 +1,6 @@
 package com.example.medkit2006.boundary;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -130,11 +132,6 @@ public class AccountSettingsUI extends AppCompatActivity {
                 });
                 dialog.show();
             });
-            findViewById(R.id.accountSettingsChangePwBtn).setOnClickListener(btn -> {
-                Intent intent = new Intent(this, ForgetPwUI.class);
-                intent.putExtra("ChangePassword", true);
-                startActivity(intent);
-            });
             Button save = findViewById(R.id.accountSettingsSaveBtn);
             save.setOnClickListener(btn -> {
                 TextView status = findViewById(R.id.accountSettingsStatus);
@@ -189,10 +186,15 @@ public class AccountSettingsUI extends AppCompatActivity {
         user.setGender(gender.getSelectedItem().toString());
         user.setBloodType(bloodType.getSelectedItem().toString());
         status.setText("Saving");
+        AlertDialog dialog = new AlertDialog.Builder(this).setView(new ProgressBar(this)).setTitle("Saving").setMessage("Please wait").setCancelable(false).show();
         MainActivity.accountMgr.saveLoggedInUserDetails(() -> {
+            dialog.dismiss();
             status.setText("Saved");
             if(emailChanged)
                 findViewById(R.id.accountSettingsVerifyBtn).setVisibility(View.VISIBLE);
-        }, e -> status.setText(e.getMessage()));
+        }, e -> {
+            dialog.dismiss();
+            status.setText(e.getMessage());
+        });
     }
 }

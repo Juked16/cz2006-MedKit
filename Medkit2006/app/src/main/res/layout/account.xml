@@ -3,19 +3,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView xmlns:app="http://schema.android.com/apk/res/res-auto"
-            android:id="@+id/navigation"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_gravity="start"
-            android:layout_alignParentBottom="true"
-            app:menu="@menu/bottom_navigation" />
+    <com.google.android.material.bottomnavigation.BottomNavigationView xmlns:app="http://schema.android.com/apk/res/res-auto"
+        android:id="@+id/navigation"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="start"
+        app:menu="@menu/bottom_navigation" />
+
     <TextView
         android:id="@+id/accountHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="50dp"
         android:layout_marginEnd="159dp"
         android:text="Account"
         android:textSize="50sp" />
@@ -24,18 +25,18 @@
         android:id="@+id/accountName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/accountHeader"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="250dp"
+        android:layout_marginTop="50dp"
         android:text="" />
 
     <TextView
         android:id="@+id/accountEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/accountName"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="303dp"
+        android:layout_marginTop="20dp"
         android:text="" />
 
     <Button
@@ -44,8 +45,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/accountLoginBtn"
         android:layout_centerHorizontal="true"
-        android:text="Main Menu"
         android:layout_marginTop="20dp"
+        android:text="Main Menu"
         android:visibility="invisible" />
 
     <Button
@@ -59,10 +60,21 @@
         android:visibility="invisible" />
 
     <Button
-        android:id="@+id/accountLoginBtn"
+        android:id="@+id/accountChangePwBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/accountToSettingsBtn"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="Change Password"
+        android:textAllCaps="false"
+        android:visibility="invisible" />
+
+    <Button
+        android:id="@+id/accountLoginBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/accountChangePwBtn"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:onClick="toLogin"
