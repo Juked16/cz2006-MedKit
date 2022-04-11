@@ -2,6 +2,8 @@ package com.example.medkit2006.boundary;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -14,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.medkit2006.MainActivity;
 import com.example.medkit2006.MessageAdapter;
 import com.example.medkit2006.R;
-import com.example.medkit2006.control.ChatMgr;
 import com.example.medkit2006.entity.Message;
 import com.example.medkit2006.entity.User;
 
@@ -23,7 +24,6 @@ import java.util.List;
 
 public class MessageActivity extends AppCompatActivity {
 
-    TextView chatName;
     User tmp_user;
     ImageButton btn_send;
     EditText text_send;
@@ -32,6 +32,9 @@ public class MessageActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     Intent intent;
     Integer chatId;
+    TextView error;
+    Handler handler = new Handler(Looper.getMainLooper());
+    boolean loopPaused = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,10 +49,10 @@ public class MessageActivity extends AppCompatActivity {
 
         btn_send = findViewById(R.id.btn_send);
         text_send = findViewById(R.id.text_send);
+        error = findViewById(R.id.sendError);
 
         intent = getIntent();
-        String chatName = intent.getStringExtra("chatName");
-        setTitle(chatName);
+        setTitle(intent.getStringExtra("chatName"));
         chatId = intent.getIntExtra("chatId", -1);
         tmp_user = MainActivity.accountMgr.getLoggedInUser();
 
@@ -68,21 +71,36 @@ public class MessageActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        TextView error = findViewById(R.id.sendError);
+        loopPaused = false;
+        loop();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        loopPaused = true;
+    }
+
+    /**
+     * Polling for new msg every 5 sec, find a better way
+     */
+    private void loop() {
+        if (loopPaused) return;
         MainActivity.chatMgr.getMessages(chatId, messages -> {
-            mChat = messages;
-            messageAdapter = new MessageAdapter(this, mChat);
-            recyclerView.setAdapter(messageAdapter);
+            if (!mChat.equals(messages)) {
+                mChat = messages;
+                messageAdapter = new MessageAdapter(this, mChat);
+                recyclerView.setAdapter(messageAdapter);
+            }
         }, e -> error.setText(e.getMessage()));
+        handler.postDelayed(this::loop, 5000);
     }
 
     private void sendMessage(String sender, String message) {
-        ChatMgr mgr = MainActivity.chatMgr;
-        TextView error = findViewById(R.id.sendError);
-        mgr.sendMessage(chatId, sender, message, () -> mChat.add(new Message(sender,message)),e -> error.setText(e.getMessage()));
+        MainActivity.chatMgr.sendMessage(chatId, sender, message, () -> {
+            mChat.add(new Message(sender, message));
+            messageAdapter.notifyItemInserted(mChat.size() - 1);
+        }, e -> error.setText(e.getMessage()));
         //TODO: notifications?
-        /*i = new Intent(MessageActivity.this, MainActivity.accountMgr.isLoggedIn() ? MessageActivity.class : LoginUI.class);
-        i.putExtra("username", getUser());
-        startActivity(i);*/
     }
 }
