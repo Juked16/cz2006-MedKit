@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medkit2006.entity.Message;
-import com.example.medkit2006.entity.User;
 
 import java.util.List;
 
@@ -19,12 +18,19 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     public static final int MSG_TYPE_RECEIVED = 0;
     public static final int MSG_TYPE_SENT = 1;
     private final Context mContext;
-    private final List<Message> mChat;
-    User tmp_user;
+    private List<Message> messages;
 
-    public MessageAdapter(Context mContext, List<Message> mChat) {
+    public MessageAdapter(Context mContext, List<Message> messages) {
         this.mContext = mContext;
-        this.mChat = mChat;
+        this.messages = messages;
+    }
+
+    public List<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
     }
 
     @NonNull
@@ -41,13 +47,13 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull MessageAdapter.ViewHolder holder, int position) {
-        Message message = mChat.get(position);
+        Message message = messages.get(position);
         holder.textMessage.setText(message.getContent());
     }
 
     @Override
     public int getItemCount() {
-        return mChat.size();
+        return messages.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -63,8 +69,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
     @Override
     public int getItemViewType(int position) {
-        tmp_user = MainActivity.accountMgr.getLoggedInUser();
-        if (mChat.get(position).getSender().equals(tmp_user.getUsername())) {
+        if (messages.get(position).getSender().equals(MainActivity.accountMgr.getLoggedInUser().getUsername())) {
             return MSG_TYPE_SENT;
         } else {
             return MSG_TYPE_RECEIVED;

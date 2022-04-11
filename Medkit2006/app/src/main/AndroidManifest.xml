@@ -27,7 +27,7 @@
             android:label="Chats"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".boundary.MessageActivity"
+            android:name=".boundary.ChatMessageUI"
             android:parentActivityName=".boundary.ChatUsersUI"
             android:exported="false" />
 

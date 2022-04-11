@@ -1,5 +1,6 @@
 package com.example.medkit2006.boundary;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,15 +21,13 @@ import com.example.medkit2006.entity.Message;
 import com.example.medkit2006.entity.User;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class MessageActivity extends AppCompatActivity {
+public class ChatMessageUI extends AppCompatActivity {
 
     User tmp_user;
     ImageButton btn_send;
     EditText text_send;
-    MessageAdapter messageAdapter;
-    List<Message> mChat = new ArrayList<>();
+    MessageAdapter messageAdapter = new MessageAdapter(this, new ArrayList<>());
     RecyclerView recyclerView;
     Intent intent;
     Integer chatId;
@@ -46,6 +45,7 @@ public class MessageActivity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         linearLayoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(messageAdapter);
 
         btn_send = findViewById(R.id.btn_send);
         text_send = findViewById(R.id.text_send);
@@ -61,8 +61,7 @@ public class MessageActivity extends AppCompatActivity {
             if (!message.equals("")) {
                 sendMessage(tmp_user.getUsername(), message);
             } else {
-                Toast.makeText(MessageActivity.this, "You can't send empty message",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(ChatMessageUI.this, "Please enter your message", Toast.LENGTH_SHORT).show();
             }
             text_send.setText("");
         });
@@ -84,13 +83,14 @@ public class MessageActivity extends AppCompatActivity {
     /**
      * Polling for new msg every 5 sec, find a better way
      */
+    @SuppressLint("NotifyDataSetChanged")
     private void loop() {
         if (loopPaused) return;
         MainActivity.chatMgr.getMessages(chatId, messages -> {
-            if (!mChat.equals(messages)) {
-                mChat = messages;
-                messageAdapter = new MessageAdapter(this, mChat);
-                recyclerView.setAdapter(messageAdapter);
+            if (!messageAdapter.getMessages().equals(messages)) {
+                messageAdapter.setMessages(messages);
+                messageAdapter.notifyDataSetChanged();
+                //TODO: notifications?
             }
         }, e -> error.setText(e.getMessage()));
         handler.postDelayed(this::loop, 5000);
@@ -98,9 +98,8 @@ public class MessageActivity extends AppCompatActivity {
 
     private void sendMessage(String sender, String message) {
         MainActivity.chatMgr.sendMessage(chatId, sender, message, () -> {
-            mChat.add(new Message(sender, message));
-            messageAdapter.notifyItemInserted(mChat.size() - 1);
+            messageAdapter.getMessages().add(new Message(sender, message));
+            messageAdapter.notifyItemInserted(messageAdapter.getMessages().size() - 1);
         }, e -> error.setText(e.getMessage()));
-        //TODO: notifications?
     }
 }

@@ -10,8 +10,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="150dp"
         android:layout_marginEnd="159dp"
-        android:textSize="50sp"
-        android:text="Account" />
+        android:text="Account"
+        android:textSize="50sp" />
 
     <TextView
         android:id="@+id/accountName"
@@ -35,19 +35,19 @@
         android:id="@+id/accountToMainBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/accountLoginBtn"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="200dp"
         android:text="Main Menu"
+        android:layout_marginTop="20dp"
         android:visibility="invisible" />
 
     <Button
         android:id="@+id/accountToSettingsBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/accountEmail"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="300dp"
+        android:layout_marginTop="20dp"
         android:text="@string/btn_settings"
         android:visibility="invisible" />
 
@@ -55,12 +55,11 @@
         android:id="@+id/accountLoginBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/accountToSettingsBtn"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="250dp"
-        android:text="@string/btn_login"
+        android:layout_marginTop="20dp"
         android:onClick="toLogin"
-        />
+        android:text="@string/btn_login" />
 
 
 </RelativeLayout>

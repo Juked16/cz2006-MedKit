@@ -116,10 +116,8 @@ public class ForumUI extends AppCompatActivity {
             }
         });
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        View hView =  navigationView.getHeaderView(0);
-        TextView name;
-        name = hView.findViewById(R.id.userName);
+        View hView =  navigation.getHeaderView(0);
+        TextView name = hView.findViewById(R.id.userName);
         name.setText(getUser());
     }
 
@@ -128,7 +126,7 @@ public class ForumUI extends AppCompatActivity {
         super.onResume();
         User loggedIn = MainActivity.accountMgr.getLoggedInUser();
         if (loggedIn == null){
-            Toast.makeText(this, "You haven't log in!",Toast.LENGTH_SHORT);
+            Toast.makeText(this, "You are not logged in!",Toast.LENGTH_SHORT).show();
         }
         //refresh page
         MainActivity.forumMgr.getAllPostAbstract(postList -> {

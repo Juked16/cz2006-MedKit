@@ -2,16 +2,14 @@ package com.example.medkit2006.boundary;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.medkit2006.ChatListAdapter;
 import com.example.medkit2006.MainActivity;
 import com.example.medkit2006.R;
-import com.example.medkit2006.UserAdapter;
 import com.example.medkit2006.control.ChatMgr;
 import com.example.medkit2006.entity.User;
 
@@ -22,8 +20,8 @@ public class ChatUsersUI extends AppCompatActivity {
 
     private RecyclerView recyclerView;
 
-    private UserAdapter userAdapter;
-    User tmp_user;
+    private ChatListAdapter chatListAdapter;
+    private User tmp_user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,11 +43,6 @@ public class ChatUsersUI extends AppCompatActivity {
             return;
         }
         updateChats();
-        findViewById(R.id.chatTestBtn).setVisibility(View.VISIBLE);
-        findViewById(R.id.chatTestBtn).setOnClickListener(btn -> MainActivity.chatMgr.startPrivateMessage(tmp_user.getUsername(), "test2", this::updateChats, e -> {
-            e.printStackTrace();
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-        }));//TODO: remove
     }
 
     /**
@@ -62,8 +55,8 @@ public class ChatUsersUI extends AppCompatActivity {
             for (Integer id : chatIds)
                 mgr.getMembers(id, usernames -> {
                     map.put(id,usernames);
-                    userAdapter = new UserAdapter(this, map);
-                    recyclerView.setAdapter(userAdapter);
+                    chatListAdapter = new ChatListAdapter(this, map);
+                    recyclerView.setAdapter(chatListAdapter);
                 }, Throwable::printStackTrace);
         }, Throwable::printStackTrace);
     }
