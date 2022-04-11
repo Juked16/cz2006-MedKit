@@ -1,4 +1,4 @@
-package com.example.medkit2006;
+package com.example.medkit2006.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.medkit2006.MainActivity;
+import com.example.medkit2006.R;
 import com.example.medkit2006.entity.Message;
 
 import java.util.List;

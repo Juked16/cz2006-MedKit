@@ -19,7 +19,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.example.medkit2006.FeedAdapter;
+import com.example.medkit2006.adapter.FeedAdapter;
 import com.example.medkit2006.MainActivity;
 import com.example.medkit2006.R;
 import com.example.medkit2006.entity.Post;
@@ -159,10 +159,6 @@ public class ForumUI extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        User loggedIn = MainActivity.accountMgr.getLoggedInUser();
-        if (loggedIn == null){
-            Toast.makeText(this, "You are not logged in!",Toast.LENGTH_SHORT).show();
-        }
         //refresh page
         MainActivity.forumMgr.getAllPostAbstract(postList -> {
             Log.d("Received Post List", String.valueOf(postList.size()));
@@ -201,11 +197,6 @@ public class ForumUI extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void goBack() {
-        Intent i = new Intent(ForumUI.this, MainActivity.class);
-        startActivity(i);
     }
 
     public void goEdit()

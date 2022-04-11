@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medkit2006.MainActivity;
-import com.example.medkit2006.MessageAdapter;
+import com.example.medkit2006.adapter.MessageAdapter;
 import com.example.medkit2006.R;
 import com.example.medkit2006.entity.Message;
 import com.example.medkit2006.entity.User;

@@ -1,4 +1,4 @@
-package com.example.medkit2006;
+package com.example.medkit2006.adapter;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -12,6 +12,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.medkit2006.MainActivity;
+import com.example.medkit2006.R;
 import com.example.medkit2006.boundary.ChatMessageUI;
 
 import java.util.ArrayList;

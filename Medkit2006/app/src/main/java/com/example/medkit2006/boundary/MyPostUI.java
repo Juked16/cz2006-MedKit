@@ -9,7 +9,7 @@ import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.medkit2006.FeedAdapter;
+import com.example.medkit2006.adapter.FeedAdapter;
 import com.example.medkit2006.MainActivity;
 import com.example.medkit2006.R;
 import com.example.medkit2006.entity.Post;

@@ -65,9 +65,9 @@
                     android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
+                    android:textSize="24sp"
                     android:layout_marginTop="8dp"
                     android:text="Medical Facility Name"
-                    android:textSize="24sp"
                     android:textStyle="bold" />
 
                 <ImageButton

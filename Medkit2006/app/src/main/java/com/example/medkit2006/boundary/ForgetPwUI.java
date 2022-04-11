@@ -24,7 +24,7 @@ public class ForgetPwUI extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.forgetpw);
+        setContentView(R.layout.activity_forgetpw);
     }
 
     @Override

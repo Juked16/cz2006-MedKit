@@ -2,10 +2,12 @@ package com.example.medkit2006.boundary;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,7 +34,9 @@ public class AccountUI extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
-
+        if (!MainActivity.accountMgr.isLoggedIn()){
+            Toast.makeText(this, "Please Login First!",Toast.LENGTH_LONG).show();
+        }
         BottomNavigationView btmNav = findViewById(R.id.navigation);
         btmNav.getMenu().clear();
         btmNav.inflateMenu(R.menu.bottom_navigation);
@@ -95,6 +99,30 @@ public class AccountUI extends AppCompatActivity {
                 startActivity(intent);
             });
         }
+        else
+            Toast.makeText(getApplicationContext(), "Please Login First!", Toast.LENGTH_LONG);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.account_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent i;
+        if(item.getItemId() == R.id.action_go_chat) {
+            i = new Intent(getApplicationContext(), MainActivity.accountMgr.isLoggedIn()?ChatUsersUI.class:LoginUI.class);
+            startActivity(i);
+            return true;
+        }
+        else if(item.getItemId() == R.id.action_go_bookmark){
+            i = new Intent(getApplicationContext(), MainActivity.accountMgr.isLoggedIn()?BookmarkUI.class:LoginUI.class);
+            startActivity(i);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void toLogin(View view) {

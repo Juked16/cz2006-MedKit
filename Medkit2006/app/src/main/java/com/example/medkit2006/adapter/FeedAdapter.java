@@ -1,4 +1,4 @@
-package com.example.medkit2006;
+package com.example.medkit2006.adapter;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import com.example.medkit2006.R;
 import com.example.medkit2006.entity.Post;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class FeedAdapter extends ArrayAdapter<Post>{
         View listItemView = convertView;
         if(listItemView == null) {
             listItemView = LayoutInflater.from(getContext()).inflate(
-                    R.layout.feed_tile, parent, false);
+                    R.layout.tile_post, parent, false);
         }
         Post current = getItem(position);
         TextView question = listItemView.findViewById(R.id.question);

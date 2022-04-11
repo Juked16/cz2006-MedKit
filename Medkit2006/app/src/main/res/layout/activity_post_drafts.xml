@@ -9,7 +9,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
-    tools:context="com.example.student.forum.feed">
+    tools:context="com.example.medkit2006.boundary.ForumUI">
 
     <ListView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"

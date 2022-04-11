@@ -1,4 +1,4 @@
-package com.example.medkit2006;
+package com.example.medkit2006.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.medkit2006.R;
 import com.example.medkit2006.boundary.FacilityDetailUI;
 import com.example.medkit2006.boundary.SearchUI;
 import com.example.medkit2006.entity.MedicalFacility;
@@ -36,7 +37,7 @@ public class MedicalFacilityAdapter extends RecyclerView.Adapter<MedicalFacility
 
     @Override
     public MFViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.medical_facility_layout,parent, false);
+        View view = inflater.inflate(R.layout.tile_medical_facility,parent, false);
         return new MFViewHolder(view);
     }
 

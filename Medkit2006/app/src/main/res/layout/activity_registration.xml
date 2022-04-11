@@ -9,9 +9,9 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="87dp"
-        android:textSize="50sp"
         android:text="Registration"
-        />
+        android:textSize="40sp"
+        android:textStyle="bold" />
 
 
     <EditText
@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="170dp"
+        android:layout_marginTop="200dp"
         android:ems="10"
         android:hint="Username"
         android:minHeight="48dp"
@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="219dp"
+        android:layout_marginTop="250dp"
         android:ems="10"
         android:hint="Email"
         android:inputType="textEmailAddress"
@@ -45,7 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="286dp"
+        android:layout_marginTop="300dp"
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
@@ -55,9 +55,9 @@
         android:id="@+id/regConfirmPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="292dp"
+        android:layout_marginTop="350dp"
         android:ems="10"
         android:hint="ConfirmPassword"
         android:inputType="textPassword"
@@ -66,11 +66,12 @@
 
     <Button
         android:id="@+id/btnRegister"
-        android:layout_width="wrap_content"
+        android:layout_width="220dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="170dp"
+        android:backgroundTint="#8e7cc3"
         android:text="Register" />
 
     <TextView

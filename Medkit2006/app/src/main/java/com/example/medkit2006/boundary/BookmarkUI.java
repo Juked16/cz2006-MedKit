@@ -5,11 +5,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.medkit2006.BookmarkAdapter;
+import com.example.medkit2006.adapter.BookmarkAdapter;
 import com.example.medkit2006.MainActivity;
 import com.example.medkit2006.R;
 import com.example.medkit2006.entity.User;
@@ -18,7 +19,7 @@ public class BookmarkUI extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.bookmark);
+        setContentView(R.layout.activility_bookmark);
     }
 
     @Override
@@ -37,6 +38,8 @@ public class BookmarkUI extends AppCompatActivity {
         MainActivity.bookmarkMgr.getAll(bookmarks -> {
             list.setAdapter(new BookmarkAdapter(this, bookmarks));
             findViewById(R.id.bookmarkLoading).setVisibility(View.INVISIBLE);
-        }, e -> ((TextView) findViewById(R.id.bookmarkHeader)).setText(e.getMessage()));
+        }, e -> {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG);
+        });
     }
 }

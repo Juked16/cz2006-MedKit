@@ -1,4 +1,4 @@
-package com.example.medkit2006;
+package com.example.medkit2006.adapter;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -14,6 +14,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.medkit2006.MainActivity;
+import com.example.medkit2006.R;
 import com.example.medkit2006.boundary.FacilityDetailUI;
 import com.example.medkit2006.boundary.SearchUI;
 import com.example.medkit2006.entity.Bookmark;
@@ -29,7 +31,7 @@ public class BookmarkAdapter extends ArrayAdapter<Bookmark> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         if (convertView == null)
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.bookmark_list_item, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.tile_bookmark, parent, false);
         TextView name = convertView.findViewById(R.id.bookmarkListFacilityName);
         Bookmark bookmark = getItem(position);
         name.setText(getItem(position).getFacilityName());

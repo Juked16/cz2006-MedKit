@@ -23,7 +23,7 @@ public class RegistrationUI extends AppCompatActivity {
             startActivity(intent);
             return;
         }
-        setContentView(R.layout.registration);
+        setContentView(R.layout.activity_registration);
         EditText username = findViewById(R.id.regUsername);
         EditText email = findViewById(R.id.regEmailAddress);
         EditText pwdField = findViewById(R.id.regPassword);

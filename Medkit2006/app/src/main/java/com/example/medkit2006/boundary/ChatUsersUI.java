@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.medkit2006.ChatListAdapter;
+import com.example.medkit2006.adapter.ChatListAdapter;
 import com.example.medkit2006.MainActivity;
 import com.example.medkit2006.R;
 import com.example.medkit2006.control.ChatMgr;
