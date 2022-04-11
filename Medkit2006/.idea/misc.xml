@@ -79,6 +79,10 @@
         <entry key="app/src/main/res/layout/search.xml" value="0.1" />
         <entry key="app/src/main/res/layout/success.xml" value="0.14583333333333334" />
         <entry key="app/src/main/res/layout/textview.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/tile_chat_user.xml" value="0.26424870466321243" />
+        <entry key="app/src/main/res/layout/tile_chatuser.xml" value="0.375" />
+        <entry key="app/src/main/res/layout/tile_medical_facility.xml" value="0.15520833333333334" />
+        <entry key="app/src/main/res/layout/tile_post.xml" value="0.11503623188405797" />
         <entry key="app/src/main/res/layout/user_container.xml" value="0.15070921985815602" />
         <entry key="app/src/main/res/layout/verification.xml" value="0.15070921985815602" />
         <entry key="app/src/main/res/menu/account_menu.xml" value="0.2351851851851852" />

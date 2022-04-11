@@ -34,7 +34,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.user_container, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.tile_chat_user, parent, false);
         return new ChatListAdapter.ViewHolder(view);
     }
 
@@ -69,7 +69,6 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
                             .setNegativeButton("No", (dialog, i) -> dialog.dismiss())
                             .show();
                     return true;
-
                 });
                 break;
             }
@@ -87,7 +86,6 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
 
         public ViewHolder(View itemView) {
             super(itemView);
-
             username = itemView.findViewById(R.id.chatName);
         }
     }

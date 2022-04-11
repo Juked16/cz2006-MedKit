@@ -63,7 +63,6 @@ public class SearchUI extends AppCompatActivity implements AdapterView.OnItemSel
             }
         });
 
-
         //Setting spinners
         Spinner type_spin = findViewById(R.id.type_filter_spinner);
         Spinner rating_spin = findViewById(R.id.rating_filter_spinner);

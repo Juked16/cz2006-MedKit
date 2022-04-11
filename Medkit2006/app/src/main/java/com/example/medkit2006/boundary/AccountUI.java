@@ -86,6 +86,11 @@ public class AccountUI extends AppCompatActivity {
             });
 
             ((Button) findViewById(R.id.accountLoginBtn)).setText("Logout");
+            findViewById(R.id.accountLoginBtn).setOnClickListener(btn -> {
+                MainActivity.accountMgr.setLoggedInUser(null);
+                Intent intent = new Intent(this, LoginUI.class);
+                startActivity(intent);
+            });
 
             findViewById(R.id.accountToChatBtn).setVisibility(View.VISIBLE);
             findViewById(R.id.accountToChatBtn).setOnClickListener(btn -> {
