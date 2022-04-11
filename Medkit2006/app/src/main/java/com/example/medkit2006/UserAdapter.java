@@ -57,11 +57,11 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                 });
                 holder.itemView.setOnLongClickListener(view -> {
                     new AlertDialog.Builder(mContext)
-                            .setIcon(R.drawable.ic_launcher_foreground)
+                            .setIcon(android.R.drawable.ic_delete)
                             .setTitle("Confirm delete?")
                             .setMessage("Delete this Chat?")
                             .setPositiveButton("Delete", (dialog,i)->
-                                    MainActivity.chatMgr.removeChat(chat.getKey(),()->notifyDataSetChanged(), e -> {
+                                    MainActivity.chatMgr.removeChat(chat.getKey(),()->notifyItemRemoved(i), e -> {
                                         e.printStackTrace();
                                         Toast.makeText(mContext, "Failed to remove", Toast.LENGTH_SHORT).show();
                                     }))

@@ -139,7 +139,6 @@ public class ChatMgr extends AppCompatActivity {
     //TODO: remove member
 
     public void removeChat(@NotNull int chatId, Runnable callback, Consumer<Exception> error) {
-        User user = MainActivity.accountMgr.getLoggedInUser();
         DB.instance.execute("delete from chat where id = " + chatId , callback, error);
     }
 }
