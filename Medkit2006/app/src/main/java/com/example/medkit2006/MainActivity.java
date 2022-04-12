@@ -14,7 +14,6 @@ import com.example.medkit2006.control.BookmarkMgr;
 import com.example.medkit2006.control.ChatMgr;
 import com.example.medkit2006.control.ForumMgr;
 import com.example.medkit2006.control.MedicalFacilityMgr;
-import com.example.medkit2006.data.DB;
 
 public class MainActivity extends AppCompatActivity {
     public static AccountMgr accountMgr = new AccountMgr();

@@ -16,7 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.medkit2006.MainActivity;
 import com.example.medkit2006.R;
-import com.example.medkit2006.data.DB;
+import com.example.medkit2006.DB;
 import com.example.medkit2006.entity.User;
 
 public class PostDetailUI extends AppCompatActivity {

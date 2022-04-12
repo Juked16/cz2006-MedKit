@@ -3,7 +3,7 @@ package com.example.medkit2006.control;
 import android.util.Log;
 
 import com.BoardiesITSolutions.AndroidMySQLConnector.MySQLRow;
-import com.example.medkit2006.data.DB;
+import com.example.medkit2006.DB;
 import com.example.medkit2006.entity.MedicalFacility;
 import com.example.medkit2006.entity.User;
 
@@ -122,11 +122,14 @@ public class MedicalFacilityMgr {
 				tmp_facil.setType(row.getString("type"));
 				tmp_facil.setAddress(row.getString("address"));
 				tmp_facil.setContact(row.getString("contact"));
-				try{tmp_facil.setLatitude(row.getFloat("longitude"));} catch(Exception e){
-					tmp_facil.setLongitude(0.0F);}
-				try{tmp_facil.setDescription(row.getString("latitude"));}catch(Exception e){
+				try{tmp_facil.setLatitude(row.getFloat("latitude"));} catch(Exception e){
 					tmp_facil.setLatitude(0.0F);}
-				try{tmp_facil.setDescription(row.getString("description"));}catch(Exception e){
+				try{tmp_facil.setLongitude(row.getFloat("longitude"));}catch(Exception e){
+					tmp_facil.setLongitude(0.0F);}
+				try{
+					tmp_facil.setDescription(row.getString("description"));
+					if(tmp_facil.getDescription().length()<10)
+						tmp_facil.setDescription("This is a great facility!"); }catch(Exception e){
 					tmp_facil.setDescription("This is a great facility!");}
 				Log.d("@string/MF_mgr_tag"+"getFacilityDetail Result",tmp_facil.getName());
 			} catch (Exception e) {

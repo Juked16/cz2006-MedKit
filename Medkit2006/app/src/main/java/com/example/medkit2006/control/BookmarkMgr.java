@@ -3,7 +3,7 @@ package com.example.medkit2006.control;
 import com.BoardiesITSolutions.AndroidMySQLConnector.Exceptions.SQLColumnNotFoundException;
 import com.BoardiesITSolutions.AndroidMySQLConnector.MySQLRow;
 import com.example.medkit2006.MainActivity;
-import com.example.medkit2006.data.DB;
+import com.example.medkit2006.DB;
 import com.example.medkit2006.entity.Bookmark;
 import com.example.medkit2006.entity.User;
 

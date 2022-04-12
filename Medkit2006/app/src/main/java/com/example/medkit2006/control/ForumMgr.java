@@ -3,7 +3,7 @@ package com.example.medkit2006.control;
 import android.util.Log;
 
 import com.BoardiesITSolutions.AndroidMySQLConnector.MySQLRow;
-import com.example.medkit2006.data.DB;
+import com.example.medkit2006.DB;
 import com.example.medkit2006.entity.Post;
 
 import org.jetbrains.annotations.NotNull;

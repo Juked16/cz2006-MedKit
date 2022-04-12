@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 
 import com.BoardiesITSolutions.AndroidMySQLConnector.Exceptions.SQLColumnNotFoundException;
 import com.BoardiesITSolutions.AndroidMySQLConnector.MySQLRow;
-import com.example.medkit2006.data.DB;
+import com.example.medkit2006.DB;
 import com.example.medkit2006.entity.User;
 
 import org.jetbrains.annotations.NotNull;

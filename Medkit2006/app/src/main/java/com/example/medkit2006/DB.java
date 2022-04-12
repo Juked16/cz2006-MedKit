@@ -1,4 +1,4 @@
-package com.example.medkit2006.data;
+package com.example.medkit2006;
 
 import android.os.Build;
 import android.util.Log;
