@@ -31,9 +31,6 @@ public class BookmarkUI extends AppCompatActivity {
             return;
         }
         ListView list = findViewById(R.id.bookmarkList);
-        list.setOnItemClickListener((adapterView, view, pos, l) -> {
-
-        });
         MainActivity.bookmarkMgr.getAll(bookmarks -> {
             list.setAdapter(new BookmarkAdapter(this, bookmarks));
             findViewById(R.id.bookmarkLoading).setVisibility(View.INVISIBLE);

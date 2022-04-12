@@ -80,6 +80,7 @@
         android:layout_marginBottom="72dp"
         android:textColor="#B00020"
         android:textSize="20sp"
+        android:maxLength="1000"
         app:layout_constraintBottom_toBottomOf="@id/layoutSend"
         app:layout_constraintStart_toStartOf="parent" />
     <!--android:text="@string/error_in_sending_message"-->

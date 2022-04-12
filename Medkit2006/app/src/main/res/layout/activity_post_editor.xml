@@ -20,6 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/title"
+        android:maxLength="150"
         android:hint = "Enter the title" />
 
     <EditText
@@ -33,12 +34,14 @@
         android:hint="Enter the post"
         android:inputType="textMultiLine"
         android:lines="8"
+        android:maxLength="1000"
         android:scrollbars="vertical" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="Enter Tags"
+        android:maxLength="100"
         android:id="@+id/tags"/>
 
     <RatingBar

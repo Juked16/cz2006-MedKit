@@ -67,7 +67,7 @@ public class DB {
     CREATE TABLE bookmark (
         username VARCHAR(45) NOT NULL,
         medical_facility VARCHAR(45) NOT NULL,
-        notes VARCHAR(100) DEFAULT "",
+        notes VARCHAR(1000) DEFAULT "",
         FOREIGN KEY (username) REFERENCES account(username),
         FOREIGN KEY (medical_facility) REFERENCES medical_facilities(name),
         CONSTRAINT user_mf PRIMARY KEY (username,medical_facility)

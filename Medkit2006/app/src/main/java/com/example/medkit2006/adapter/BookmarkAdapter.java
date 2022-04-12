@@ -3,6 +3,7 @@ package com.example.medkit2006.adapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +45,7 @@ public class BookmarkAdapter extends ArrayAdapter<Bookmark> {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setTitle("Notes");
             EditText notes = new EditText(getContext());
+            notes.setFilters(new InputFilter[]{new InputFilter.LengthFilter(1000)});
             notes.setText(getItem(position).getNotes());
             builder.setView(notes);
             builder.setPositiveButton("Update", (dialog, i) -> {
