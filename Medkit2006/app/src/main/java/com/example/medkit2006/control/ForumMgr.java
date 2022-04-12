@@ -55,9 +55,7 @@ public class ForumMgr {
 				MySQLRow row;
 				while ((row = resultSet.getNextRow()) != null) {
 					int ID = row.getInt("_ID");
-					int like, report;
-					try{ like = row.getInt("LIKES");}catch(Exception e){ like = 0; }
-					try{ report = row.getInt("REPORTS");}catch(Exception e){ report = 0; }
+					int like = row.getInt("LIKES"), report = row.getInt("REPORT");
 					Post tmp_post = new Post(
 							row.getInt("_ID"),
 							row.getString("TITLE"),
@@ -124,6 +122,7 @@ public class ForumMgr {
 		DB.instance.execute(query, ()->{}, e -> {
 			Log.d("ForumMgr delete post failure", e.getMessage());
 		});
+		DB.instance.execute("delete from text where postId = " + post_id, null, Throwable::printStackTrace);
 	}
 
 	public void addComment(int postId, String sender, String content, Runnable callback, Consumer<Exception> error){

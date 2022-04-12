@@ -53,25 +53,21 @@ public class PostDetailUI extends AppCompatActivity {
             Toast.makeText(this, "Can't find post!", Toast.LENGTH_LONG).show();
         else {
             MainActivity.forumMgr.getPostDetail(post_id, searchPost -> runOnUiThread(() -> {
-                if (searchPost.getReportNum() >= 5)
-                    setTitle("Reported Post");
-                else {
-                    setTitle(searchPost.getTitle());
-                    user.setText(searchPost.getUsername());
-                    post_user = searchPost.getUsername();
-                    title.setText(searchPost.getTitle());
-                    date.setText(searchPost.getDate());
-                    tags.setText(searchPost.getTags());
-                    content.setText(searchPost.getContent());
-                    likeNum = searchPost.getLikeNum();
-                    reportNum = searchPost.getReportNum();
-                    like.setText(likeNum + " Like" + (likeNum > 0 ? "s" : ""));
-                    commentAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, searchPost.getComments());
-                    ListView listView = findViewById(R.id.commList);
-                    listView.setAdapter(commentAdapter);
-                    User u = MainActivity.accountMgr.getLoggedInUser();
-                    findViewById(R.id.message).setVisibility(u != null && Objects.equals(u.getUsername(), post_user) ? View.INVISIBLE : View.VISIBLE);
-                }
+                setTitle(searchPost.getTitle());
+                user.setText("Post by " + searchPost.getUsername());
+                post_user = searchPost.getUsername();
+                title.setText(searchPost.getTitle());
+                date.setText(searchPost.getDate());
+                tags.setText("Tags: " + searchPost.getTags());
+                content.setText(searchPost.getContent());
+                likeNum = searchPost.getLikeNum();
+                reportNum = searchPost.getReportNum();
+                like.setText(likeNum + " Like" + (likeNum > 0 ? "s" : ""));
+                commentAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, searchPost.getComments());
+                ListView listView = findViewById(R.id.commList);
+                listView.setAdapter(commentAdapter);
+                User u = MainActivity.accountMgr.getLoggedInUser();
+                findViewById(R.id.message).setVisibility(u != null && Objects.equals(u.getUsername(), post_user) ? View.INVISIBLE : View.VISIBLE);
             }), error -> Log.d("Detail Getting Failed", error.getMessage()));
         }
 
@@ -91,10 +87,11 @@ public class PostDetailUI extends AppCompatActivity {
             else {
                 ImageView like_img = findViewById(R.id.like_img);
                 like_img.setImageResource(R.drawable.like_on);
-                like.setText("Like " + (likeNum+1));
+                likeNum++;
+                like.setText(likeNum + " Like" + (likeNum > 0 ? "s" : ""));
                 setLikeFlag();
                 //update the like into database
-                DB.instance.execute(("update post set likes = ".toUpperCase() + (likeNum + 1) + " WHERE _ID = "+post_id), ()->{}, error-> Log.d("Update Likes Fail", error.getMessage()));
+                DB.instance.execute(("update post set likes = ".toUpperCase() + likeNum + " WHERE _ID = "+post_id), ()->{}, error-> Log.d("Update Likes Fail", error.getMessage()));
             }
         });
 
@@ -108,12 +105,14 @@ public class PostDetailUI extends AppCompatActivity {
                 Toast.makeText(PostDetailUI.this, "Already Reported!", Toast.LENGTH_LONG).show();
             else
             {
-                DB.instance.execute(("update post set report = " + (reportNum + 1) + " where _ID = "+post_id).toUpperCase(),
-                        ()-> runOnUiThread(() -> Toast.makeText(PostDetailUI.this,"Reported!", Toast.LENGTH_LONG).show()), error-> Log.d("Update Reports Fail", error.getMessage()));
-                setReportFlag();
-                Intent intent = getIntent();
-                finish();
-                startActivity(intent);
+                if(reportNum >= 5) {
+                    MainActivity.forumMgr.deletePost(post_id);
+                    onBackPressed();
+                } else {
+                    DB.instance.execute(("update post set report = " + (reportNum + 1) + " where _ID = " + post_id).toUpperCase(),
+                            () -> runOnUiThread(() -> Toast.makeText(PostDetailUI.this, "Reported!", Toast.LENGTH_LONG).show()), error -> Log.d("Update Reports Fail", error.getMessage()));
+                    setReportFlag();
+                }
             }
         });
 
