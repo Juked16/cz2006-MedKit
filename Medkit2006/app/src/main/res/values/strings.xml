@@ -32,6 +32,7 @@
     <string name="send_message">Send message</string>
     <string name="MF_mgr_tag">MF_Mgr Queries</string>
     <string name="Post_forum_hint1">Posted By  </string>
+    <string name="comment_break">\n</string>
     <string-array name="gender_array">
         <item />
         <item>M</item>

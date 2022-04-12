@@ -55,8 +55,7 @@ public class FacilityDetailUI extends AppCompatActivity implements OnMapReadyCal
                         map.moveCamera(CameraUpdateFactory.newLatLng(pos));
                     }
                 },
-                e -> { Log.d("Received Medical Facility List Unsuccessful", e.toString().trim());
-        });
+                e -> Log.d("Received Medical Facility List Unsuccessful", e.toString().trim()));
 
 
 

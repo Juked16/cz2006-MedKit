@@ -35,6 +35,7 @@ public class MedicalFacilityAdapter extends RecyclerView.Adapter<MedicalFacility
     }
 
 
+    @NonNull
     @Override
     public MFViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.tile_medical_facility,parent, false);
@@ -44,21 +45,18 @@ public class MedicalFacilityAdapter extends RecyclerView.Adapter<MedicalFacility
     @Override
     public void onBindViewHolder(@NonNull MFViewHolder holder, int position) {
         MedicalFacility medicalFacility = medicalFacilityList.get(position);
-        Log.d("position, facility",String.valueOf(position)+", "+medicalFacility.getName());
+        Log.d("position, facility",position +", "+medicalFacility.getName());
         holder.txtMFName.setText(medicalFacility.getName());
         holder.txtMFType.setText(medicalFacility.getType());
         holder.txtMFAddress.setText(medicalFacility.getAddress());
         holder.txtMFContact.setText(medicalFacility.getContact());
         holder.txtMFRating.setText(String.valueOf(medicalFacility.getAveRating()));
-        CardView cv = (CardView) holder.itemView.findViewById(R.id.cardView);
-        cv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), FacilityDetailUI.class);
-                intent.putExtra(SearchUI.EXTRA_MESSAGE, holder.txtMFName.getText());
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                view.getContext().startActivity(intent);
-            }
+        CardView cv = holder.itemView.findViewById(R.id.cardView);
+        cv.setOnClickListener(view -> {
+            Intent intent = new Intent(view.getContext(), FacilityDetailUI.class);
+            intent.putExtra(SearchUI.EXTRA_MESSAGE, holder.txtMFName.getText());
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            view.getContext().startActivity(intent);
         });
     }
 
@@ -67,7 +65,7 @@ public class MedicalFacilityAdapter extends RecyclerView.Adapter<MedicalFacility
         return medicalFacilityList.size();
     }
 
-    public class MFViewHolder extends RecyclerView.ViewHolder{
+    public static class MFViewHolder extends RecyclerView.ViewHolder{
         TextView txtMFName,txtMFContact,txtMFType,txtMFAddress,txtMFRating;
 
         public MFViewHolder(View itemView){

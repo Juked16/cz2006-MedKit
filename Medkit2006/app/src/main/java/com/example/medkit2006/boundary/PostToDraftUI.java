@@ -21,6 +21,7 @@ import com.example.medkit2006.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class PostToDraftUI extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
@@ -36,31 +37,23 @@ public class PostToDraftUI extends AppCompatActivity implements AdapterView.OnIt
         EditText title = findViewById(R.id.title);
         EditText content = findViewById(R.id.post);
         EditText tags = findViewById(R.id.tags);
-        RatingBar ratingBar = findViewById(R.id.ratingBar);
 
         Spinner mSpinner = findViewById(R.id.post_facility_selection_spinner);
         mSpinner.setOnItemSelectedListener(this);
-        ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_item, MainActivity.facilityMgr.all_facility_names);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, MainActivity.facilityMgr.all_facility_names);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinner.setAdapter(adapter);
 
         if(post_id == -1)
             Toast.makeText(this, "Can't find post!", Toast.LENGTH_SHORT).show();
         else{
-        MainActivity.forumMgr.getPostDetail(post_id, post->{
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    title.setText(post.getTitle());
-                    content.setText(post.getContent());
-                    tags.setText(post.getTags());
-                    int spinnerPosition = adapter.getPosition(post.getFacility());
-                    mSpinner.setSelection(spinnerPosition);
-                }
-            });
-        }, error->{
-            Log.d("PostToDraftUI",error.getMessage());
-        });
+        MainActivity.forumMgr.getPostDetail(post_id, post-> runOnUiThread(() -> {
+            title.setText(post.getTitle());
+            content.setText(post.getContent());
+            tags.setText(post.getTags());
+            int spinnerPosition = adapter.getPosition(post.getFacility());
+            mSpinner.setSelection(spinnerPosition);
+        }), error-> Log.d("PostToDraftUI",error.getMessage()));
         }
     }
 
@@ -123,24 +116,16 @@ public class PostToDraftUI extends AppCompatActivity implements AdapterView.OnIt
                     tags.getText().toString().toLowerCase().trim(),//tags
                     status,//status
                     ratingbar.getNumStars(),//ratings
-                    () -> {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {// Stuff that updates the UI
-                                if (status == 1)
-                                    Toast.makeText(getApplicationContext(), "Posted!", Toast.LENGTH_SHORT).show();
-                                else
-                                    Toast.makeText(getApplicationContext(), "Saved to draft!", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    },//callback
+                    () -> runOnUiThread(() -> {// Stuff that updates the UI
+                        if (status == 1)
+                            Toast.makeText(getApplicationContext(), "Posted!", Toast.LENGTH_SHORT).show();
+                        else
+                            Toast.makeText(getApplicationContext(), "Saved to draft!", Toast.LENGTH_SHORT).show();
+                    }),//callback
                     e -> {
                         Log.d("Add Post Fail", e.getMessage());
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {// Stuff that updates the UI
-                                Toast.makeText(getApplicationContext(), e.toString().trim(), Toast.LENGTH_SHORT).show();
-                            }
+                        runOnUiThread(() -> {// Stuff that updates the UI
+                            Toast.makeText(getApplicationContext(), e.toString().trim(), Toast.LENGTH_SHORT).show();
                         });
                     }
             );
@@ -150,15 +135,13 @@ public class PostToDraftUI extends AppCompatActivity implements AdapterView.OnIt
 
     public String getNewDate()
     {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String strDate = sdf.format(new Date());
-        return strDate;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+        return sdf.format(new Date());
     }
 
     public String getUsername(){
         Intent i = getIntent();
-        String name = i.getStringExtra(ForumUI.USEREXTRA);
-        return name;
+        return i.getStringExtra(ForumUI.USER_EXTRA);
     }
 
 

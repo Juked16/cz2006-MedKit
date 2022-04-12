@@ -1,5 +1,6 @@
 package com.example.medkit2006.boundary;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -23,7 +24,7 @@ import com.google.android.material.navigation.NavigationBarView;
 
 public class AccountUI extends AppCompatActivity {
 
-    private View.OnClickListener homeClickListener = new View.OnClickListener() {
+    private final View.OnClickListener homeClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             NavUtils.navigateUpFromSameTask(AccountUI.this);
@@ -64,6 +65,7 @@ public class AccountUI extends AppCompatActivity {
     }
 
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onResume() {
         super.onResume();

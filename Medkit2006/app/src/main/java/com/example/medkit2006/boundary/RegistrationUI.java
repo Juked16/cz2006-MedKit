@@ -52,13 +52,11 @@ public class RegistrationUI extends AppCompatActivity {
                                         email.requestFocus();
                                     } else {
                                         error.setText("Registering...");
-                                        mgr.createAccount(username.getText().toString(), email.getText().toString(), pwdField.getText().toString(), () -> {
-                                            mgr.getUserDetails(username.getText().toString(), user -> {
-                                                mgr.setLoggedInUser(user);
-                                                finish();
-                                                startActivity(new Intent(this, VerificationUI.class));
-                                            }, e -> error.setText(e.getMessage()));
-                                        }, e -> error.setText(e.getMessage()));
+                                        mgr.createAccount(username.getText().toString(), email.getText().toString(), pwdField.getText().toString(), () -> mgr.getUserDetails(username.getText().toString(), user -> {
+                                            mgr.setLoggedInUser(user);
+                                            finish();
+                                            startActivity(new Intent(this, VerificationUI.class));
+                                        }, e -> error.setText(e.getMessage())), e -> error.setText(e.getMessage()));
                                     }
                                 }, e -> error.setText(e.getMessage()));
                         }, e -> error.setText(e.getMessage()));

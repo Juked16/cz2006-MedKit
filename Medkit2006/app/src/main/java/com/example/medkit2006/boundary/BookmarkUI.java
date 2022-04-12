@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -38,8 +37,6 @@ public class BookmarkUI extends AppCompatActivity {
         MainActivity.bookmarkMgr.getAll(bookmarks -> {
             list.setAdapter(new BookmarkAdapter(this, bookmarks));
             findViewById(R.id.bookmarkLoading).setVisibility(View.INVISIBLE);
-        }, e -> {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG);
-        });
+        }, e -> Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG));
     }
 }

@@ -1,5 +1,6 @@
 package com.example.medkit2006.boundary;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
@@ -27,6 +28,7 @@ public class ForgetPwUI extends AppCompatActivity {
         setContentView(R.layout.activity_forgetpw);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onResume() {
         super.onResume();

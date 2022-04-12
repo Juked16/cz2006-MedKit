@@ -28,7 +28,7 @@ public class PostEditorUI extends AppCompatActivity implements AdapterView.OnIte
 
         Spinner spn = findViewById(R.id.post_facility_selection_spinner);
         spn.setOnItemSelectedListener(this);
-        ArrayAdapter ad = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_item, MainActivity.facilityMgr.all_facility_names);
+        ArrayAdapter<String> ad = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, MainActivity.facilityMgr.all_facility_names);
         ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spn.setAdapter(ad);
     }
@@ -86,24 +86,16 @@ public class PostEditorUI extends AppCompatActivity implements AdapterView.OnIte
                     tags.getText().toString().toLowerCase().trim(),//tags
                     status,//status
                     ratingbar.getNumStars(),//ratings
-                    () -> {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {// Stuff that updates the UI
-                                if(status == 1)
-                                    Toast.makeText(getApplicationContext(), "Posted!", Toast.LENGTH_SHORT).show();
-                                else
-                                    Toast.makeText(getApplicationContext(), "Saved to draft!", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    },//callback
+                    () -> runOnUiThread(() -> {// Stuff that updates the UI
+                        if(status == 1)
+                            Toast.makeText(getApplicationContext(), "Posted!", Toast.LENGTH_SHORT).show();
+                        else
+                            Toast.makeText(getApplicationContext(), "Saved to draft!", Toast.LENGTH_SHORT).show();
+                    }),//callback
                     e -> {
                         Log.d("Add Post Fail", e.getMessage());
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {// Stuff that updates the UI
-                                Toast.makeText(getApplicationContext(), e.toString().trim(), Toast.LENGTH_SHORT).show();
-                            }
+                        runOnUiThread(() -> {// Stuff that updates the UI
+                            Toast.makeText(getApplicationContext(), e.toString().trim(), Toast.LENGTH_SHORT).show();
                         });
                     }
             );
@@ -114,9 +106,9 @@ public class PostEditorUI extends AppCompatActivity implements AdapterView.OnIte
     public String getUser()
     {
         Intent i = getIntent();
-        String name = i.getStringExtra(ForumUI.USEREXTRA);
-        return name;
+        return i.getStringExtra(ForumUI.USER_EXTRA);
     }
+
     @Override
     public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {
         // Auto-generated method stub
