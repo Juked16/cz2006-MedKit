@@ -34,8 +34,8 @@ public class AccountUI extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
-        if (!MainActivity.accountMgr.isLoggedIn()){
-            Toast.makeText(this, "Please Login First!",Toast.LENGTH_LONG).show();
+        if (!MainActivity.accountMgr.isLoggedIn()) {
+            Toast.makeText(this, "Please Login First!", Toast.LENGTH_LONG).show();
         }
         BottomNavigationView btmNav = findViewById(R.id.navigation);
         btmNav.getMenu().clear();
@@ -54,7 +54,7 @@ public class AccountUI extends AppCompatActivity {
                         startActivity(i);
                         break;
                     case R.id.nav_account:
-                        i = new Intent(getApplicationContext(), MainActivity.accountMgr.isLoggedIn()? AccountUI.class: LoginUI.class);
+                        i = new Intent(getApplicationContext(), MainActivity.accountMgr.isLoggedIn() ? AccountUI.class : LoginUI.class);
                         startActivity(i);
                         break;
                 }
@@ -93,20 +93,7 @@ public class AccountUI extends AppCompatActivity {
                 Intent intent = new Intent(this, LoginUI.class);
                 startActivity(intent);
             });
-
-            findViewById(R.id.accountToChatBtn).setVisibility(View.VISIBLE);
-            findViewById(R.id.accountToChatBtn).setOnClickListener(btn -> {
-                Intent intent = new Intent(this, ChatUsersUI.class);
-                startActivity(intent);
-            });
-
-            findViewById(R.id.accountToBookmarkBtn).setVisibility(View.VISIBLE);
-            findViewById(R.id.accountToBookmarkBtn).setOnClickListener(btn -> {
-                Intent intent = new Intent(this, BookmarkUI.class);
-                startActivity(intent);
-            });
-        }
-        else
+        } else
             Toast.makeText(this, "Please Login First!", Toast.LENGTH_LONG).show();
     }
 
@@ -118,15 +105,11 @@ public class AccountUI extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Intent i;
-        if(item.getItemId() == R.id.action_go_chat) {
-            i = new Intent(getApplicationContext(), MainActivity.accountMgr.isLoggedIn()?ChatUsersUI.class:LoginUI.class);
-            startActivity(i);
+        if (item.getItemId() == R.id.action_go_chat) {
+            startActivity(new Intent(getApplicationContext(), MainActivity.accountMgr.isLoggedIn() ? ChatUsersUI.class : LoginUI.class));
             return true;
-        }
-        else if(item.getItemId() == R.id.action_go_bookmark){
-            i = new Intent(getApplicationContext(), MainActivity.accountMgr.isLoggedIn()?BookmarkUI.class:LoginUI.class);
-            startActivity(i);
+        } else if (item.getItemId() == R.id.action_go_bookmark) {
+            startActivity(new Intent(getApplicationContext(), MainActivity.accountMgr.isLoggedIn() ? BookmarkUI.class : LoginUI.class));
             return true;
         }
         return super.onOptionsItemSelected(item);
