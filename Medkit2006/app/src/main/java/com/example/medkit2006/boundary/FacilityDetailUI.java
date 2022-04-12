@@ -3,19 +3,17 @@ package com.example.medkit2006.boundary;
 import static com.example.medkit2006.MainActivity.facilityMgr;
 
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.BoardiesITSolutions.AndroidMySQLConnector.MySQLRow;
 import com.example.medkit2006.MainActivity;
 import com.example.medkit2006.R;
-import com.example.medkit2006.DB;
 import com.example.medkit2006.entity.Bookmark;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -63,7 +61,9 @@ public class FacilityDetailUI extends AppCompatActivity implements OnMapReadyCal
                 },
                 e -> Log.d("Received Medical Facility List Unsuccessful", e.toString().trim()));
 
-        //TODO:Retrieve image from database
+        facilityMgr.getImage(message,
+                bitmap -> runOnUiThread(() -> ((ImageView)findViewById(R.id.medfacil_img)).setImageBitmap(bitmap)),
+                e -> runOnUiThread(() -> ((ImageView) findViewById(R.id.medfacil_img)).setImageResource(R.drawable.no_image)));
 
         ImageButton bookmarkBtn = findViewById(R.id.bookmark_btn);
         if (MainActivity.accountMgr.isLoggedIn())

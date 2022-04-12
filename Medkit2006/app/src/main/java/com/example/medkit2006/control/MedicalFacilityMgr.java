@@ -1,5 +1,7 @@
 package com.example.medkit2006.control;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.BoardiesITSolutions.AndroidMySQLConnector.MySQLRow;
@@ -9,6 +11,9 @@ import com.example.medkit2006.entity.User;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
@@ -21,7 +26,7 @@ public class MedicalFacilityMgr {
 	public void getAllFacilityName(@NotNull Consumer<String[]> callback, Consumer<Exception> error){
 		String query = "select name from medical_facilities";
 		DB.instance.executeQuery(query, resultSet -> {
-			ArrayList<String> names = new ArrayList<String>();
+			ArrayList<String> names = new ArrayList<>();
 			try{
 				MySQLRow row;
 				while((row = resultSet.getNextRow()) != null){
@@ -40,7 +45,7 @@ public class MedicalFacilityMgr {
 
 	public void getAllFacilityAbstract(@NotNull Consumer<ArrayList<MedicalFacility>> callback, Consumer<Exception> error){
 		String query = "select *, avg(fill_na_rate) as rate from(select m.*, coalesce(r.rating, 0) as fill_na_rate from medical_facilities m left join rating r on m.name = r.medical_facility)t group by t.name";
-		getFacilityAbstract(query, callback::accept, error::accept);
+		getFacilityAbstract(query, callback, error);
 	}
 
 	public void getFacilityAbstract(String name, int[] filter_pos, String order, Consumer<ArrayList<MedicalFacility>> callback, Consumer<Exception> error) {
@@ -83,13 +88,13 @@ public class MedicalFacilityMgr {
 				break;
 		}
 		Log.d("@string/MF_mgr_tag"+"Search keywords",name+", type: "+filters_type[filter_pos[0]]+", rating: "+filters_rating[filter_pos[1]]+", "+order);
-		getFacilityAbstract(query, callback::accept, error::accept);
+		getFacilityAbstract(query, callback, error);
 	}
 
 	public void getFacilityAbstract(String query, Consumer<ArrayList<MedicalFacility>> callback, Consumer<Exception> error) {
 		Log.d("@string/MF_mgr_tag"+"getFacilityAbstract Executing query", query);
 		DB.instance.executeQuery(query, resultSet -> {
-			ArrayList<MedicalFacility> facility_list = new ArrayList<MedicalFacility>();
+			ArrayList<MedicalFacility> facility_list = new ArrayList<>();
 			try {
 				MySQLRow row;
 				while ((row = resultSet.getNextRow()) != null) {
@@ -103,7 +108,7 @@ public class MedicalFacilityMgr {
 					facility_list.add(tmp_facil);
 					Log.d("@string/MF_mgr_tag"+"getFacilityAbstract Result", tmp_facil.getName());
 				}
-				Log.d("@string/MF_mgr_tag"+"getFacilityAbstract returned entries", String.valueOf(facility_list.size()) + "medical facility records retrieved");
+				Log.d("@string/MF_mgr_tag"+"getFacilityAbstract returned entries", facility_list.size() + "medical facility records retrieved");
 			} catch (Exception e) {
 				error.accept(e);
 				return;
@@ -118,7 +123,7 @@ public class MedicalFacilityMgr {
 			MedicalFacility tmp_facil = new MedicalFacility();
 			MySQLRow row = resultSet.getNextRow();
 			try {
-				tmp_facil.setName(row.getString("name"));    //name is nullable
+				tmp_facil.setName(row.getString("name"));
 				tmp_facil.setType(row.getString("type"));
 				tmp_facil.setAddress(row.getString("address"));
 				tmp_facil.setContact(row.getString("contact"));
@@ -139,6 +144,21 @@ public class MedicalFacilityMgr {
 			}
 			callback.accept(tmp_facil);
 		}, error);
+	}
+
+	public void getImage(String facility_name, Consumer<Bitmap> callback, Consumer<Exception> error) {
+		new Thread(() -> {
+			try {
+				URL urlConnection = new URL("http://159.138.106.155/" + facility_name.replace(" ", "").toLowerCase() + ".png");
+				HttpURLConnection connection = (HttpURLConnection) urlConnection.openConnection();
+				connection.setDoInput(true);
+				connection.connect();
+				InputStream input = connection.getInputStream();
+				callback.accept(BitmapFactory.decodeStream(input));
+			} catch (Exception e) {
+				error.accept(e);
+			}
+		}).start();
 	}
 
 	public void addNotifyList(User user, MedicalFacility medicalFacility) {

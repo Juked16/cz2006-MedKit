@@ -42,11 +42,6 @@ public class DB {
         longitude DECIMAL(12,7) NOT NULL,
         description VARCHAR(1000) DEFAULT "" NOT NULL
     );
-    CREATE TABLE mf_photo(
-        medical_facility VARCHAR(45) NOT NULL,
-        image VARBINARY(8000) NOT NULL,
-        FOREIGN KEY (medical_facility) REFERENCES medical_facilities(name)
-    );
     CREATE TABLE service(
         medical_facility VARCHAR(45) NOT NULL,
         type VARCHAR(45) NOT NULL, -- #TODO: ENUM?
