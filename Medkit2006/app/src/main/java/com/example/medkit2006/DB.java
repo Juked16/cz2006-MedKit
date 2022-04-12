@@ -76,7 +76,7 @@ public class DB {
         id INT AUTO_INCREMENT PRIMARY KEY,
         username VARCHAR(45) NOT NULL,
         content VARCHAR(1000) NOT NULL,
-        timestamp DATETIME NOT NULL,
+        timestamp DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
         postId INT CHECK (chatId = NULL),
         chatId INT CHECK (postId = NULL),
         FOREIGN KEY (username) REFERENCES account(username)

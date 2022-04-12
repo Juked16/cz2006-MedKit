@@ -1,5 +1,9 @@
 package com.example.medkit2006.entity;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+
 /**
  * Created by Student on 4/29/2017.
  */
@@ -9,7 +13,7 @@ public class Post {
     private int _id;
     private String title;
     private String content;
-    private String comments;
+    private ArrayList<String> comments = new ArrayList<>();
     private String date;
     private String username;
     private String facility;
@@ -27,12 +31,11 @@ public class Post {
         _id = id;
         facility = ffacility;
     }
-    public Post(int id, String ftitle, String fcontent, String fcomments, String fdate, String fusername, String ffacility, String ftags, int numLikes, int numReports)
+    public Post(int id, String ftitle, String fcontent, String fdate, String fusername, String ffacility, String ftags, int numLikes, int numReports)
     {
         _id = id;
         title = ftitle;
         content = fcontent;
-        comments = fcomments;
         date = fdate;
         username = fusername;
         facility = ffacility;
@@ -60,14 +63,14 @@ public class Post {
         return reportNum;
     }
 
-    public void setComments(String a)
+    public void setComments(@NotNull ArrayList<String> a)
     {
         comments = a;
     }
 
     public String getFacility() { return facility; }
 
-    public String getComments()
+    public ArrayList<String> getComments()
     {
         return comments;
     }

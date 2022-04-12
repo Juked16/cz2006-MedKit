@@ -2,6 +2,7 @@ package com.example.medkit2006.control;
 
 import android.util.Log;
 
+import com.BoardiesITSolutions.AndroidMySQLConnector.Exceptions.SQLColumnNotFoundException;
 import com.BoardiesITSolutions.AndroidMySQLConnector.MySQLRow;
 import com.example.medkit2006.DB;
 import com.example.medkit2006.entity.Post;
@@ -50,31 +51,41 @@ public class ForumMgr {
 	public void getPostDetail(int post_id, Consumer<Post> callback, Consumer<Exception> error) {
 		String query = "select * from POST where _ID = " + post_id;
 		DB.instance.executeQuery(query, resultSet -> {
-			Post tmp_post = null;
 			try {
 				MySQLRow row;
 				while ((row = resultSet.getNextRow()) != null) {
+					int ID = row.getInt("_ID");
 					int like, report;
 					try{ like = row.getInt("LIKES");}catch(Exception e){ like = 0; }
 					try{ report = row.getInt("REPORTS");}catch(Exception e){ report = 0; }
-					 tmp_post = new Post(
+					Post tmp_post = new Post(
 							row.getInt("_ID"),
 							row.getString("TITLE"),
 							row.getString("POST"),
-							row.getString("COMMENTS"),
 							row.getString("DATETIME"),
 							row.getString("USERNAME"),
 							row.getString("MEDICAL_FACILITY"),
 							row.getString("TAGS"),
 							like, report);
 					Log.d("MF_Search Result", tmp_post.getTitle());
+					DB.instance.executeQuery("select * from text where postId = " + ID, commentResult -> {
+						ArrayList<String> comments = new ArrayList<>();
+						MySQLRow r;
+						while((r = commentResult.getNextRow()) != null){
+							try {
+								comments.add(r.getString("username") + ": " + r.getString("content") + "\n" + r.getString("timestamp"));
+							} catch (SQLColumnNotFoundException e) {
+								e.printStackTrace();
+							}
+						}
+						tmp_post.setComments(comments);
+						callback.accept(tmp_post);
+						Log.d("Forum_mgr get detail of", tmp_post.getTitle());
+					}, error);
 				}
-				Log.d("Forum_mgr get detail of", tmp_post.getTitle());
 			} catch (Exception e) {
 				error.accept(e);
-				return;
 			}
-			callback.accept(tmp_post);
 		}, error);
 	}
 	public void addPost(String title, String content, String username, String medical_facility, String tags, int status, int rating, @NotNull Runnable callback, Consumer<Exception> error) {
@@ -115,4 +126,7 @@ public class ForumMgr {
 		});
 	}
 
+	public void addComment(int postId, String sender, String content, Runnable callback, Consumer<Exception> error){
+		DB.instance.execute("insert into text (username, content, postId) values('" + sender + "','" + content + "'," + postId + ")", callback, error);
+	}
 }

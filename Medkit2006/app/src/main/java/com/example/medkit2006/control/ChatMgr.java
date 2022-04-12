@@ -8,7 +8,6 @@ import com.example.medkit2006.entity.Message;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.function.Consumer;
@@ -59,7 +58,7 @@ public class ChatMgr{
     }
 
     public void sendMessage(int chatId, String sender, String content, Runnable callback, Consumer<Exception> error){
-        DB.instance.execute("insert into text (username, content, timestamp, chatId) values('" + sender + "','" + content + "','" + Instant.now().toString() + "'," + chatId + ")", callback, error);
+        DB.instance.execute("insert into text (username, content, chatId) values('" + sender + "','" + content + "'," + chatId + ")", callback, error);
     }
 
     /**

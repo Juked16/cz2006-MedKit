@@ -20,6 +20,7 @@ import com.example.medkit2006.MainActivity;
 import com.example.medkit2006.R;
 import com.example.medkit2006.entity.User;
 
+import java.time.Instant;
 import java.util.Objects;
 
 public class PostDetailUI extends AppCompatActivity {
@@ -28,12 +29,12 @@ public class PostDetailUI extends AppCompatActivity {
     private int reportFlag = 0;
     private int likeNum = 0;
     private int reportNum = 0;
-    private String comments = null;
     private String post_user;
     public void setLikeFlag() { likeFlag = 1; }
     public int getLikeFlag() { return likeFlag; }
     public void setReportFlag() { reportFlag = 1; }
     public int getReportFlag() { return reportFlag; }
+    private ArrayAdapter<String> commentAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,22 +57,20 @@ public class PostDetailUI extends AppCompatActivity {
                     setTitle("Reported Post");
                 else {
                     setTitle(searchPost.getTitle());
-                    user.append(searchPost.getUsername());
+                    user.setText(searchPost.getUsername());
                     post_user = searchPost.getUsername();
                     title.setText(searchPost.getTitle());
                     date.setText(searchPost.getDate());
-                    tags.append(searchPost.getTags());
+                    tags.setText(searchPost.getTags());
                     content.setText(searchPost.getContent());
                     likeNum = searchPost.getLikeNum();
                     reportNum = searchPost.getReportNum();
-                    like.setText("Like " + likeNum);
-                    comments = searchPost.getComments();
-                    if(comments != null) {
-                        String[] items = comments.split(getString(R.string.comment_break));
-                        ArrayAdapter<String> itemsAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, items);
-                        ListView listView = findViewById(R.id.commList);
-                        listView.setAdapter(itemsAdapter);
-                    }
+                    like.setText(likeNum + " Like" + (likeNum > 0 ? "s" : ""));
+                    commentAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, searchPost.getComments());
+                    ListView listView = findViewById(R.id.commList);
+                    listView.setAdapter(commentAdapter);
+                    User u = MainActivity.accountMgr.getLoggedInUser();
+                    findViewById(R.id.message).setVisibility(u != null && Objects.equals(u.getUsername(), post_user) ? View.INVISIBLE : View.VISIBLE);
                 }
             }), error -> Log.d("Detail Getting Failed", error.getMessage()));
         }
@@ -146,12 +145,14 @@ public class PostDetailUI extends AppCompatActivity {
                 startActivity(i14);
             }
             else {
-                String newComments = user12.getUsername() + ": " + comments + comment.getText().toString().trim() + getString(R.string.comment_break);
-                DB.instance.execute(("update post set COMMENTS = '" + newComments + "' where _ID = " + post_id),
-                        () -> runOnUiThread(() -> Toast.makeText(PostDetailUI.this, "Commented!", Toast.LENGTH_LONG).show()), error -> Log.d("Update Comments Fail", error.getMessage()));
-                Intent intent = getIntent();
-                finish();
-                startActivity(intent);
+                String c = comment.getText().toString().trim();
+                comment.setText("");
+                MainActivity.forumMgr.addComment(post_id,user12.getUsername(),c,
+                        () -> {
+                            commentAdapter.add(user12.getUsername() + ": " + c + "\n" + Instant.now());
+                            Toast.makeText(PostDetailUI.this, "Commented!", Toast.LENGTH_LONG).show();
+                        },
+                        error -> Log.d("Update Comments Fail", error.getMessage()));
             }
         });
     }
