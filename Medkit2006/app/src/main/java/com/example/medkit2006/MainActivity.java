@@ -3,7 +3,6 @@ package com.example.medkit2006;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ProgressBar;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,27 +20,29 @@ public class MainActivity extends AppCompatActivity {
     public static ForumMgr forumMgr = new ForumMgr();
     public static BookmarkMgr bookmarkMgr = new BookmarkMgr();
     public static ChatMgr chatMgr = new ChatMgr();
+    private boolean displayed = false;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_entrance);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setView(new ProgressBar(this));
-
-        builder.setCancelable(false); //TODO: uncomment before submitting
-        builder.setTitle("Connecting");
-        AlertDialog dialog = builder.show();
         new DB(
-                ()->{
-                    final Runnable runnable = dialog::dismiss;
-                    runnable.run();
-                    Intent i = new Intent(this, SearchUI.class);
-                    startActivity(i);
-                    },
-                e -> runOnUiThread(() -> {
-                    dialog.setTitle("Connection failed");
-                })
+                ()-> startActivity(new Intent(this, SearchUI.class)),
+                e -> runOnUiThread(() -> new AlertDialog.Builder(this)
+                        .setTitle("Connection Failed")
+                        .setMessage("Please check your internet connection and restart the app")
+                        .setOnDismissListener(dialog -> finishAffinity())
+                        .show()
+                )
         );
         DB.instance.conn.returnCallbackToMainThread(true, this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(displayed)
+            finishAffinity();
+        displayed = true;
     }
 }
