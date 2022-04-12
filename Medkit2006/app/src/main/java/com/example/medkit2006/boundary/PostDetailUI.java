@@ -3,6 +3,7 @@ package com.example.medkit2006.boundary;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,10 +15,12 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.medkit2006.DB;
 import com.example.medkit2006.MainActivity;
 import com.example.medkit2006.R;
-import com.example.medkit2006.DB;
 import com.example.medkit2006.entity.User;
+
+import java.util.Objects;
 
 public class PostDetailUI extends AppCompatActivity {
     private int post_id;
@@ -151,5 +154,12 @@ public class PostDetailUI extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        User user = MainActivity.accountMgr.getLoggedInUser();
+        findViewById(R.id.message).setVisibility(user != null && Objects.equals(user.getUsername(), post_user) ? View.INVISIBLE : View.VISIBLE);
     }
 }

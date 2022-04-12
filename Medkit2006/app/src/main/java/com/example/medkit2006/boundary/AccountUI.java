@@ -17,7 +17,6 @@ import androidx.core.app.NavUtils;
 
 import com.example.medkit2006.MainActivity;
 import com.example.medkit2006.R;
-import com.example.medkit2006.entity.Bookmark;
 import com.example.medkit2006.entity.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -90,6 +89,7 @@ public class AccountUI extends AppCompatActivity {
             ((Button) findViewById(R.id.accountLoginBtn)).setText("Logout");
             findViewById(R.id.accountLoginBtn).setOnClickListener(btn -> {
                 MainActivity.accountMgr.setLoggedInUser(null);
+                finish();
                 Intent intent = new Intent(this, LoginUI.class);
                 startActivity(intent);
             });
@@ -107,7 +107,7 @@ public class AccountUI extends AppCompatActivity {
             });
         }
         else
-            Toast.makeText(getApplicationContext(), "Please Login First!", Toast.LENGTH_LONG);
+            Toast.makeText(this, "Please Login First!", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -130,14 +130,5 @@ public class AccountUI extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public void toLogin(View view) {
-        if (((Button) view).getText().toString().equals("Logout")) {
-            MainActivity.accountMgr.setLoggedInUser(null);
-        }
-        finish();
-        Intent intent = new Intent(AccountUI.this, LoginUI.class);
-        startActivity(intent);
     }
 }
