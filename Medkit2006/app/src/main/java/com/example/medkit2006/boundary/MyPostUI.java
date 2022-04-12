@@ -14,13 +14,14 @@ import com.example.medkit2006.entity.Post;
 
 public class MyPostUI extends AppCompatActivity {
 
+    private ListView listView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_post);
 
         setTitle("Your Posts");
-        final ListView listView = findViewById(R.id.list);
+        listView = findViewById(R.id.list);
         MainActivity.forumMgr.getMyPostAbstract(getUser(), postList-> runOnUiThread(() -> {
             FeedAdapter itemsAdapter = new FeedAdapter(MyPostUI.this, postList);
             listView.setAdapter(itemsAdapter);
@@ -32,6 +33,15 @@ public class MyPostUI extends AppCompatActivity {
             i.putExtra(ForumUI.EXTRA , selectedFromList.getID());
             startActivity(i);
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MainActivity.forumMgr.getMyPostAbstract(getUser(), postList-> runOnUiThread(() -> {
+            FeedAdapter itemsAdapter = new FeedAdapter(MyPostUI.this, postList);
+            listView.setAdapter(itemsAdapter);
+        }), error-> Log.d("MyPost display error", error.getMessage()));
     }
 
     public String getUser()

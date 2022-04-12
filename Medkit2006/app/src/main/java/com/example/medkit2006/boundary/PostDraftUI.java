@@ -13,13 +13,13 @@ import com.example.medkit2006.R;
 import com.example.medkit2006.entity.Post;
 
 public class PostDraftUI extends AppCompatActivity {
-
+    ListView listView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_drafts);
         setTitle("Your Drafts");
-        final ListView listView = findViewById(R.id.list);
+        listView = findViewById(R.id.list);
         MainActivity.forumMgr.getMyDraftAbstract(getUser(), postList-> runOnUiThread(() -> {
             FeedAdapter itemsAdapter = new FeedAdapter(PostDraftUI.this,postList);
             listView.setAdapter(itemsAdapter);
@@ -32,6 +32,16 @@ public class PostDraftUI extends AppCompatActivity {
             i.putExtra(ForumUI.USER_EXTRA, getUser());
             startActivity(i);
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MainActivity.forumMgr.getMyDraftAbstract(getUser(), postList-> runOnUiThread(() -> {
+            FeedAdapter itemsAdapter = new FeedAdapter(PostDraftUI.this,postList);
+            listView.setAdapter(itemsAdapter);
+        }), error-> Log.d("Post Draft OnResume error", error.getMessage()));
+
     }
 
     public String getUser()
