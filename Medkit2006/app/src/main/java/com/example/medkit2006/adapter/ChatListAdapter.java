@@ -63,7 +63,10 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
                             .setTitle("Confirm delete?")
                             .setMessage("It will also delete for the other member(s)")
                             .setPositiveButton("Delete", (dialog,i)->
-                                    MainActivity.chatMgr.removeChat(chat.getKey(),()->notifyItemRemoved(position), e -> {
+                                    MainActivity.chatMgr.removeChat(chat.getKey(), () -> {
+                                        chats.remove(chat.getKey());
+                                        notifyItemRemoved(position);
+                                    }, e -> {
                                         e.printStackTrace();
                                         Toast.makeText(mContext, "Failed to remove", Toast.LENGTH_SHORT).show();
                                     }))
