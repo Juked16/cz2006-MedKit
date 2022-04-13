@@ -149,7 +149,8 @@ public class MedicalFacilityMgr {
 	public void getImage(String facility_name, Consumer<Bitmap> callback, Consumer<Exception> error) {
 		new Thread(() -> {
 			try {
-				URL urlConnection = new URL("http://159.138.106.155/" + facility_name.replace(" ", "") + ".png");
+				URL urlConnection = new URL("http://159.138.106.155/"
+						+ facility_name.replace(" ", "").replace("/","") + ".png");
 				HttpURLConnection connection = (HttpURLConnection) urlConnection.openConnection();
 				connection.setDoInput(true);
 				connection.connect();

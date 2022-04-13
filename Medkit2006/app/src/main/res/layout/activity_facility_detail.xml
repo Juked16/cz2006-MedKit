@@ -59,14 +59,14 @@
             </LinearLayout>
             <TextView
                 android:id="@+id/medfacil_address"
-                android:layout_width="380dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:text=""
                 android:textAlignment="viewStart" />
             <TextView
                 android:id="@+id/medfacil_descr"
-                android:layout_width="380dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:text="It is the only private medical provider in Singapore that owns and operates a fully integrated healthcare organisation comprising a tertiary hospital, a network of family medicine and dental clinics, insurance services, Japanese and Traditional Chinese Medicine clinics, and a consumer healthcare division."
