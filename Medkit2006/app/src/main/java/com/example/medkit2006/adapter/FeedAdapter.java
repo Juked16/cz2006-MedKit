@@ -16,8 +16,6 @@ import com.example.medkit2006.entity.Post;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -52,11 +50,7 @@ public class FeedAdapter extends ArrayAdapter<Post>{
 
         TextView date = listItemView.findViewById(R.id.date);
         try {
-            Date d = Objects.requireNonNull(new SimpleDateFormat("yyyy-MM-dd H:m:s", Locale.US).parse(current.getDate()));
-            Calendar c = Calendar.getInstance();
-            c.setTime(d);
-            c.add(Calendar.HOUR_OF_DAY, -8);
-            date.setText(DateUtils.getRelativeTimeSpanString(c.getTime().getTime()));
+            date.setText(DateUtils.getRelativeTimeSpanString(Objects.requireNonNull(new SimpleDateFormat("yyyy-MM-dd H:m:s", Locale.US).parse(current.getDate())).getTime()));
         } catch (ParseException e) {
             e.printStackTrace();
         }

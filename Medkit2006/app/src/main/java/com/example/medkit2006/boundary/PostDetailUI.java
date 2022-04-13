@@ -23,8 +23,6 @@ import com.example.medkit2006.entity.User;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -63,11 +61,7 @@ public class PostDetailUI extends AppCompatActivity {
                 post_user = searchPost.getUsername();
                 title.setText(searchPost.getTitle());
                 try {
-                    Date d = Objects.requireNonNull(new SimpleDateFormat("yyyy-MM-dd H:m:s", Locale.US).parse(searchPost.getDate()));
-                    Calendar c = Calendar.getInstance();
-                    c.setTime(d);
-                    c.add(Calendar.HOUR_OF_DAY, -8);
-                    date.setText(DateUtils.getRelativeTimeSpanString(c.getTime().getTime()));
+                    date.setText(DateUtils.getRelativeTimeSpanString(Objects.requireNonNull(new SimpleDateFormat("yyyy-MM-dd H:m:s", Locale.US).parse(searchPost.getDate())).getTime()));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }

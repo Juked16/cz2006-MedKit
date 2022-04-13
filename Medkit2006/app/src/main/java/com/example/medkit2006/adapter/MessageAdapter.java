@@ -14,7 +14,6 @@ import com.example.medkit2006.MainActivity;
 import com.example.medkit2006.R;
 import com.example.medkit2006.entity.Message;
 
-import java.util.Calendar;
 import java.util.List;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
@@ -53,10 +52,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     public void onBindViewHolder(@NonNull MessageAdapter.ViewHolder holder, int position) {
         Message message = messages.get(position);
         holder.textMessage.setText(message.getContent());
-        Calendar c = Calendar.getInstance();
-        c.setTime(message.getTimestamp());
-        c.add(Calendar.HOUR_OF_DAY, -8);
-        holder.textTime.setText(DateUtils.getRelativeTimeSpanString(c.getTime().getTime()));
+        holder.textTime.setText(DateUtils.getRelativeTimeSpanString(message.getTimestamp().getTime()));
     }
 
     @Override
