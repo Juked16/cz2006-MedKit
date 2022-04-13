@@ -19,7 +19,7 @@ import java.util.function.Consumer;
 
 public class MedicalFacilityMgr {
 
-	public final String[] filters_type = {"Type Unselected", "hospital", "nursing home","dental"};
+	public final String[] filters_type = {"Type Unselected", "hospital", "nursing home","dental","hospice" };
 	public final String[] filters_rating = {"Rating Unselected", "Rating>3.5", "Rating>4.0", "Rating>4.5"};
 	public String[] all_facility_names;
 
@@ -62,7 +62,9 @@ public class MedicalFacilityMgr {
 			case 3:
 				query+=" and t.type = 'dental'";
 				break;
-
+			case 4:
+				query+=" and t.type = 'hospice'";
+				break;
 		}
 		switch(filter_pos[1]){
 			case 0: break;

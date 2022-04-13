@@ -10,7 +10,6 @@ public class MedicalFacility {
 	private float longitude;
 	private String description;
 	private float aveRating;
-	private ArrayList<Service> services;
 	private ArrayList<User> notifyList;
 
 	/**
@@ -81,10 +80,7 @@ public class MedicalFacility {
 	 */
 	public void setAveRating(float rating) { this.aveRating = rating; }
 	public float getAveRating() { return this.aveRating; }
-	public void addServices(Service service) {services.add(service); }
-	public ArrayList<Service> getServices() {
-		return this.services;
-	}
+
 	public void setType(String type){ this.type = type; }
 	public String getType(){return this.type;}
 	public void addNotifyUser(User user){ notifyList.add(user); }
