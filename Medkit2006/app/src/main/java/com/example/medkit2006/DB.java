@@ -83,10 +83,11 @@ public class DB {
     CREATE TABLE rating(
         username VARCHAR(45) NOT NULL,
         medical_facility VARCHAR(45) NOT NULL,
-        rating INT NOT NULL CHECK(rating >= 1 AND rating <= 5),
+        rating INT NOT NULL CHECK(rating >= 0 AND rating <= 5),
+        postId INT NOT NULL,
         FOREIGN KEY (username) REFERENCES account(username),
         FOREIGN KEY (medical_facility) REFERENCES medical_facilities(name),
-        CONSTRAINT user_mf PRIMARY KEY (username,medical_facility)
+        FOREIGN KEY (postId) REFERENCES post(_ID)
     );
     CREATE TABLE chat(
         id INT NOT NULL,

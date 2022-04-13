@@ -104,12 +104,21 @@ public class ForumMgr {
 				 + 0 + "\",\""
 				 + tags + "\",\""
 				 + status + "\",\""
-				 + 0 + "\")", callback, error);
-		 if(status == 1 ){
-		 DB.instance.execute("insert into rating (username, medical_facility, rating) values (\""
-				 + username + "\",\""
-				 + medical_facility + "\",\""
-				 + rating + "\")", callback, error);}
+				 + 0 + "\")", () -> {
+			 if (status == 1) {
+				 DB.instance.executeQuery("select max(_ID) as ID from post", resultSet -> {
+					 try {
+						 int id = resultSet.getNextRow().getInt("ID");
+						 DB.instance.execute("insert into rating (username, medical_facility, rating, postId) values (\""
+								 + username + "\",\""
+								 + medical_facility + "\",\""
+								 + rating + "\"," + id + ")", callback, error);
+					 } catch (Exception e) {
+						 error.accept(e);
+					 }
+				 });
+			 }
+		 }, error);
 	 }
 	public void updatePost(int ID, String title, String content, String newDate, String username, String medical_facility, String tags, int status, int rating, @NotNull Runnable callback, Consumer<Exception> error) {
 		DB.instance.execute("update post set"
@@ -126,11 +135,10 @@ public class ForumMgr {
 				+ rating + "\")", callback, error);}
 	}
 	public void deletePost(int post_id){
-		String query = "delete from post where _ID = "+post_id;
-		DB.instance.execute(query, null, e -> {
-			Log.d("ForumMgr delete post failure", e.getMessage());
-		});
 		DB.instance.execute("delete from text where postId = " + post_id, null, Throwable::printStackTrace);
+		DB.instance.execute("delete from rating where postId = " + post_id, null, Throwable::printStackTrace);
+		String query = "delete from post where _ID = "+post_id;
+		DB.instance.execute(query, null, e -> Log.d("ForumMgr delete post failure", e.getMessage()));
 	}
 
 	public void addComment(int postId, String sender, String content, Runnable callback, Consumer<Exception> error){
