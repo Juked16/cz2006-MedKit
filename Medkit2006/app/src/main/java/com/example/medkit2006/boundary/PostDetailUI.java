@@ -2,6 +2,7 @@ package com.example.medkit2006.boundary;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -20,7 +21,11 @@ import com.example.medkit2006.MainActivity;
 import com.example.medkit2006.R;
 import com.example.medkit2006.entity.User;
 
-import java.time.Instant;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 
 public class PostDetailUI extends AppCompatActivity {
@@ -57,12 +62,20 @@ public class PostDetailUI extends AppCompatActivity {
                 user.setText("Post by " + searchPost.getUsername());
                 post_user = searchPost.getUsername();
                 title.setText(searchPost.getTitle());
-                date.setText(searchPost.getDate());
+                try {
+                    Date d = Objects.requireNonNull(new SimpleDateFormat("yyyy-MM-dd H:m:s", Locale.US).parse(searchPost.getDate()));
+                    Calendar c = Calendar.getInstance();
+                    c.setTime(d);
+                    c.add(Calendar.HOUR_OF_DAY, -8);
+                    date.setText(DateUtils.getRelativeTimeSpanString(c.getTime().getTime()));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 tags.setText("Tags: " + searchPost.getTags());
                 content.setText(searchPost.getContent());
                 likeNum = searchPost.getLikeNum();
                 reportNum = searchPost.getReportNum();
-                like.setText(likeNum + " Like" + (likeNum > 0 ? "s" : ""));
+                like.setText(likeNum + " Like" + (likeNum > 1 ? "s" : ""));
                 commentAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, searchPost.getComments());
                 ListView listView = findViewById(R.id.commList);
                 listView.setAdapter(commentAdapter);
@@ -79,8 +92,7 @@ public class PostDetailUI extends AppCompatActivity {
         like.setOnClickListener(view -> {
             if(!MainActivity.accountMgr.isLoggedIn()){
                 Toast.makeText(PostDetailUI.this, "Please Login First!", Toast.LENGTH_LONG).show();
-                Intent i1 = new Intent(PostDetailUI.this, LoginUI.class);
-                startActivity(i1);
+                startActivity(new Intent(PostDetailUI.this, LoginUI.class));
             }
             else if(getLikeFlag() != 0)
                 Toast.makeText(PostDetailUI.this, "Already Liked!", Toast.LENGTH_LONG).show();
@@ -88,7 +100,7 @@ public class PostDetailUI extends AppCompatActivity {
                 ImageView like_img = findViewById(R.id.like_img);
                 like_img.setImageResource(R.drawable.like_on);
                 likeNum++;
-                like.setText(likeNum + " Like" + (likeNum > 0 ? "s" : ""));
+                like.setText(likeNum + " Like" + (likeNum > 1 ? "s" : ""));
                 setLikeFlag();
                 //update the like into database
                 DB.instance.execute(("update post set likes = ".toUpperCase() + likeNum + " WHERE _ID = "+post_id), ()->{}, error-> Log.d("Update Likes Fail", error.getMessage()));
@@ -140,15 +152,14 @@ public class PostDetailUI extends AppCompatActivity {
             User user12 = MainActivity.accountMgr.getLoggedInUser();
             if(user12 == null){
                 Toast.makeText(PostDetailUI.this, "Please Login First!", Toast.LENGTH_LONG).show();
-                Intent i14 = new Intent(PostDetailUI.this, LoginUI.class);
-                startActivity(i14);
+                startActivity(new Intent(PostDetailUI.this, LoginUI.class));
             }
             else {
                 String c = comment.getText().toString().trim();
                 comment.setText("");
                 MainActivity.forumMgr.addComment(post_id,user12.getUsername(),c,
                         () -> {
-                            commentAdapter.add(user12.getUsername() + ": " + c + "\n" + Instant.now());
+                            commentAdapter.add(user12.getUsername() + ": " + c + "\nJust now");
                             Toast.makeText(PostDetailUI.this, "Commented!", Toast.LENGTH_LONG).show();
                         },
                         error -> Log.d("Update Comments Fail", error.getMessage()));

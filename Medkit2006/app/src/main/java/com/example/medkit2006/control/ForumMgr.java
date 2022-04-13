@@ -1,15 +1,20 @@
 package com.example.medkit2006.control;
 
+import android.text.format.DateUtils;
 import android.util.Log;
 
-import com.BoardiesITSolutions.AndroidMySQLConnector.Exceptions.SQLColumnNotFoundException;
 import com.BoardiesITSolutions.AndroidMySQLConnector.MySQLRow;
 import com.example.medkit2006.DB;
 import com.example.medkit2006.entity.Post;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 public class ForumMgr {
@@ -71,8 +76,12 @@ public class ForumMgr {
 						MySQLRow r;
 						while((r = commentResult.getNextRow()) != null){
 							try {
-								comments.add(r.getString("username") + ": " + r.getString("content") + "\n" + r.getString("timestamp"));
-							} catch (SQLColumnNotFoundException e) {
+								Date d = Objects.requireNonNull(new SimpleDateFormat("yyyy-MM-dd H:m:s", Locale.US).parse(r.getString("timestamp")));
+								Calendar c = Calendar.getInstance();
+								c.setTime(d);
+								c.add(Calendar.HOUR_OF_DAY, -8);
+								comments.add(r.getString("username") + ": " + r.getString("content") + "\n" + DateUtils.getRelativeTimeSpanString(c.getTime().getTime()));
+							} catch (Exception e) {
 								e.printStackTrace();
 							}
 						}
@@ -87,10 +96,9 @@ public class ForumMgr {
 		}, error);
 	}
 	public void addPost(String title, String content, String username, String medical_facility, String tags, int status, int rating, @NotNull Runnable callback, Consumer<Exception> error) {
-		 DB.instance.execute("insert into post (title, post, comments, username, medical_facility, likes, tags, status, report) values (\""
+		 DB.instance.execute("insert into post (title, post, username, medical_facility, likes, tags, status, report) values (\""
 				 + title + "\",\""
 				 + content + "\",\""
-				 + " " + "\",\""
 				 + username + "\",\""
 				 + medical_facility + "\",\""
 				 + 0 + "\",\""
@@ -119,7 +127,7 @@ public class ForumMgr {
 	}
 	public void deletePost(int post_id){
 		String query = "delete from post where _ID = "+post_id;
-		DB.instance.execute(query, ()->{}, e -> {
+		DB.instance.execute(query, null, e -> {
 			Log.d("ForumMgr delete post failure", e.getMessage());
 		});
 		DB.instance.execute("delete from text where postId = " + post_id, null, Throwable::printStackTrace);

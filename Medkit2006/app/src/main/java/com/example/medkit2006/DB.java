@@ -53,7 +53,6 @@ public class DB {
         _id INT AUTOINCREMENT PRIMARY KEY,
         title VARCHAR(150) NOT NULL,
         content VARCHAR(1000) NOT NULL,
-        comments VARCHAR(300),
         timestamp DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
         username VARCHAR(45) NOT NULL,
         medical_facility VARCHAR(45) NOT NULL,

@@ -1,6 +1,7 @@
 package com.example.medkit2006.adapter;
 
 import android.app.Activity;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,13 @@ import androidx.annotation.NonNull;
 import com.example.medkit2006.R;
 import com.example.medkit2006.entity.Post;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Objects;
 
 /**
  * Created by Student on 4/29/2017.
@@ -44,7 +51,15 @@ public class FeedAdapter extends ArrayAdapter<Post>{
         username.setText(current.getUsername());
 
         TextView date = listItemView.findViewById(R.id.date);
-        date.setText(current.getDate());
+        try {
+            Date d = Objects.requireNonNull(new SimpleDateFormat("yyyy-MM-dd H:m:s", Locale.US).parse(current.getDate()));
+            Calendar c = Calendar.getInstance();
+            c.setTime(d);
+            c.add(Calendar.HOUR_OF_DAY, -8);
+            date.setText(DateUtils.getRelativeTimeSpanString(c.getTime().getTime()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         return listItemView;
     }
