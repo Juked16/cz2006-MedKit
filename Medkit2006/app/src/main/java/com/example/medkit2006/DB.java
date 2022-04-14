@@ -42,13 +42,6 @@ public class DB {
         longitude DECIMAL(12,7) NOT NULL,
         description VARCHAR(1000) DEFAULT "" NOT NULL
     );
-    CREATE TABLE service(
-        medical_facility VARCHAR(45) NOT NULL,
-        type VARCHAR(45) NOT NULL, -- #TODO: ENUM?
-        price DOUBLE NOT NULL CHECK (price > 0),
-        description VARCHAR(1000) NOT NULL,
-        FOREIGN KEY (medical_facility) REFERENCES medical_facilities(name)
-    );
     CREATE TABLE post(
         _id INT AUTOINCREMENT PRIMARY KEY,
         title VARCHAR(150) NOT NULL,
