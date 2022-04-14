@@ -11,15 +11,12 @@
         android:layout_alignParentBottom="true"
         app:menu="@menu/bottom_navigation" />
 
-    <TextView
+    <ImageView
         android:id="@+id/mainAppNameHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="MedKit"
-        android:textColor="#1F76BC"
-        android:textSize="50sp"
-        android:textStyle="bold|italic" />
+        android:src="@drawable/logo" />
 
 </RelativeLayout>
