@@ -29,7 +29,7 @@ public class ChatMgr{
             if (row == null) {
                 DB.instance.executeQuery("select max(id) as id from chat", idResultSet -> {
                     int chatId = 1;
-                    MySQLRow idRow = resultSet.getNextRow();
+                    MySQLRow idRow = idResultSet.getNextRow();
                     if (idRow != null) {
                         try {
                             chatId = idRow.getInt("id") + 1;

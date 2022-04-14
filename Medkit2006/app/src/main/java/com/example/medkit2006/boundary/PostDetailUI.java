@@ -131,14 +131,16 @@ public class PostDetailUI extends AppCompatActivity {
                 startActivity(i13);
             }
             else {
-                MainActivity.chatMgr.startPrivateMessage(user1.getUsername(), post_user, () -> {
-                }, error -> Log.d("Message Unable to Start", error.getMessage()));
-                MainActivity.chatMgr.getPrivateMessage(user1.getUsername(), post_user, chat_id->{
+                Runnable open = () -> MainActivity.chatMgr.getPrivateMessage(user1.getUsername(), post_user, chat_id->{
                     Intent intent = new Intent(PostDetailUI.this, ChatMessageUI.class);
                     intent.putExtra("chatId", chat_id);
                     intent.putExtra("chatName", post_user);
                     startActivity(intent);
-                    }, error-> Log.d("Message Unable to Start", error.getMessage()));
+                }, error-> Log.d("Message Unable to Start", error.getMessage()));
+                MainActivity.chatMgr.startPrivateMessage(user1.getUsername(), post_user, open, error -> {
+                    Toast.makeText(this, error.getMessage(), Toast.LENGTH_LONG).show();
+                    open.run();
+                });
             }
         });
 
