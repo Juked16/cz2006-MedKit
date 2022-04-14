@@ -4,12 +4,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
 
     <com.google.android.material.bottomnavigation.BottomNavigationView xmlns:app="http://schema.android.com/apk/res/res-auto"
         android:id="@+id/navigation"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:layout_alignParentBottom="true"
         app:menu="@menu/bottom_navigation" />
@@ -20,7 +21,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:openDrawer="start">
+    tools:openDrawer="start"
+    android:layout_marginBottom="?actionBarSize"
+    >
 
     <LinearLayout
         android:id="@+id/activity_feed"
@@ -31,12 +34,13 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
         android:orientation="vertical"
-        tools:context="com.example.medkit2006.boundary.ForumUI">
+        tools:context="com.example.medkit2006.boundary.ForumUI"
+        >
 
         <ListView
             android:id="@+id/list"
             android:layout_width="wrap_content"
-            android:layout_height="658dp"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             tools:context="com.example.medkit2006.boundary.ForumUI" />
 
