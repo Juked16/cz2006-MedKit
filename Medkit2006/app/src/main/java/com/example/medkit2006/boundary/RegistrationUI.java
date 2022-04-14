@@ -65,7 +65,7 @@ public class RegistrationUI extends AppCompatActivity {
                     email.requestFocus();
                 }
             } else {
-                error.setText("Username must be at least 3 characters" + username.length());
+                error.setText("Username must be at least 3 characters");
                 username.requestFocus();
             }
         });
