@@ -11,8 +11,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -76,11 +74,7 @@ public class ForumMgr {
 						MySQLRow r;
 						while((r = commentResult.getNextRow()) != null){
 							try {
-								Date d = Objects.requireNonNull(new SimpleDateFormat("yyyy-MM-dd H:m:s", Locale.US).parse(r.getString("timestamp")));
-								Calendar c = Calendar.getInstance();
-								c.setTime(d);
-								c.add(Calendar.HOUR_OF_DAY, -8);
-								comments.add(r.getString("username") + ": " + r.getString("content") + "\n" + DateUtils.getRelativeTimeSpanString(c.getTime().getTime()));
+								comments.add(r.getString("username") + ": " + r.getString("content") + "\n" + DateUtils.getRelativeTimeSpanString(Objects.requireNonNull(new SimpleDateFormat("yyyy-MM-dd H:m:s", Locale.US).parse(r.getString("timestamp"))).getTime()));
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
