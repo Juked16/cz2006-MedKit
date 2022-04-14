@@ -1,5 +1,4 @@
 package com.example.medkit2006.entity;
-import java.util.ArrayList;
 
 public class MedicalFacility {
 	private String type;
@@ -10,7 +9,6 @@ public class MedicalFacility {
 	private float longitude;
 	private String description;
 	private float aveRating;
-	private ArrayList<User> notifyList;
 
 	/**
 	 * Empty Constructor for medical facility
@@ -74,17 +72,15 @@ public class MedicalFacility {
 		this.contact = contact;
 	}
 
+	public void setAveRating(float rating) { this.aveRating = rating; }
 	/**
-	 * Get list of all ratings of the medical facility 
+	 * Get list of all ratings of the medical facility
 	 * @return list of all ratings
 	 */
-	public void setAveRating(float rating) { this.aveRating = rating; }
 	public float getAveRating() { return this.aveRating; }
 
 	public void setType(String type){ this.type = type; }
 	public String getType(){return this.type;}
-	public void addNotifyUser(User user){ notifyList.add(user); }
-	public ArrayList<User> getNotifyList() { return this.notifyList; }
 	public void setLatitude(float lat){this.latitude = lat; }
 	public float getLatitude(){return this.latitude; }
 	public void setLongitude(float longitude){this.longitude = longitude; }

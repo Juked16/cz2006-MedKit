@@ -21,8 +21,6 @@ public class Post {
     private int likeNum;
     private int reportNum;
 
-    //Used to initialize database tile
-    public Post(){}
     public Post(int id, String fquestion, String fusername, String fdate, String ffacility)
     {
         title = fquestion;

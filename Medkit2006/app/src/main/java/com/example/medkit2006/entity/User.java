@@ -13,13 +13,8 @@ public class User {
 	private String bloodType;
 	private Date dateOfBirth;
 
-	/**
-	 * 
-	 * @param username
-	 */
 	public User(String username) {
 		this.username = username;
-		//what about the other parameters? what about comparison?
 	}
 
 	public String getUsername() {
@@ -30,10 +25,6 @@ public class User {
 		return this.email;
 	}
 
-	/**
-	 * 
-	 * @param email
-	 */
 	public void setEmail(String email) {
 		this.email = email;
 	}
@@ -42,10 +33,6 @@ public class User {
 		return this.verified;
 	}
 
-	/**
-	 * 
-	 * @param verified
-	 */
 	public void setVerified(boolean verified) {
 		this.verified = verified;
 	}
@@ -54,10 +41,6 @@ public class User {
 		return this.firstName;
 	}
 
-	/**
-	 * 
-	 * @param firstName
-	 */
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
@@ -66,10 +49,6 @@ public class User {
 		return this.lastName;
 	}
 
-	/**
-	 * 
-	 * @param lastName
-	 */
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
@@ -78,10 +57,6 @@ public class User {
 		return this.gender;
 	}
 
-	/**
-	 * 
-	 * @param gender
-	 */
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
@@ -90,10 +65,6 @@ public class User {
 		return this.bloodType;
 	}
 
-	/**
-	 * 
-	 * @param bloodType
-	 */
 	public void setBloodType(String bloodType) {
 		this.bloodType = bloodType;
 	}
@@ -102,10 +73,6 @@ public class User {
 		return this.dateOfBirth;
 	}
 
-	/**
-	 * 
-	 * @param dateOfBirth
-	 */
 	public void setDateOfBirth(Date dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}

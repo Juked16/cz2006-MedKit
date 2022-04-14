@@ -39,7 +39,7 @@ public class AccountMgr {
     private String verificationCode;
     private User loggedInUser;
 
-    public boolean validateConfirmPassword(@NonNull String password, @NotNull String confirmPassword) {//TODO: remove?
+    public boolean validateConfirmPassword(@NonNull String password, @NotNull String confirmPassword) {
         return password.equals(confirmPassword);
     }
 
@@ -134,7 +134,7 @@ public class AccountMgr {
         return verificationCode.equalsIgnoreCase(this.verificationCode);
     }
 
-    public boolean isAccountVerified(@NonNull User user) {//TODO: remove?
+    public boolean isAccountVerified(@NonNull User user) {
         return user.getVerified();
     }
 

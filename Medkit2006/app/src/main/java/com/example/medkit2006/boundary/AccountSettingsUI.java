@@ -127,9 +127,7 @@ public class AccountSettingsUI extends AppCompatActivity {
                     cal.setTime(date);
                     dialog.updateDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
                 }
-                dialog.setOnDateSetListener((datePicker, year, month, day) -> {
-                    dateOfBirth.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.US).format((new GregorianCalendar(year, month, day)).getTime()));
-                });
+                dialog.setOnDateSetListener((datePicker, year, month, day) -> dateOfBirth.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.US).format((new GregorianCalendar(year, month, day)).getTime())));
                 dialog.show();
             });
             Button save = findViewById(R.id.accountSettingsSaveBtn);

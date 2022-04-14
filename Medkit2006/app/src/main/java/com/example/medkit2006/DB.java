@@ -35,7 +35,7 @@ public class DB {
     );
     CREATE TABLE medical_facilities(
         name VARCHAR(45) PRIMARY KEY,
-        type VARCHAR(45) NOT NULL, -- #TODO: ENUM?
+        type VARCHAR(45) NOT NULL,
         address VARCHAR(100) NOT NULL,
         contact VARCHAR(45) NOT NULL,
         latitude DECIMAL(11,7) NOT NULL,
@@ -103,14 +103,6 @@ public class DB {
     public void connect(Runnable onConnected, Consumer<Exception> onError) {
         Log.i("DB", "Connecting");
         conn = new Connection("94.74.80.1", "test", "Blue!$!$!$", 3306, "medkit", new DefaultResultInterface(onConnected, onError));
-    }
-
-    /**
-     * @param statement Sql statement without result
-     * @param whenDone  Called when done without error
-     */
-    public void execute(@NotNull String statement, Runnable whenDone) {
-        execute(statement, whenDone, null);
     }
 
     /**

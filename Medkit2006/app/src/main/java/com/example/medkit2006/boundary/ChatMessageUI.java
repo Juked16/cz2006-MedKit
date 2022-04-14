@@ -90,7 +90,6 @@ public class ChatMessageUI extends AppCompatActivity {
             if (!messageAdapter.getMessages().equals(messages)) {
                 messageAdapter.setMessages(messages);
                 messageAdapter.notifyDataSetChanged();
-                //TODO: notifications?
             }
         }, e -> error.setText(e.getMessage()));
         handler.postDelayed(this::loop, 5000);

@@ -10,25 +10,15 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NavUtils;
 
 import com.example.medkit2006.MainActivity;
 import com.example.medkit2006.R;
 import com.example.medkit2006.entity.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
 
 public class AccountUI extends AppCompatActivity {
-
-    private final View.OnClickListener homeClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            NavUtils.navigateUpFromSameTask(AccountUI.this);
-        }
-    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,26 +30,23 @@ public class AccountUI extends AppCompatActivity {
         BottomNavigationView btmNav = findViewById(R.id.navigation);
         btmNav.getMenu().clear();
         btmNav.inflateMenu(R.menu.bottom_navigation);
-        btmNav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                Intent i;
-                switch (item.getItemId()) {
-                    case R.id.nav_search:
-                        i = new Intent(getApplicationContext(), SearchUI.class);
-                        startActivity(i);
-                        break;
-                    case R.id.nav_forum:
-                        i = new Intent(getApplicationContext(), ForumUI.class);
-                        startActivity(i);
-                        break;
-                    case R.id.nav_account:
-                        i = new Intent(getApplicationContext(), MainActivity.accountMgr.isLoggedIn() ? AccountUI.class : LoginUI.class);
-                        startActivity(i);
-                        break;
-                }
-                return false;
+        btmNav.setOnItemSelectedListener(item -> {
+            Intent i;
+            switch (item.getItemId()) {
+                case R.id.nav_search:
+                    i = new Intent(getApplicationContext(), SearchUI.class);
+                    startActivity(i);
+                    break;
+                case R.id.nav_forum:
+                    i = new Intent(getApplicationContext(), ForumUI.class);
+                    startActivity(i);
+                    break;
+                case R.id.nav_account:
+                    i = new Intent(getApplicationContext(), MainActivity.accountMgr.isLoggedIn() ? AccountUI.class : LoginUI.class);
+                    startActivity(i);
+                    break;
             }
+            return false;
         });
     }
 

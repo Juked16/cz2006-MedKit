@@ -7,7 +7,6 @@ import android.util.Log;
 import com.BoardiesITSolutions.AndroidMySQLConnector.MySQLRow;
 import com.example.medkit2006.DB;
 import com.example.medkit2006.entity.MedicalFacility;
-import com.example.medkit2006.entity.User;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -163,22 +162,4 @@ public class MedicalFacilityMgr {
 			}
 		}).start();
 	}
-
-	public void addNotifyList(User user, MedicalFacility medicalFacility) {
-		// TODO - implement MedicalFacilityMgr.addNotifyList
-		medicalFacility.getNotifyList().add(user);
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * Remove user from list of users who book marked the medical facility
-	 * @param user User account
-	 * @param medicalFacility Medical Facility
-	 */
-	public void removeNotifyList(User user, MedicalFacility medicalFacility) {
-		// TODO - implement MedicalFacilityMgr.removeNotifyList
-		medicalFacility.getNotifyList().remove(user);
-		throw new UnsupportedOperationException();
-	}
-
 }

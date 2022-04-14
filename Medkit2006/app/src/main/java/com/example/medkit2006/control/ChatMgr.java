@@ -128,9 +128,6 @@ public class ChatMgr{
         }, error);
     }
 
-    //TODO: add member
-    //TODO: remove member
-
     public void removeChat(int chatId, Runnable callback, Consumer<Exception> error) {
         DB.instance.execute("delete from chat where id = " + chatId , null, error);
         DB.instance.execute("delete from text where chatId = " + chatId, callback, error);

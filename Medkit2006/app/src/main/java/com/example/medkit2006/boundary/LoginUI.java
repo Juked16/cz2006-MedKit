@@ -31,9 +31,6 @@ public class LoginUI extends AppCompatActivity {
         EditText usernameField = findViewById(R.id.loginUsername);
         EditText pwdField = findViewById(R.id.loginPassword);
         TextView status = findViewById(R.id.loginStatus);
-        //TODO: remove before submitting
-        usernameField.setText("test");
-        pwdField.setText("testtest");
         findViewById(R.id.loginForgotPwBtn).setOnClickListener(btn -> startActivity(new Intent(this, ForgetPwUI.class)));
         findViewById(R.id.loginLoginBtn).setOnClickListener(button -> {
             if (usernameField.getText().length() == 0)
