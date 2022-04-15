@@ -2,8 +2,8 @@ package com.example.medkit2006.control;
 
 import com.BoardiesITSolutions.AndroidMySQLConnector.Exceptions.SQLColumnNotFoundException;
 import com.BoardiesITSolutions.AndroidMySQLConnector.MySQLRow;
-import com.example.medkit2006.MainActivity;
 import com.example.medkit2006.DB;
+import com.example.medkit2006.MainActivity;
 import com.example.medkit2006.entity.Bookmark;
 import com.example.medkit2006.entity.User;
 
@@ -16,10 +16,10 @@ public class BookmarkMgr {
 
     public void get(@NotNull String medicalFacilityName, @NotNull Consumer<Bookmark> bookmarks, Consumer<Exception> error) {
         User user = MainActivity.accountMgr.getLoggedInUser();
-        DB.instance.executeQuery("select * from bookmark where username = '" + user.getUsername() + "' and medical_facility = '" + medicalFacilityName + "'", resultSet -> {
+        DB.instance.executeQuery("select * from bookmark where username = '" + DB.escape(user.getUsername()) + "' and medical_facility = '" + DB.escape(medicalFacilityName) + "'", resultSet -> {
             try {
                 MySQLRow row = resultSet.getNextRow();
-                if(row != null)
+                if (row != null)
                     bookmarks.accept(new Bookmark(row.getString("medical_facility"), row.getString("notes")));
                 else
                     bookmarks.accept(null);
@@ -31,7 +31,7 @@ public class BookmarkMgr {
 
     public void getAll(Consumer<ArrayList<Bookmark>> bookmarks, Consumer<Exception> error) {
         User user = MainActivity.accountMgr.getLoggedInUser();
-        DB.instance.executeQuery("select * from bookmark where username = '" + user.getUsername() + "'", resultSet -> {
+        DB.instance.executeQuery("select * from bookmark where username = '" + DB.escape(user.getUsername()) + "'", resultSet -> {
             ArrayList<Bookmark> list = new ArrayList<>();
             MySQLRow row;
             try {
@@ -48,16 +48,16 @@ public class BookmarkMgr {
 
     public void add(@NotNull Bookmark bookmark, Runnable callback, Consumer<Exception> error) {
         User user = MainActivity.accountMgr.getLoggedInUser();
-        DB.instance.execute("insert into bookmark values ('" + user.getUsername() + "','" + bookmark.getFacilityName() + "','" + bookmark.getNotes() + "')", callback, error);
+        DB.instance.execute("insert into bookmark values ('" + DB.escape(user.getUsername()) + "','" + DB.escape(bookmark.getFacilityName()) + "','" + DB.escape(bookmark.getNotes()) + "')", callback, error);
     }
 
     public void updateNotes(@NotNull Bookmark bookmark, Runnable callback, Consumer<Exception> error) {
         User user = MainActivity.accountMgr.getLoggedInUser();
-        DB.instance.execute("update bookmark set notes = '" + bookmark.getNotes() + "' where username = '" + user.getUsername() + "' and medical_facility = '" + bookmark.getFacilityName() + "'", callback, error);
+        DB.instance.execute("update bookmark set notes = '" + DB.escape(bookmark.getNotes()) + "' where username = '" + DB.escape(user.getUsername()) + "' and medical_facility = '" + DB.escape(bookmark.getFacilityName()) + "'", callback, error);
     }
 
     public void remove(@NotNull Bookmark bookmark, Runnable callback, Consumer<Exception> error) {
         User user = MainActivity.accountMgr.getLoggedInUser();
-        DB.instance.execute("delete from bookmark where username = '" + user.getUsername() + "' and medical_facility = '" + bookmark.getFacilityName() + "'", callback, error);
+        DB.instance.execute("delete from bookmark where username = '" + DB.escape(user.getUsername()) + "' and medical_facility = '" + DB.escape(bookmark.getFacilityName()) + "'", callback, error);
     }
 }

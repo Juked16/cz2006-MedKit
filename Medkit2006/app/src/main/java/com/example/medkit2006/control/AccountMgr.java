@@ -53,7 +53,7 @@ public class AccountMgr {
      * @param error    Called when error
      */
     public void emailExist(@NotNull String email, Consumer<Boolean> callback, Consumer<Exception> error) {
-        DB.instance.executeQuery("select email from account where email = \"" + email + "\"", resultSet -> callback.accept(resultSet.getNextRow() != null), error);
+        DB.instance.executeQuery("select email from account where email = '" + DB.escape(email) + "'", resultSet -> callback.accept(resultSet.getNextRow() != null), error);
     }
 
     /**
@@ -62,7 +62,7 @@ public class AccountMgr {
      * @param error    Called when error
      */
     public void usernameExist(@NotNull String username, Consumer<Boolean> callback, Consumer<Exception> error) {
-        DB.instance.executeQuery("select username from account where username = \"" + username + "\"", resultSet -> callback.accept(resultSet.getNextRow() != null), error);
+        DB.instance.executeQuery("select username from account where username = '" + DB.escape(username) + "'", resultSet -> callback.accept(resultSet.getNextRow() != null), error);
     }
 
     /**
@@ -74,7 +74,7 @@ public class AccountMgr {
      */
     public void createAccount(@NotNull String username, String email, @NotNull String password, @NotNull Runnable callback, Consumer<Exception> error) {
         byte[] salt = salt();
-        DB.instance.execute("insert into account (username,email,passwordHash,passwordSalt) values (\"" + username + "\",\"" + email + "\",\"" + hash(password, salt) + "\",\"" + bytesToHex(salt) + "\")", callback, error);
+        DB.instance.execute("insert into account (username,email,passwordHash,passwordSalt) values ('" + DB.escape(username) + "','" + DB.escape(email) + "','" + hash(password, salt) + "','" + bytesToHex(salt) + "')", callback, error);
     }
 
     public void sendVerificationCode(@NotNull String email) {
@@ -145,7 +145,7 @@ public class AccountMgr {
      * @param error    Called when error
      */
     public void validateAccount(@NotNull String username, @NotNull String password, Consumer<Boolean> callback, Consumer<Exception> error) {
-        DB.instance.executeQuery("select passwordSalt from account where username = \"" + username + "\"", saltResult -> {
+        DB.instance.executeQuery("select passwordSalt from account where username = '" + DB.escape(username) + "'", saltResult -> {
             MySQLRow row = saltResult.getNextRow();
             if (row != null) {
                 byte[] salt;
@@ -155,7 +155,7 @@ public class AccountMgr {
                     callback.accept(false);
                     return;
                 }
-                DB.instance.executeQuery("select username from account where username = \"" + username + "\" and passwordHash = cast('" + hash(password, salt) + "' as BINARY(32))",
+                DB.instance.executeQuery("select username from account where username = '" + DB.escape(username) + "' and passwordHash = cast('" + hash(password, salt) + "' as BINARY(32))",
                         resultSet -> callback.accept(resultSet.getNextRow() != null), error);
             } else
                 callback.accept(false);
@@ -168,7 +168,7 @@ public class AccountMgr {
      * @param error    Called when error
      */
     public void getUserDetails(@NotNull String username, @NotNull Consumer<User> callback, Consumer<Exception> error) {
-        DB.instance.executeQuery("select * from account where username = \"" + username + "\"", resultSet -> {
+        DB.instance.executeQuery("select * from account where username = '" + DB.escape(username) + "'", resultSet -> {
             User user = new User(username);
             MySQLRow row = resultSet.getNextRow();
             try {
@@ -201,14 +201,14 @@ public class AccountMgr {
         }
         Date dob = loggedInUser.getDateOfBirth();
         DB.instance.execute("update account set " +
-                "email = \"" + loggedInUser.getEmail() + "\"," +
+                "email = '" + DB.escape(loggedInUser.getEmail()) + "'," +
                 "verified = " + (loggedInUser.getVerified() ? 1 : 0) + "," +
-                "firstName = \"" + loggedInUser.getFirstName() + "\"," +
-                "lastName = \"" + loggedInUser.getLastName() + "\"," +
-                "gender = \"" + loggedInUser.getGender() + "\"," +
-                "bloodType = \"" + loggedInUser.getBloodType() + "\"," +
-                "dateOfBirth = " + (dob != null ? "\"" + new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(dob) + "\"" : "null") + " " +
-                "where username = \"" + loggedInUser.getUsername() + "\"", callback, error
+                "firstName = '" + DB.escape(loggedInUser.getFirstName()) + "'," +
+                "lastName = '" + DB.escape(loggedInUser.getLastName()) + "'," +
+                "gender = '" + DB.escape(loggedInUser.getGender()) + "'," +
+                "bloodType = '" + DB.escape(loggedInUser.getBloodType()) + "'," +
+                "dateOfBirth = " + (dob != null ? "'" + new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(dob) + "'" : "null") + " " +
+                "where username = '" + DB.escape(loggedInUser.getUsername()) + "'", callback, error
         );
     }
 
@@ -220,7 +220,7 @@ public class AccountMgr {
      */
     public void updatePassword(@NotNull String email, @NotNull String password, Runnable callback, Consumer<Exception> error) {
         byte[] salt = salt();
-        DB.instance.execute("update account set passwordHash = \"" + hash(password, salt) + "\", passwordSalt = \"" + bytesToHex(salt) + "\" where email = \"" + email + "\"", callback, error);
+        DB.instance.execute("update account set passwordHash = '" + hash(password, salt) + "', passwordSalt = '" + bytesToHex(salt) + "' where email = '" + DB.escape(email) + "'", callback, error);
     }
 
     /**

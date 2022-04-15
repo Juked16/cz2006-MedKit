@@ -43,11 +43,11 @@ public class ForumMgr {
 		getPostAbstract(query, callback, error);
 	}
 	public void getMyPostAbstract(String username, Consumer<ArrayList<Post>> callback, Consumer<Exception> error){
-		String query = "select * from POST where USERNAME = '" + username +"' and STATUS = 1 order by _id";
+		String query = "select * from POST where USERNAME = '" + DB.escape(username) + "' and STATUS = 1 order by _id";
 		getPostAbstract(query, callback, error);
 	}
-	public void getMyDraftAbstract(String username, Consumer<ArrayList<Post>> callback, Consumer<Exception> error){
-		String query = "select * from POST where USERNAME = '" + username +"' and STATUS = 0 order by _id";
+	public void getMyDraftAbstract(String username, Consumer<ArrayList<Post>> callback, Consumer<Exception> error) {
+		String query = "select * from POST where USERNAME = '" + DB.escape(username) + "' and STATUS = 0 order by _id";
 		getPostAbstract(query, callback, error);
 
 	}
@@ -90,23 +90,23 @@ public class ForumMgr {
 		}, error);
 	}
 	public void addPost(String title, String content, String username, String medical_facility, String tags, int status, int rating, @NotNull Runnable callback, Consumer<Exception> error) {
-		 DB.instance.execute("insert into post (title, post, username, medical_facility, likes, tags, status, report) values (\""
-				 + title + "\",\""
-				 + content + "\",\""
-				 + username + "\",\""
-				 + medical_facility + "\",\""
-				 + 0 + "\",\""
-				 + tags + "\",\""
-				 + status + "\",\""
-				 + 0 + "\")", () -> {
+		 DB.instance.execute("insert into post (title, post, username, medical_facility, likes, tags, status, report) values ('"
+				 + DB.escape(title) + "','"
+				 + DB.escape(content) + "','"
+				 + DB.escape(username) + "','"
+				 + DB.escape(medical_facility) + "','"
+				 + 0 + "','"
+				 + DB.escape(tags) + "','"
+				 + status + "','"
+				 + 0 + "')", () -> {
 			 if (status == 1) {
 				 DB.instance.executeQuery("select max(_ID) as ID from post", resultSet -> {
 					 try {
 						 int id = resultSet.getNextRow().getInt("ID");
-						 DB.instance.execute("insert into rating (username, medical_facility, rating, postId) values (\""
-								 + username + "\",\""
-								 + medical_facility + "\",\""
-								 + rating + "\"," + id + ")", callback, error);
+						 DB.instance.execute("insert into rating (username, medical_facility, rating, postId) values ('"
+								 + DB.escape(username) + "','"
+								 + DB.escape(medical_facility) + "','"
+								 + rating + "'," + id + ")", callback, error);
 					 } catch (Exception e) {
 						 error.accept(e);
 					 }
@@ -116,17 +116,17 @@ public class ForumMgr {
 	 }
 	public void updatePost(int ID, String title, String content, String newDate, String username, String medical_facility, String tags, int status, int rating, @NotNull Runnable callback, Consumer<Exception> error) {
 		DB.instance.execute("update post set"
-				+ " TITLE = '" + title + "',"
-				+ " POST = '" + content + "',"
-				+ " DATETIME = '" + newDate + "',"
-				+ " MEDICAL_FACILITY = '" + medical_facility + "',"
-				+ " TAGS = '" + tags + "',"
-				+ " STATUS = " + status +" WHERE _ID = " + ID , callback, error);
+				+ " TITLE = '" + DB.escape(title) + "',"
+				+ " POST = '" + DB.escape(content) + "',"
+				+ " DATETIME = '" + DB.escape(newDate) + "',"
+				+ " MEDICAL_FACILITY = '" + DB.escape(medical_facility) + "',"
+				+ " TAGS = '" + DB.escape(tags) + "',"
+				+ " STATUS = " + status + " WHERE _ID = " + ID , callback, error);
 		if(status == 1){
-		DB.instance.execute("insert into rating (username, medical_facility, rating) values (\""
-				+ username + "\",\""
-				+ medical_facility + "\",\""
-				+ rating + "\")", callback, error);}
+		DB.instance.execute("insert into rating (username, medical_facility, rating) values ('"
+				+ DB.escape(username) + "','"
+				+ DB.escape(medical_facility) + "','"
+				+ rating + "')", callback, error);}
 	}
 	public void deletePost(int post_id){
 		DB.instance.execute("delete from text where postId = " + post_id, null, Throwable::printStackTrace);
@@ -135,7 +135,7 @@ public class ForumMgr {
 		DB.instance.execute(query, null, e -> Log.d("ForumMgr delete post failure", e.getMessage()));
 	}
 
-	public void addComment(int postId, String sender, String content, Runnable callback, Consumer<Exception> error){
-		DB.instance.execute("insert into text (username, content, postId) values('" + sender + "','" + content + "'," + postId + ")", callback, error);
+	public void addComment(int postId, String sender, String content, Runnable callback, Consumer<Exception> error) {
+		DB.instance.execute("insert into text (username, content, postId) values('" + DB.escape(sender) + "','" + DB.escape(content) + "'," + postId + ")", callback, error);
 	}
 }

@@ -45,4 +45,10 @@ public class MainActivity extends AppCompatActivity {
             finishAffinity();
         displayed = true;
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DB.instance.conn.close();
+    }
 }

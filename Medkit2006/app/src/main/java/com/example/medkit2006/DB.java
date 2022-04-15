@@ -158,6 +158,15 @@ public class DB {
         });
     }
 
+    /**
+     * Escape string to avoid SQL injection attacks
+     * @param str String to escape
+     * @return Escaped string
+     */
+    public static String escape(String str){
+        return instance.conn.escape_string(str);
+    }
+
     static class DefaultResultInterface implements IConnectionInterface, IResultInterface {
 
         private Runnable onConnected = null;

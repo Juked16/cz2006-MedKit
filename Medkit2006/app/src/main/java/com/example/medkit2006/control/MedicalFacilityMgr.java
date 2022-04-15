@@ -49,9 +49,10 @@ public class MedicalFacilityMgr {
 
 	public void getFacilityAbstract(String name, int[] filter_pos, String order, Consumer<ArrayList<MedicalFacility>> callback, Consumer<Exception> error) {
 		String join_tab = "(select *, avg(fill_na_rate) as rate from(select m.*, coalesce(r.rating, 0) as fill_na_rate from medical_facilities m left join rating r on m.name = r.medical_facility)t1 group by t1.name)t";
-		String query = "select * from "+ join_tab +" where t.name like '%"+name.toUpperCase()+"%'";
-		switch(filter_pos[0]){
-			case 0: break;
+		String query = "select * from " + join_tab + " where t.name like '%" + DB.escape(name.toUpperCase()) + "%'";
+		switch (filter_pos[0]) {
+			case 0:
+				break;
 			case 1:
 				query+=" and t.type = 'hospital'";
 				break;
@@ -118,7 +119,7 @@ public class MedicalFacilityMgr {
 		}, error);
 	}
 	public void getFacilityDetails(String facility_name, Consumer<MedicalFacility> callback, Consumer<Exception> error) {
-		String query = ("select * from medical_facilities where name = '"+facility_name+"'").toUpperCase();
+		String query = ("select * from medical_facilities where name = '" + DB.escape(facility_name) + "'").toUpperCase();
 		Log.d("@string/MF_mgr_tag"+"getFacilityDetails executing query", query);
 		DB.instance.executeQuery(query, resultSet -> {
 			MedicalFacility tmp_facil = new MedicalFacility();

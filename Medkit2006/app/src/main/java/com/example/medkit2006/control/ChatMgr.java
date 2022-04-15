@@ -24,8 +24,8 @@ public class ChatMgr{
      */
     public void startPrivateMessage(String sender, String receiver, Runnable callback, Consumer<Exception> error) {
         DB.instance.executeQuery("select c1.id from chat c1 inner join chat c2 on c1.id=c2.id where c1.username = '"
-                +sender + "' and c2.username ='" + receiver+"'", resultSet -> {
-            MySQLRow row= resultSet.getNextRow();
+                + DB.escape(sender) + "' and c2.username ='" + DB.escape(receiver) + "'", resultSet -> {
+            MySQLRow row = resultSet.getNextRow();
             if (row == null) {
                 DB.instance.executeQuery("select max(id) as id from chat", idResultSet -> {
                     int chatId = 1;
@@ -37,8 +37,8 @@ public class ChatMgr{
                             e.printStackTrace();
                         }
                     }
-                    DB.instance.execute("insert into chat values (" + chatId + ",'" + sender + "')", null, error);
-                    DB.instance.execute("insert into chat values (" + chatId + ",'" + receiver + "')", callback, error);
+                    DB.instance.execute("insert into chat values (" + chatId + ",'" + DB.escape(sender) + "')", null, error);
+                    DB.instance.execute("insert into chat values (" + chatId + ",'" + DB.escape(receiver) + "')", callback, error);
                 });
             } else
                 error.accept(new Exception("Chat with " + receiver + " already exist"));
@@ -47,18 +47,21 @@ public class ChatMgr{
 
     public void getPrivateMessage(String sender, String receiver, Consumer<Integer> callback, Consumer<Exception> error) {
         DB.instance.executeQuery("select c1.id from chat c1 inner join chat c2 on c1.id=c2.id where c1.username = '"
-                + sender + "' and c2.username ='" + receiver + "'", resultSet -> {
-            MySQLRow row= resultSet.getNextRow();
-                if(row != null){
-                    try{ callback.accept(row.getInt("id")); }catch(Exception e) { error.accept(e); }
+                + DB.escape(sender) + "' and c2.username ='" + DB.escape(receiver) + "'", resultSet -> {
+            MySQLRow row = resultSet.getNextRow();
+            if (row != null) {
+                try {
+                    callback.accept(row.getInt("id"));
+                } catch (Exception e) {
+                    error.accept(e);
                 }
-                else
-                    error.accept(new Exception("Chat with " + receiver + " non existed"));
+            } else
+                error.accept(new Exception("Chat with " + receiver + " non existed"));
         }, error);
     }
 
     public void sendMessage(int chatId, String sender, String content, Runnable callback, Consumer<Exception> error){
-        DB.instance.execute("insert into text (username, content, chatId) values('" + sender + "','" + content + "'," + chatId + ")", callback, error);
+        DB.instance.execute("insert into text (username, content, chatId) values('" + DB.escape(sender) + "','" + DB.escape(content) + "'," + chatId + ")", callback, error);
     }
 
     /**
@@ -68,7 +71,7 @@ public class ChatMgr{
      * @param error    Called when error
      */
     public void getChats(String username, Consumer<ArrayList<Integer>> callback, Consumer<Exception> error) {
-        DB.instance.executeQuery("select id from chat where username = '" + username + "'", resultSet -> {
+        DB.instance.executeQuery("select id from chat where username = '" + DB.escape(username) + "'", resultSet -> {
             ArrayList<Integer> chatIds = new ArrayList<>();
             MySQLRow row;
             try {
