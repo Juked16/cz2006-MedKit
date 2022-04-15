@@ -3,6 +3,7 @@ package com.example.medkit2006;
 import android.os.Build;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import com.BoardiesITSolutions.AndroidMySQLConnector.Connection;
@@ -163,8 +164,10 @@ public class DB {
      * @param str String to escape
      * @return Escaped string
      */
-    public static String escape(String str){
-        return instance.conn.escape_string(str);
+    @NonNull
+    public static String escape(@NotNull String str){
+        String escaped = instance.conn.escape_string(str);
+        return escaped == null ? "" : escaped;
     }
 
     static class DefaultResultInterface implements IConnectionInterface, IResultInterface {
