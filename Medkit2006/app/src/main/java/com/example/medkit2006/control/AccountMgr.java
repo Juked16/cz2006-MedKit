@@ -84,6 +84,7 @@ public class AccountMgr {
         for (int idx = 0; idx < codeBuf.length; ++idx)
             codeBuf[idx] = chars[random.nextInt(chars.length)];
         verificationCode = new String(codeBuf);
+        Log.d("Verification code sent",verificationCode);
         new Thread(() -> {
             Properties prop = new Properties();
             prop.put("mail.smtp.auth", true);

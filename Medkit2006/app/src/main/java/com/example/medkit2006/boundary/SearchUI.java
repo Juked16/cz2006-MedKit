@@ -73,6 +73,18 @@ public class SearchUI extends AppCompatActivity implements AdapterView.OnItemSel
         recyclerView = findViewById(R.id.search_result_rv);
         displayAllFacility();
     }
+    /*
+    public void getFacilityNames(){
+        facilityMgr.getAllFacilityName(names-> {
+            if(names==null)getFacilityNames();
+            else if(names.length==301)
+                    facilityMgr.all_facility_names = names;
+
+            },
+                error-> Log.d("ForumUI get facility names error", error.getMessage()));
+            }
+
+     */
 
     public void displayAllFacility(){
         facilityMgr.getAllFacilityAbstract(medicalFacilityList -> {
@@ -81,6 +93,11 @@ public class SearchUI extends AppCompatActivity implements AdapterView.OnItemSel
                 recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                 adapter = new MedicalFacilityAdapter(getApplicationContext(), medicalFacilityList);
                 recyclerView.setAdapter(adapter);
+                facilityMgr.all_facility_names = new String[medicalFacilityList.size()];
+                for(int i =0; i<medicalFacilityList.size();i++){
+                    facilityMgr.all_facility_names[i]=medicalFacilityList.get(i).getName();
+                }
+                Log.d("Medical Facility Name Size ",String.valueOf(facilityMgr.all_facility_names.length));
             });
         }, e -> {
             Log.d("Received Medical Facility List Unsuccessful", e.toString().trim());

@@ -4,9 +4,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-/**
- * Created by Student on 4/29/2017.
- */
 
 public class Post {
 
