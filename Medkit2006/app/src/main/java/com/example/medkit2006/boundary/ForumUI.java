@@ -40,7 +40,6 @@ public class ForumUI extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forum);
 
-        //MainActivity.facilityMgr.getAllFacilityName(names-> MainActivity.facilityMgr.all_facility_names = names, error-> Log.d("ForumUI get facility names error", error.getMessage()));
         //Set up bottom navigation bar
         BottomNavigationView btmNav = findViewById(R.id.navigation);
         btmNav.getMenu().clear();

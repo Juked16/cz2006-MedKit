@@ -22,26 +22,6 @@ public class MedicalFacilityMgr {
 	public final String[] filters_rating = {"Rating Unselected", "Rating>3.5", "Rating>4.0", "Rating>4.5"};
 	public String[] all_facility_names;
 
-	public void getAllFacilityName(@NotNull Consumer<String[]> callback, Consumer<Exception> error){
-		String query = "select name from medical_facilities";
-		DB.instance.executeQuery(query, resultSet -> {
-			ArrayList<String> names = new ArrayList<>();
-			try{
-				MySQLRow row;
-				while((row = resultSet.getNextRow()) != null){
-					names.add(row.getString("name"));
-				}
-			}catch(Exception e){
-				error.accept(e);
-			}
-			String[] namesArray = new String[names.size()];
-			for (int i = 0; i < names.size(); i++) {
-				namesArray[i] = names.get(i);
-			}
-			callback.accept(namesArray);
-		}, error);
-	}
-
 	public void getAllFacilityAbstract(@NotNull Consumer<ArrayList<MedicalFacility>> callback, Consumer<Exception> error){
 		String query = "select *, avg(fill_na_rate) as rate from(select m.*, coalesce(r.rating, 0) as fill_na_rate from medical_facilities m left join rating r on m.name = r.medical_facility)t group by t.name";
 		getFacilityAbstract(query, callback, error);
@@ -101,7 +81,7 @@ public class MedicalFacilityMgr {
 				MySQLRow row;
 				while ((row = resultSet.getNextRow()) != null) {
 					MedicalFacility tmp_facil = new MedicalFacility();
-					tmp_facil.setName(row.getString("name"));    //name is nullable
+					tmp_facil.setName(row.getString("name"));
 					tmp_facil.setType(row.getString("type"));
 					tmp_facil.setAddress(row.getString("address"));
 					tmp_facil.setContact(row.getString("contact"));
