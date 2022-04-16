@@ -77,7 +77,12 @@ public class AccountMgr {
         DB.instance.execute("insert into account (username,email,passwordHash,passwordSalt) values ('" + DB.escape(username) + "','" + DB.escape(email) + "','" + hash(password, salt) + "','" + bytesToHex(salt) + "')", callback, error);
     }
 
-    public void sendVerificationCode(@NotNull String email) {
+    /**
+     * @param email     Email
+     * @param callback  Called when no error
+     * @param error     Called when error
+     */
+    public void sendVerificationCode(@NotNull String email, Runnable callback, Consumer<Exception> error) {
         SecureRandom random = new SecureRandom();
         char[] chars = "ABCDEFGHIJKLMNPQRSTUVWXYZ123456789".toCharArray();
         char[] codeBuf = new char[5];
@@ -86,20 +91,20 @@ public class AccountMgr {
         verificationCode = new String(codeBuf);
         Log.d("Verification code sent",verificationCode);
         new Thread(() -> {
-            Properties prop = new Properties();
-            prop.put("mail.smtp.auth", true);
-            prop.put("mail.smtp.starttls.enable", true);
-            prop.put("mail.smtp.host", "smtp.gmail.com");
-            prop.put("mail.smtp.port", 587);
-            Session session = Session.getInstance(prop, new Authenticator() {
-                @Override
-                protected PasswordAuthentication getPasswordAuthentication() {
-                    return new PasswordAuthentication("cz2006.blue.medkit@gmail.com", "q^Vk.\\Oc}X3@e43kv<VW");
-                }
-            });
-            ((MailcapCommandMap) CommandMap.getDefaultCommandMap()).addMailcap("multipart/*;; x-java-content-handler=com.sun.mail.handlers.multipart_mixed");
-            Message message = new MimeMessage(session);
             try {
+                Properties prop = new Properties();
+                prop.put("mail.smtp.auth", true);
+                prop.put("mail.smtp.starttls.enable", true);
+                prop.put("mail.smtp.host", "smtp.gmail.com");
+                prop.put("mail.smtp.port", 587);
+                Session session = Session.getInstance(prop, new Authenticator() {
+                    @Override
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication("cz2006.blue.medkit@gmail.com", "q^Vk.\\Oc}X3@e43kv<VW");
+                    }
+                });
+                ((MailcapCommandMap) CommandMap.getDefaultCommandMap()).addMailcap("multipart/*;; x-java-content-handler=com.sun.mail.handlers.multipart_mixed");
+                Message message = new MimeMessage(session);
                 message.setFrom(new InternetAddress("cz2006.blue.medkit@gmail.com"));
                 message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email));
                 message.setSubject("Medkit - Verification Code");
@@ -113,8 +118,12 @@ public class AccountMgr {
                 message.setContent(multipart);
 
                 Transport.send(message);
+                if(callback != null)
+                    callback.run();
             } catch (Exception e) {
                 Log.wtf("Email", e);
+                if(error != null)
+                    error.accept(e);
             }
         }).start();
     }

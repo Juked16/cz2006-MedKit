@@ -42,8 +42,11 @@ public class VerificationUI extends AppCompatActivity {
         send.setOnClickListener(btn -> {
             code.setEnabled(true);
             verify.setEnabled(true);
-            MainActivity.accountMgr.sendVerificationCode(user.getEmail());
-            status.setText("Verification code sent to " + user.getEmail());
+            status.setText("Sending email to " + user.getEmail());
+            MainActivity.accountMgr.sendVerificationCode(user.getEmail(),
+                    () -> runOnUiThread(() -> status.setText("Verification code sent to " + user.getEmail())),
+                    error -> runOnUiThread(() -> status.setText("An error occurred while sending email"))
+            );
             send.setEnabled(false);
             resendTime = 61;
             scheduleTimer(send);
