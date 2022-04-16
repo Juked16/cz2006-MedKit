@@ -30,6 +30,7 @@ public class AccountUI extends AppCompatActivity {
         BottomNavigationView btmNav = findViewById(R.id.navigation);
         btmNav.getMenu().clear();
         btmNav.inflateMenu(R.menu.bottom_navigation);
+        btmNav.setSelectedItemId(R.id.nav_account);
         btmNav.setOnItemSelectedListener(item -> {
             Intent i;
             switch (item.getItemId()) {
@@ -39,10 +40,6 @@ public class AccountUI extends AppCompatActivity {
                     break;
                 case R.id.nav_forum:
                     i = new Intent(getApplicationContext(), ForumUI.class);
-                    startActivity(i);
-                    break;
-                case R.id.nav_account:
-                    i = new Intent(getApplicationContext(), MainActivity.accountMgr.isLoggedIn() ? AccountUI.class : LoginUI.class);
                     startActivity(i);
                     break;
             }

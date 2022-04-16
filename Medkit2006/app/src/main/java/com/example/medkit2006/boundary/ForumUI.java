@@ -44,15 +44,12 @@ public class ForumUI extends AppCompatActivity {
         BottomNavigationView btmNav = findViewById(R.id.navigation);
         btmNav.getMenu().clear();
         btmNav.inflateMenu(R.menu.bottom_navigation);
+        btmNav.setSelectedItemId(R.id.nav_forum);
         btmNav.setOnItemSelectedListener(item -> {
             Intent i;
             switch (item.getItemId()) {
                 case R.id.nav_search:
                     i = new Intent(getApplicationContext(), SearchUI.class);
-                    startActivity(i);
-                    break;
-                case R.id.nav_forum:
-                    i = new Intent(getApplicationContext(), ForumUI.class);
                     startActivity(i);
                     break;
                 case R.id.nav_account:

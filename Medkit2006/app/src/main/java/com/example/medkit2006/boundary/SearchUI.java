@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -36,6 +37,7 @@ public class SearchUI extends AppCompatActivity{
         BottomNavigationView btmNav = findViewById(R.id.navigation);
         btmNav.getMenu().clear();
         btmNav.inflateMenu(R.menu.bottom_navigation);
+        btmNav.setSelectedItemId(R.id.nav_search);
         btmNav.setOnItemSelectedListener(item -> {
             Intent i;
             switch (item.getItemId()) {
@@ -54,6 +56,26 @@ public class SearchUI extends AppCompatActivity{
         //Setting spinners
         Spinner type_spin = findViewById(R.id.type_filter_spinner);
         Spinner rating_spin = findViewById(R.id.rating_filter_spinner);
+
+        AdapterView.OnItemSelectedListener update = new AdapterView.OnItemSelectedListener(){
+
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                toSearchResult(null);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                toSearchResult(null);
+            }
+        };
+
+        type_spin.setOnItemSelectedListener(update);
+        rating_spin.setOnItemSelectedListener(update);
+
+        RadioGroup rgr = findViewById(R.id.sort_radioGroup);
+
+        rgr.setOnCheckedChangeListener((radioGroup, i) -> toSearchResult(null));
 
         ArrayAdapter<String> type_ad = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, facilityMgr.filters_type);
         type_ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -106,9 +128,19 @@ public class SearchUI extends AppCompatActivity{
         }catch (Exception e){
             order = "";
         }
+        //prevent spamming leading to crash
+        findViewById(R.id.toMfList2).setEnabled(false);
+        findViewById(R.id.type_filter_spinner).setEnabled(false);
+        spn.setEnabled(false);
+        rgr.setEnabled(false);
         MainActivity.facilityMgr.getFacilityAbstract(name, filter_pos, order, medicalFacilityList -> {
             Log.d("Received Medical Facility List", String.valueOf(medicalFacilityList.size()));
             runOnUiThread(() -> {// Stuff that updates the UI
+                //prevent spamming leading to crash
+                findViewById(R.id.toMfList2).setEnabled(true);
+                findViewById(R.id.type_filter_spinner).setEnabled(true);
+                findViewById(R.id.rating_filter_spinner).setEnabled(true);
+                rgr.setEnabled(true);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                 adapter = new MedicalFacilityAdapter(getApplicationContext(), medicalFacilityList);
                 recyclerView.setAdapter(adapter);
@@ -116,6 +148,11 @@ public class SearchUI extends AppCompatActivity{
         }, e -> {
             Log.d("Received Medical Facility List Unsuccessful", e.toString().trim());
             runOnUiThread(() -> {// Stuff that updates the UI
+                //prevent spamming leading to crash
+                findViewById(R.id.toMfList2).setEnabled(true);
+                findViewById(R.id.type_filter_spinner).setEnabled(true);
+                findViewById(R.id.rating_filter_spinner).setEnabled(true);
+                rgr.setEnabled(true);
                 Toast.makeText(getApplicationContext(),"No Search Result!", Toast.LENGTH_SHORT).show();
             });
         });
