@@ -100,6 +100,11 @@ public class FacilityDetailUI extends AppCompatActivity implements OnMapReadyCal
             }
         });
         Log.d("Received MF Name", message);
+        ImageButton goBookMarkBtn = findViewById(R.id.bookmarkList_btn);
+        goBookMarkBtn.setOnClickListener(btn->{
+            Intent i = new Intent(this, MainActivity.accountMgr.isLoggedIn()?BookmarkUI.class:LoginUI.class);
+            startActivity(i);
+        });
     }
 
     @Override

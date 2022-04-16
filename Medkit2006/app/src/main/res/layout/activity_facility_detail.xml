@@ -41,7 +41,7 @@
 
                 <TextView
                     android:id="@+id/medfacil_name"
-                    android:layout_width="300dp"
+                    android:layout_width="250dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="Medical Facility Name"
@@ -56,6 +56,15 @@
                     android:adjustViewBounds="true"
                     android:scaleType="fitCenter"
                     app:srcCompat="@drawable/favourite" />
+
+                <ImageButton
+                    android:id="@+id/bookmarkList_btn"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/bookmark_black" />
+
             </LinearLayout>
             <TextView
                 android:id="@+id/medfacil_address"
