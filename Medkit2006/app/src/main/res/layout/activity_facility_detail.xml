@@ -57,13 +57,7 @@
                     android:scaleType="fitCenter"
                     app:srcCompat="@drawable/favourite" />
 
-                <ImageButton
-                    android:id="@+id/bookmarkList_btn"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:adjustViewBounds="true"
-                    android:scaleType="fitCenter"
-                    app:srcCompat="@drawable/bookmark_black" />
+
 
             </LinearLayout>
             <TextView
