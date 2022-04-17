@@ -19,11 +19,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medkit2006.MainActivity;
-import com.example.medkit2006.adapter.MedicalFacilityAdapter;
 import com.example.medkit2006.R;
+import com.example.medkit2006.adapter.MedicalFacilityAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class SearchUI extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+public class SearchUI extends AppCompatActivity{
     public static final String EXTRA_MESSAGE = "@string/MF_name";
 
     RecyclerView recyclerView;
@@ -37,13 +37,10 @@ public class SearchUI extends AppCompatActivity implements AdapterView.OnItemSel
         BottomNavigationView btmNav = findViewById(R.id.navigation);
         btmNav.getMenu().clear();
         btmNav.inflateMenu(R.menu.bottom_navigation);
+        btmNav.setSelectedItemId(R.id.nav_search);
         btmNav.setOnItemSelectedListener(item -> {
             Intent i;
             switch (item.getItemId()) {
-                case R.id.nav_search:
-                    i = new Intent(getApplicationContext(), SearchUI.class);
-                    startActivity(i);
-                    break;
                 case R.id.nav_forum:
                     i = new Intent(getApplicationContext(), ForumUI.class);
                     startActivity(i);
@@ -60,8 +57,25 @@ public class SearchUI extends AppCompatActivity implements AdapterView.OnItemSel
         Spinner type_spin = findViewById(R.id.type_filter_spinner);
         Spinner rating_spin = findViewById(R.id.rating_filter_spinner);
 
-        type_spin.setOnItemSelectedListener(this);
-        rating_spin.setOnItemSelectedListener(this);
+        AdapterView.OnItemSelectedListener update = new AdapterView.OnItemSelectedListener(){
+
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                toSearchResult(null);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                toSearchResult(null);
+            }
+        };
+
+        type_spin.setOnItemSelectedListener(update);
+        rating_spin.setOnItemSelectedListener(update);
+
+        RadioGroup rgr = findViewById(R.id.sort_radioGroup);
+
+        rgr.setOnCheckedChangeListener((radioGroup, i) -> toSearchResult(null));
 
         ArrayAdapter<String> type_ad = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, facilityMgr.filters_type);
         type_ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -73,18 +87,6 @@ public class SearchUI extends AppCompatActivity implements AdapterView.OnItemSel
         recyclerView = findViewById(R.id.search_result_rv);
         displayAllFacility();
     }
-    /*
-    public void getFacilityNames(){
-        facilityMgr.getAllFacilityName(names-> {
-            if(names==null)getFacilityNames();
-            else if(names.length==301)
-                    facilityMgr.all_facility_names = names;
-
-            },
-                error-> Log.d("ForumUI get facility names error", error.getMessage()));
-            }
-
-     */
 
     public void displayAllFacility(){
         facilityMgr.getAllFacilityAbstract(medicalFacilityList -> {
@@ -107,15 +109,6 @@ public class SearchUI extends AppCompatActivity implements AdapterView.OnItemSel
         });
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {
-        // Auto-generated method stub
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-        // Auto-generated method stub
-    }
     public void toSearchResult(View view){
         //Get user input text
         EditText edx = findViewById(R.id.search_src1);
@@ -135,9 +128,19 @@ public class SearchUI extends AppCompatActivity implements AdapterView.OnItemSel
         }catch (Exception e){
             order = "";
         }
+        //prevent spamming leading to crash
+        findViewById(R.id.toMfList2).setEnabled(false);
+        findViewById(R.id.type_filter_spinner).setEnabled(false);
+        spn.setEnabled(false);
+        rgr.setEnabled(false);
         MainActivity.facilityMgr.getFacilityAbstract(name, filter_pos, order, medicalFacilityList -> {
             Log.d("Received Medical Facility List", String.valueOf(medicalFacilityList.size()));
             runOnUiThread(() -> {// Stuff that updates the UI
+                //prevent spamming leading to crash
+                findViewById(R.id.toMfList2).setEnabled(true);
+                findViewById(R.id.type_filter_spinner).setEnabled(true);
+                findViewById(R.id.rating_filter_spinner).setEnabled(true);
+                rgr.setEnabled(true);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                 adapter = new MedicalFacilityAdapter(getApplicationContext(), medicalFacilityList);
                 recyclerView.setAdapter(adapter);
@@ -145,6 +148,11 @@ public class SearchUI extends AppCompatActivity implements AdapterView.OnItemSel
         }, e -> {
             Log.d("Received Medical Facility List Unsuccessful", e.toString().trim());
             runOnUiThread(() -> {// Stuff that updates the UI
+                //prevent spamming leading to crash
+                findViewById(R.id.toMfList2).setEnabled(true);
+                findViewById(R.id.type_filter_spinner).setEnabled(true);
+                findViewById(R.id.rating_filter_spinner).setEnabled(true);
+                rgr.setEnabled(true);
                 Toast.makeText(getApplicationContext(),"No Search Result!", Toast.LENGTH_SHORT).show();
             });
         });

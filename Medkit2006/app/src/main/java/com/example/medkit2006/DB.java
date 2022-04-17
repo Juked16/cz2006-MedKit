@@ -1,10 +1,8 @@
 package com.example.medkit2006;
 
-import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 
 import com.BoardiesITSolutions.AndroidMySQLConnector.Connection;
 import com.BoardiesITSolutions.AndroidMySQLConnector.Exceptions.InvalidSQLPacketException;
@@ -116,7 +114,6 @@ public class DB {
             if (onError != null)
                 onError.accept(new RuntimeException("No connection"));
         conn.createStatement().execute(statement, new DefaultResultInterface(onError) {
-            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void actionCompleted() {
                 try {
@@ -147,7 +144,6 @@ public class DB {
             if (onError != null)
                 onError.accept(new RuntimeException("No connection"));
         conn.createStatement().executeQuery(query, new DefaultResultInterface(onError) {
-            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void executionComplete(ResultSet resultSet) {
                 try {

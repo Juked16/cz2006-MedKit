@@ -46,12 +46,15 @@ public class ForgetPwUI extends AppCompatActivity {
                         text.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
                         text.setHint("Verification code");
                         mgr.emailExist(email, emailExist -> {
-                            if (emailExist)
-                                mgr.sendVerificationCode(email);
-                            else
+                            if (emailExist) {
+                                status.setText("Sending email to " + email);
+                                mgr.sendVerificationCode(email,
+                                        () -> runOnUiThread(() -> status.setText("Verification code sent to " + email)),
+                                        error -> runOnUiThread(() -> status.setText("An error occurred while sending email"))
+                                );
+                            } else
                                 status.setText("Email does not exist in our records");
                         }, e -> status.setText(e.getMessage()));
-                        status.setText("Verification code sent to " + email);
                         stage++;
                     } else
                         status.setText("Invalid email");

@@ -40,20 +40,16 @@ public class ForumUI extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forum);
 
-        //MainActivity.facilityMgr.getAllFacilityName(names-> MainActivity.facilityMgr.all_facility_names = names, error-> Log.d("ForumUI get facility names error", error.getMessage()));
         //Set up bottom navigation bar
         BottomNavigationView btmNav = findViewById(R.id.navigation);
         btmNav.getMenu().clear();
         btmNav.inflateMenu(R.menu.bottom_navigation);
+        btmNav.setSelectedItemId(R.id.nav_forum);
         btmNav.setOnItemSelectedListener(item -> {
             Intent i;
             switch (item.getItemId()) {
                 case R.id.nav_search:
                     i = new Intent(getApplicationContext(), SearchUI.class);
-                    startActivity(i);
-                    break;
-                case R.id.nav_forum:
-                    i = new Intent(getApplicationContext(), ForumUI.class);
                     startActivity(i);
                     break;
                 case R.id.nav_account:
