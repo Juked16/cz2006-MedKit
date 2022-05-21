@@ -11,5 +11,6 @@
 - Requirement specification & Analysis using ``UML diagrams`` including ``Class diagrams``,``Use Case Diagrams``,``Sequence Diagram``, ``Dialog Map``
 - ``Architecture Design``
 - Implementation and ``Black Box & White Box Testing``
+- ``Design Patterns``
 - Web Scraping to extract necessary information for our database
 
