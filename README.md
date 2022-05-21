@@ -6,8 +6,10 @@
 - Other features include forum posts and chating with other users.
 - Our database is implemented on a ``Cloud server`` on Huawei Cloud in mysql  
 
-##Learning Outcome
+
+## Learning Outcome
 - Requirement specification & Analysis using ``UML diagrams`` including ``Class diagrams``,``Use Case Diagrams``,``Sequence Diagram``, ``Dialog Map``
 - ``Architecture Design``
 - Implementation and ``Black Box & White Box Testing``
+- Web Scraping to extract necessary information for our database
 
